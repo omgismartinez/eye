@@ -11,17 +11,17 @@ export default function Sidebar() {
         <aside className='border-r-2 border-_gray-border'>
             <h1 className='text-_main font-medium text-xs uppercase px-4 py-6'>Menu</h1>
             <div className='px-4'>
-                <section className='flex flex-col justify-between gap-1 min-h-[600px]'>
-                    <div className='flex flex-col gap-2 text-_gray-C2C2C2 text-sm font-bold'>
+                <section className='flex flex-col justify-between gap-1 min-h-[650px]'>
+                    <div className='flex flex-col gap-2 text-_gray-808080 text-sm font-bold'>
                         <div className='flex flex-col gap-4'>
                             <button className='flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg text-_main hover:text-_main/80'>
-                                <BarChart4 /> Administrar Diagnósticos
+                                <BarChart4 size={18} /> Administrar Diagnósticos
                             </button>
                             <div className='flex gap-6 pl-6p'>
                                 <div className='px-[10px]'>
                                     <div className='w-[2px] h-[120px] bg-_gray-border' />
                                 </div>
-                                <div className='flex flex-col gap-1 font-semibold'>
+                                <div className='flex flex-col gap-1 font-semibold text-_gray-C2C2C2'>
                                     <button className='flex items-center gap-4 px-6 py-3 whitespace-nowrap rounded-lg bg-_gray-select text-_main'>
                                         Nuevo Diagnóstico
                                     </button>
@@ -35,16 +35,16 @@ export default function Sidebar() {
                             </div>
                         </div>
                         <button className='flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg hover:text-_main/80'>
-                            <Users /> Administrar Pacientes
+                            <Users size={18} /> Administrar Pacientes
                         </button>
                         <button className='flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg hover:text-_main/80'>
-                            <BadgeCheck /> Soporte y Términos
+                            <BadgeCheck size={18} /> Soporte y Términos
                         </button>
                     </div>
                     <div className='flex flex-col gap-6 text-_gray-C2C2C2 text-sm font-bold'>
-                        <div className='flex flex-col gap-2'>
+                        <div className='flex flex-col gap-2 text-_gray-808080'>
                             <button className='flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg hover:text-_main/80'>
-                                <Settings /> Cuenta y Perfil
+                                <Settings size={18} /> Cuenta y Perfil
                             </button>
                             <button className='flex items-center gap-4 px-6p whitespace-nowrap group'>
                                 <div className='flex items-center gap-4 py-3 border-y border-_gray-border w-full'>
@@ -59,7 +59,7 @@ export default function Sidebar() {
                         <div className='w-full'>
                             <button className='px-6 py-3 rounded-lg bg-_main hover:bg-_main/80 w-full'>
                                 <span className='flex items-center justify-between gap-4 whitespace-nowrap text-xs text-_white font-medium'>
-                                    Desconectar <LogOut />
+                                    Desconectar <LogOut size={18} />
                                 </span>
                             </button>
                         </div>
