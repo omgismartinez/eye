@@ -8,7 +8,7 @@ import {
 
 export default function Sidebar() {
     return (
-        <aside className='border-r-2 border-_gray-border'>
+        <aside className='border-r border-_gray-border pt-[73px] pb-6 min-h-screen'>
             <h1 className='text-_main font-medium text-xs uppercase px-4 py-6'>Menu</h1>
             <div className='px-4'>
                 <section className='flex flex-col justify-between gap-1 min-h-[650px]'>
@@ -58,7 +58,7 @@ export default function Sidebar() {
                         </div>
                         <div className='w-full'>
                             <button className='px-6 py-3 rounded-lg bg-_main hover:bg-_main/80 w-full'>
-                                <span className='flex items-center justify-between gap-4 whitespace-nowrap text-xs text-_white font-medium'>
+                                <span className='flex items-center justify-between gap-4 whitespace-nowrap text-xs text-_white font-normal'>
                                     Desconectar <LogOut size={18} />
                                 </span>
                             </button>
