@@ -1,3 +1,5 @@
+'use client'
+
 import {
     BadgeCheck,
     BarChart4,
@@ -5,8 +7,12 @@ import {
     Settings,
     Users
 } from 'lucide-react'
+import Link from 'next/link'
+import clsx from 'clsx'
+import { usePathname } from 'next/navigation'
 
 export default function Sidebar() {
+    const pathname = usePathname()
     return (
         <aside className='border-r border-_gray-border pt-[73px] pb-6 min-h-screen'>
             <h1 className='text-_main font-medium text-xs uppercase px-4 py-6'>Menu</h1>
@@ -22,9 +28,13 @@ export default function Sidebar() {
                                     <div className='w-[2px] h-[120px] bg-_gray-border' />
                                 </div>
                                 <div className='flex flex-col gap-1 font-semibold text-_gray-C2C2C2'>
-                                    <button className='flex items-center gap-4 px-6 py-3 whitespace-nowrap rounded-lg bg-_gray-select text-_main'>
+                                    <Link
+                                        href='/new'
+                                        className={clsx(`flex items-center gap-4 px-6 py-3 w-full whitespace-nowrap rounded-lg hover:bg-_gray-select`, {
+                                            'bg-_gray-select text-_main': pathname === '/new'
+                                        })}>
                                         Nuevo Diagnóstico
-                                    </button>
+                                    </Link>
                                     <button className='flex items-center gap-4 px-6 py-3 whitespace-nowrap rounded-lg hover:bg-_gray-select'>
                                         Todos los Diagnósticos
                                     </button>
