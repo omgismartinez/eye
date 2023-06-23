@@ -1,16 +1,15 @@
 import { Image } from 'lucide-react'
+import Header from '@/components/header'
 
 export default function New() {
     return (
         <main className='px-4 py-2'>
             <div className='max-w-xl mx-auto'>
                 <section className='my-6'>
-                    <div className='flex flex-col gap-6 mb-6'>
-                        <h1 className='text-2xl font-bold text-center'>Completa los campos</h1>
-                        <p className='text-_gray-808080 text-sm text-center'>
-                            Sube tu imagen. Arrastre y suelte <strong>1 imagen</strong> para empezar la detección.
-                        </p>
-                    </div>
+                    <Header
+                        title='Completa los campos'
+                        subtitle={<>Sube tu imagen. Arrastre y suelte <strong>1 imagen</strong> para empezar la detección.</>}
+                    />
                     <form>
                         <div className='flex flex-col gap-10'>
                             <div className='border border-_gray-border' />
