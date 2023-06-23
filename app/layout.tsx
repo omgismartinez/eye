@@ -22,7 +22,9 @@ export default function RootLayout({
         <main className='flex justify-between max-w-7xl mx-auto'>
           <Sidebar />
           <div className='pt-[73px] w-full'>
-            {children}
+            <div className='px-4 lg:px-6 py-8'>
+              {children}
+            </div>
           </div>
         </main>
       </body>
