@@ -35,9 +35,13 @@ export default function Sidebar() {
                                         })}>
                                         Nuevo Diagnóstico
                                     </Link>
-                                    <button className='flex items-center gap-4 px-6 py-3 whitespace-nowrap rounded-lg hover:bg-_gray-select'>
+                                    <Link
+                                        href='/all'
+                                        className={clsx(`flex items-center gap-4 px-6 py-3 w-full whitespace-nowrap rounded-lg hover:bg-_gray-select`, {
+                                            'bg-_gray-select text-_main': pathname === '/all'
+                                        })}>
                                         Todos los Diagnósticos
-                                    </button>
+                                    </Link>
                                     <button className='flex items-center gap-4 px-6 py-3 whitespace-nowrap rounded-lg hover:bg-_gray-select'>
                                         Nuevo Diagnóstico
                                     </button>
