@@ -35,6 +35,7 @@ export const columns: ColumnDef<Diagnostic>[] = [
         enableHiding: false,
     },
     {
+        id: 'Paciente',
         accessorKey: 'patient',
         header({ column }) {
             return (
@@ -50,10 +51,12 @@ export const columns: ColumnDef<Diagnostic>[] = [
         },
     },
     {
+        id: 'Predicción',
         accessorKey: 'prediction',
         header: 'Predicción',
     },
     {
+        id: 'Fecha',
         accessorKey: 'date',
         header({ column }) {
             return (
@@ -69,6 +72,7 @@ export const columns: ColumnDef<Diagnostic>[] = [
         }
     },
     {
+        id: 'Teléfono',
         accessorKey: 'phone',
         header({ column }) {
             return (
@@ -84,6 +88,7 @@ export const columns: ColumnDef<Diagnostic>[] = [
         },
     },
     {
+        id: 'Correo electrónico',
         accessorKey: 'email',
         header({ column }) {
             return (
