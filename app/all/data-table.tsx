@@ -58,9 +58,9 @@ export function DataTable<TData, TValue>({
                 <Input
                     icon={<Search size={18} />}
                     placeholder='Buscar por paciente'
-                    value={(table.getColumn('patient')?.getFilterValue() as string) ?? ''}
+                    value={(table.getColumn('Paciente')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
-                        table.getColumn('patient')?.setFilterValue(event.target.value)
+                        table.getColumn('Paciente')?.setFilterValue(event.target.value)
                     }
                     className='max-w-2xl'
                 />
