@@ -8,6 +8,7 @@ import {
     getCoreRowModel,
     getFilteredRowModel,
     getSortedRowModel,
+    getPaginationRowModel,
     useReactTable,
 } from '@tanstack/react-table'
 
@@ -25,6 +26,7 @@ import { Input } from '@/components/ui/input'
 import { ChevronDownIcon, Search } from 'lucide-react'
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
+import { DataTablePagination } from './pagination'
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -46,6 +48,7 @@ export function DataTable<TData, TValue>({
         getSortedRowModel: getSortedRowModel(),
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         state: {
             sorting,
             columnFilters
@@ -53,8 +56,8 @@ export function DataTable<TData, TValue>({
     })
 
     return (
-        <div>
-            <div className='flex items-center py-6'>
+        <div className='flex flex-col gap-4'>
+            <div className='flex items-center mt-4'>
                 <Input
                     icon={<Search size={18} />}
                     placeholder='Buscar por paciente'
@@ -135,6 +138,7 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
+            <DataTablePagination table={table} />
         </div>
     )
 }
