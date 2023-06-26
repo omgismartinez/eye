@@ -1,14 +1,17 @@
 'use client'
 
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
+import { predictions } from '../data/data'
+import Marker from './marker'
 
 export type Diagnostic = {
     id: string
     patient: string
-    prediction: 'No dr' | 'Leve' | 'Moderado' | 'Severo' | 'Proliferativo'
+    prediction: 'no dr' | 'leve' | 'moderado' | 'severo' | 'proliferativo'
     date: string
     phone: string
     email: string
@@ -54,6 +57,24 @@ export const columns: ColumnDef<Diagnostic>[] = [
         id: 'Predicción',
         accessorKey: 'prediction',
         header: 'Predicción',
+        cell: ({ row }) => {
+            const prediction = predictions.find((prediction) => prediction.value === row.getValue('Predicción'))
+
+            if (!prediction) {
+                return null
+            }
+            return (
+                <div className='flex items-center'>
+                    <Badge variant='outline' className='rounded-md capitalize'>
+                        <Marker value={prediction.value} />
+                        {prediction.value}
+                    </Badge>
+                </div>
+            )
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id))
+        }
     },
     {
         id: 'Fecha',
