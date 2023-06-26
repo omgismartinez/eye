@@ -4,6 +4,7 @@ import { Search, X } from 'lucide-react'
 import { Table } from '@tanstack/react-table'
 import { DataTableFacetedFilter } from './faceted'
 import { predictions } from '../data/data'
+import { DataTableViewOptions } from './view-options'
 
 interface DataTableFilterProps<TData> {
     table: Table<TData>
@@ -44,7 +45,7 @@ export function DataTableFilter<TData>({ table }: DataTableFilterProps<TData>) {
                     </Button>
                 )}
             </div>
-            {/* <DataTableViewOptions table={table} /> */}
+            <DataTableViewOptions table={table} />
         </div>
     )
 }
