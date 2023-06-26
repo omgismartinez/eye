@@ -1,11 +1,10 @@
 'use client'
 
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown } from 'lucide-react'
 import { predictions } from '../data/data'
+import { DataTableColumnHeader } from './header'
 import Marker from './marker'
 
 export type Diagnostic = {
@@ -42,17 +41,9 @@ export const columns: ColumnDef<Diagnostic>[] = [
         accessorKey: 'patient',
         header({ column }) {
             return (
-                <Button
-                    size={'sm'}
-                    variant={'ghost'}
-                    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                >
-                    Paciente
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
-                </Button>
+                <DataTableColumnHeader column={column} title={'Paciente'} />
             )
         },
-        enableSorting: false,
         enableHiding: false,
     },
     {
@@ -83,14 +74,7 @@ export const columns: ColumnDef<Diagnostic>[] = [
         accessorKey: 'date',
         header({ column }) {
             return (
-                <Button
-                    size={'sm'}
-                    variant={'ghost'}
-                    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                >
-                    Fecha
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
-                </Button>
+                <DataTableColumnHeader column={column} title={'Fecha'} />
             )
         }
     },
@@ -99,14 +83,7 @@ export const columns: ColumnDef<Diagnostic>[] = [
         accessorKey: 'phone',
         header({ column }) {
             return (
-                <Button
-                    size={'sm'}
-                    variant={'ghost'}
-                    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                >
-                    Teléfono
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
-                </Button>
+                <DataTableColumnHeader column={column} title={'Teléfono'} />
             )
         },
     },
@@ -115,14 +92,7 @@ export const columns: ColumnDef<Diagnostic>[] = [
         accessorKey: 'email',
         header({ column }) {
             return (
-                <Button
-                    size={'sm'}
-                    variant={'ghost'}
-                    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                >
-                    Correo electrónico
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
-                </Button>
+                <DataTableColumnHeader column={column} title={'Correo electrónico'} />
             )
         }
     },
