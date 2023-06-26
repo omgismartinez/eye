@@ -52,6 +52,8 @@ export const columns: ColumnDef<Diagnostic>[] = [
                 </Button>
             )
         },
+        enableSorting: false,
+        enableHiding: false,
     },
     {
         id: 'Predicción',
