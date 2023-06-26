@@ -10,6 +10,9 @@ import {
     getSortedRowModel,
     getPaginationRowModel,
     useReactTable,
+    getFacetedRowModel,
+    getFacetedUniqueValues,
+    VisibilityState,
 } from '@tanstack/react-table'
 
 import {
@@ -22,11 +25,8 @@ import {
 } from '@/components/ui/table'
 
 import { useState } from 'react'
-import { Input } from '@/components/ui/input'
-import { ChevronDownIcon, Search } from 'lucide-react'
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
 import { DataTablePagination } from './pagination'
+import { DataTableFilter } from './filter'
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -37,63 +37,36 @@ export function DataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
+    const [rowSelection, setRowSelection] = useState({})
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
     const table = useReactTable({
         data,
         columns,
-        getCoreRowModel: getCoreRowModel(),
-        onSortingChange: setSorting,
-        getSortedRowModel: getSortedRowModel(),
-        onColumnFiltersChange: setColumnFilters,
-        getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
         state: {
             sorting,
-            columnFilters
-        }
+            columnVisibility,
+            rowSelection,
+            columnFilters,
+        },
+        enableRowSelection: true,
+        onRowSelectionChange: setRowSelection,
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        onColumnVisibilityChange: setColumnVisibility,
+        getCoreRowModel: getCoreRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFacetedRowModel: getFacetedRowModel(),
+        getFacetedUniqueValues: getFacetedUniqueValues(),
     })
 
     return (
         <div className='flex flex-col gap-4'>
-            <div className='flex items-center mt-4'>
-                <Input
-                    icon={<Search size={18} />}
-                    placeholder='Buscar por paciente'
-                    value={(table.getColumn('Paciente')?.getFilterValue() as string) ?? ''}
-                    onChange={(event) =>
-                        table.getColumn('Paciente')?.setFilterValue(event.target.value)
-                    }
-                    className='max-w-2xl'
-                />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant='outline' className='ml-auto'>
-                            Predicción <ChevronDownIcon className='ml-2 h-4 w-4' />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align='end'>
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className='capitalize'
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
+            <DataTableFilter table={table} />
             <div className='rounded-lg border border-_gray-border overflow-hidden'>
                 <Table>
                     <TableHeader>
