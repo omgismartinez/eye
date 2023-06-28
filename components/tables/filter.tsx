@@ -2,9 +2,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Search, X } from 'lucide-react'
 import { Table } from '@tanstack/react-table'
-import { DataTableFacetedFilter } from './faceted'
-import { predictions } from '../data/data'
+import { DataTableFacetedFilter } from '@/components/tables/faceted'
 import { DataTableViewOptions } from './view-options'
+import { predictions } from './data'
 
 interface DataTableFilterProps<TData> {
     table: Table<TData>

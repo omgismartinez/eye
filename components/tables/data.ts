@@ -1,4 +1,6 @@
-export const predictions = [
+import { Status } from '@/types'
+
+export const predictions: { label: string, value: Status }[] = [
     {
         label: 'No dr',
         value: 'no dr',
