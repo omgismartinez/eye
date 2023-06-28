@@ -3,18 +3,10 @@
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ColumnDef } from '@tanstack/react-table'
-import { predictions } from '../data/data'
-import { DataTableColumnHeader } from './header'
-import Marker from './marker'
-
-export type Diagnostic = {
-    id: string
-    patient: string
-    prediction: 'no dr' | 'leve' | 'moderado' | 'severo' | 'proliferativo'
-    date: string
-    phone: string
-    email: string
-}
+import { DataTableColumnHeader } from '@/components/tables/header'
+import { predictions } from '@/components/tables/data'
+import { Diagnostic } from '@/types'
+import Marker from '@/components/tables/marker'
 
 export const columns: ColumnDef<Diagnostic>[] = [
     {
