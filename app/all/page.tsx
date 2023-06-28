@@ -1,6 +1,7 @@
 import Header from '@/components/header'
-import { DataTable } from './components/data-table'
-import { Diagnostic, columns } from './components/columns'
+import { DataTable } from '@/components/tables/data-table'
+import { Diagnostic } from '@/types'
+import { columns } from './columns'
 
 async function getData(): Promise<Diagnostic[]> {
     // Fetch data from your API here.
@@ -111,7 +112,7 @@ export default async function All() {
         <main>
             <Header
                 className='max-w-2xl mx-auto'
-                title='Diagnosticos realizados'
+                title='Diagnósticos realizados'
                 subtitle={<>
                     La tabla contiene información detallada sobre cada diagnóstico realizado.
                     Lo que permite un <strong>seguimiento preciso</strong> de la evolución de la retinopatía diabética en cada paciente.
