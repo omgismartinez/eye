@@ -48,9 +48,13 @@ export default function Sidebar() {
                                 </div>
                             </div>
                         </div>
-                        <button className='flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg hover:text-_main/80'>
+                        <Link
+                            href='/patients'
+                            className={clsx('flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg hover:text-_main/80', {
+                                'text-_main': pathname === '/patients'
+                            })}>
                             <Users size={18} /> Administrar Pacientes
-                        </button>
+                        </Link>
                         <button className='flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg hover:text-_main/80'>
                             <BadgeCheck size={18} /> Soporte y Términos
                         </button>
