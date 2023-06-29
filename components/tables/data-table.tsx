@@ -31,14 +31,16 @@ import { DataTableFilter } from './filter'
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    columnsVisibility?: VisibilityState
 }
 
 export function DataTable<TData, TValue>({
     columns,
+    columnsVisibility,
     data,
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = useState({})
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(columnsVisibility || {})
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
