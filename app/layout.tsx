@@ -21,7 +21,7 @@ export default function RootLayout({
         <Navbar />
         <main className='flex justify-between max-w-7xl mx-auto'>
           <Sidebar />
-          <div className='pt-[73px] w-full'>
+          <div className='pt-[73px] w-full overflow-hidden'>
             <div className='px-4 lg:px-6 py-8'>
               {children}
             </div>
