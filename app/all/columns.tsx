@@ -73,19 +73,11 @@ export const columns: ColumnDef<Diagnostic>[] = [
     {
         id: 'Teléfono',
         accessorKey: 'phone',
-        header({ column }) {
-            return (
-                <DataTableColumnHeader column={column} title={'Teléfono'} />
-            )
-        },
+        header: 'Teléfono',
     },
     {
         id: 'Correo electrónico',
         accessorKey: 'email',
-        header({ column }) {
-            return (
-                <DataTableColumnHeader column={column} title={'Correo electrónico'} />
-            )
-        }
+        header: 'Correo electrónico',
     },
 ]
