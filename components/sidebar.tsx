@@ -61,9 +61,13 @@ export default function Sidebar() {
                     </div>
                     <div className='flex flex-col gap-6 text-_gray-C2C2C2 text-sm font-bold'>
                         <div className='flex flex-col gap-2 text-_gray-808080'>
-                            <button className='flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg hover:text-_main/80'>
+                            <Link
+                                href='/account'
+                                className={clsx('flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg hover:text-_main/80', {
+                                    'text-_main': pathname === '/account'
+                                })}>
                                 <Settings size={18} /> Cuenta y Perfil
-                            </button>
+                            </Link>
                             <button className='flex items-center gap-4 px-6p whitespace-nowrap group'>
                                 <div className='flex items-center gap-4 py-3 border-y border-_gray-border w-full'>
                                     <div className='w-8 h-8 rounded-full bg-_main group-hover:bg-_main/80' />
