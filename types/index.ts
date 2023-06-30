@@ -2,11 +2,9 @@ export type Status = 'no dr' | 'leve' | 'moderado' | 'severo' | 'proliferativo'
 
 export type Diagnostic = {
     id: string
-    patient: string
+    patient: Patient
     prediction: 'no dr' | 'leve' | 'moderado' | 'severo' | 'proliferativo'
     date: string
-    phone: string
-    email: string
 }
 
 export type Patient = {
@@ -18,7 +16,7 @@ export type Patient = {
     phone: number
     email: string
     age: number
-    sex: string
+    gender: 'M' | 'F'
     address: string
     occupation: string
 }
