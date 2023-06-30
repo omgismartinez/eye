@@ -5,8 +5,17 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/tables/header'
 import { predictions } from '@/components/tables/data'
-import { Diagnostic } from '@/types'
+import { Diagnostic, Patient } from '@/types'
 import Marker from '@/components/tables/marker'
+
+export const columnsVisibility = {
+    'Paciente': true,
+    'Predicción': true,
+    'Fecha': true,
+    'Teléfono': true,
+    'Correo electrónico': true,
+    'Género': false,
+}
 
 export const columns: ColumnDef<Diagnostic>[] = [
     {
@@ -35,6 +44,10 @@ export const columns: ColumnDef<Diagnostic>[] = [
             return (
                 <DataTableColumnHeader column={column} title={'Paciente'} />
             )
+        },
+        cell: ({ row }) => <>{row.original.patient.name}</>,
+        filterFn: (row, id, value) => {
+            return row.getValue<Patient>(id).name.toLowerCase().includes(value.toLowerCase())
         },
         enableHiding: false,
     },
@@ -74,10 +87,28 @@ export const columns: ColumnDef<Diagnostic>[] = [
         id: 'Teléfono',
         accessorKey: 'phone',
         header: 'Teléfono',
+        cell: ({ row }) => <>{row.original.patient.phone}</>,
     },
     {
         id: 'Correo electrónico',
         accessorKey: 'email',
         header: 'Correo electrónico',
+        cell: ({ row }) => <>{row.original.patient.email}</>,
+    },
+    {
+        id: 'Género',
+        accessorKey: 'gender',
+        header: 'Género',
+        cell: ({ row }) => {
+            const gender = row.original.patient.gender === 'M' ? 'Masculino' : 'Femenino'
+            return (
+                <Badge variant='outline' className='capitalize'>
+                    {gender}
+                </Badge>
+            )
+        },
+        filterFn: (row, value) => {
+            return value.includes(row.original.patient.gender)
+        }
     },
 ]
