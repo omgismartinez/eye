@@ -39,15 +39,11 @@ export const columns: ColumnDef<Diagnostic>[] = [
     },
     {
         id: 'Paciente',
-        accessorKey: 'patient',
+        accessorKey: 'patient.name',
         header({ column }) {
             return (
                 <DataTableColumnHeader column={column} title={'Paciente'} />
             )
-        },
-        cell: ({ row }) => <>{row.original.patient.name}</>,
-        filterFn: (row, id, value) => {
-            return row.getValue<Patient>(id).name.toLowerCase().includes(value.toLowerCase())
         },
         enableHiding: false,
     },
@@ -85,30 +81,28 @@ export const columns: ColumnDef<Diagnostic>[] = [
     },
     {
         id: 'Teléfono',
-        accessorKey: 'phone',
+        accessorKey: 'patient.phone',
         header: 'Teléfono',
-        cell: ({ row }) => <>{row.original.patient.phone}</>,
     },
     {
-        id: 'Correo electrónico',
-        accessorKey: 'email',
+        id: 'C. electrónico',
+        accessorKey: 'patient.email',
         header: 'Correo electrónico',
-        cell: ({ row }) => <>{row.original.patient.email}</>,
     },
     {
         id: 'Género',
-        accessorKey: 'gender',
+        accessorKey: 'patient.gender',
         header: 'Género',
-        cell: ({ row }) => {
-            const gender = row.original.patient.gender === 'M' ? 'Masculino' : 'Femenino'
+        cell: ({ getValue }) => {
+            const gender = getValue() === 'M' ? 'Masculino' : 'Femenino'
             return (
-                <Badge variant='outline' className='capitalize'>
+                <Badge variant='outline' className='capitalize rounded-md'>
                     {gender}
                 </Badge>
             )
         },
-        filterFn: (row, value) => {
-            return value.includes(row.original.patient.gender)
-        }
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id))
+        },
     },
 ]
