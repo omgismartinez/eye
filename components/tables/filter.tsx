@@ -34,6 +34,16 @@ export function DataTableFilter<TData>({ table }: DataTableFilterProps<TData>) {
                         options={predictions}
                     />
                 )}
+                {table.getColumn('Género') && (
+                    <DataTableFacetedFilter
+                        column={table.getColumn('Género')}
+                        title='Género'
+                        options={[
+                            { value: 'M', label: 'Masculino' },
+                            { value: 'F', label: 'Femenino' },
+                        ]}
+                    />
+                )}
                 {isFiltered && (
                     <Button
                         variant='ghost'
