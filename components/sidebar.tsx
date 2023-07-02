@@ -20,7 +20,7 @@ export default function Sidebar() {
                 <section className='flex flex-col justify-between gap-1 min-h-[650px]'>
                     <div className='flex flex-col gap-2 text-_gray-808080 text-sm font-bold'>
                         <div className='flex flex-col gap-4'>
-                            <button className='flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg text-_main hover:text-_main/80'>
+                            <button className='flex items-center gap-4 py-3 whitespace-nowrap rounded-lg text-_main hover:text-_main/80'>
                                 <BarChart4 size={18} /> Administrar Diagnósticos
                             </button>
                             <div className='flex gap-6 pl-6p'>
@@ -50,14 +50,18 @@ export default function Sidebar() {
                         </div>
                         <Link
                             href='/patients'
-                            className={clsx('flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg hover:text-_main/80', {
+                            className={clsx('flex items-center gap-4 py-3 whitespace-nowrap rounded-lg hover:text-_main/80', {
                                 'text-_main': pathname === '/patients'
                             })}>
                             <Users size={18} /> Administrar Pacientes
                         </Link>
-                        <button className='flex items-center gap-4 px-6p py-3 whitespace-nowrap rounded-lg hover:text-_main/80'>
-                            <BadgeCheck size={18} /> Soporte y Términos
-                        </button>
+                        <Link
+                            href='/terms'
+                            className={clsx('flex items-center gap-4 py-3 whitespace-nowrap rounded-lg hover:text-_main/80', {
+                                'text-_main': pathname === '/terms'
+                            })}>
+                            <BadgeCheck size={18} /> Términos y Condiciones
+                        </Link>
                     </div>
                     <div className='flex flex-col gap-6 text-_gray-C2C2C2 text-sm font-bold'>
                         <div className='flex flex-col gap-2 text-_gray-808080'>
