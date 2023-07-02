@@ -19,9 +19,9 @@ export default function RootLayout({
     <html lang='es'>
       <body className={`min-h-screen ${inter.className}`}>
         <Navbar />
-        <main className='flex justify-between max-w-7xl mx-auto'>
+        <main className='flex max-w-screen-2xl mx-auto'>
           <Sidebar />
-          <div className='pt-[73px] w-full overflow-hidden'>
+          <div className='lg:ml-72 pt-[73px] w-full overflow-hidden'>
             <div className='px-4 lg:px-6 py-8'>
               {children}
             </div>
