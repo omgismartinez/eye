@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/tables/header'
 import { predictions } from '@/components/tables/data'
-import { Diagnostic, Patient } from '@/types'
+import { Diagnostic } from '@/types'
 import Marker from '@/components/tables/marker'
 
 export const columnsVisibility = {
