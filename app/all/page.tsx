@@ -15,7 +15,7 @@ async function getData(): Promise<Diagnostic[]> {
 export default async function All() {
     const data = await getData()
     return (
-        <main>
+        <main className='max-w-4xl mx-auto'>
             <Header
                 className='max-w-2xl mx-auto'
                 title='Diagnósticos realizados'
