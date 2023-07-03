@@ -129,7 +129,7 @@ export default function Terms() {
                     <div>
                         <small>
                             <strong>5.1. Uso de la aplicación. </strong>
-                            La aplicación se proporciona "tal cual" y "según disponibilidad". No garantizamos que la aplicación sea
+                            La aplicación se proporciona &quot;tal cual&quot; y &quot;según disponibilidad&quot;. No garantizamos que la aplicación sea
                             libre de errores o que funcione de manera ininterrumpida. No nos hacemos responsables de cualquier daño
                             directo, indirecto, incidental, consecuente o especial que puedas sufrir como resultado del uso de la
                             aplicación.
