@@ -36,7 +36,9 @@ export default function Sidebar() {
                 <section className='flex flex-col justify-between gap-1 min-h-[650px]'>
                     <div className='flex flex-col gap-2 text-_gray-808080 text-sm font-bold'>
                         <div className='flex flex-col gap-4'>
-                            <button className='flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg text-_main hover:text-_main/80'>
+                            <button className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80', {
+                                'text-_main': pathname === '/new' || pathname === '/all',
+                            })}>
                                 <BarChart4 size={18} /> Administrar Diagnósticos
                             </button>
                             <div className='flex gap-2'>
@@ -67,14 +69,14 @@ export default function Sidebar() {
                         <Link
                             href='/patients'
                             className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80', {
-                                'text-_main': pathname === '/patients'
+                                'text-_main bg-_gray-select': pathname === '/patients'
                             })}>
                             <Users size={18} /> Administrar Pacientes
                         </Link>
                         <Link
                             href='/terms'
                             className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80', {
-                                'text-_main': pathname === '/terms'
+                                'text-_main bg-_gray-select': pathname === '/terms'
                             })}>
                             <BadgeCheck size={18} /> Términos y Condiciones
                         </Link>
@@ -84,7 +86,7 @@ export default function Sidebar() {
                             <Link
                                 href='/account'
                                 className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80', {
-                                    'text-_main': pathname === '/account'
+                                    'text-_main bg-_gray-select': pathname === '/account'
                                 })}>
                                 <Settings size={18} /> Cuenta y Perfil
                             </Link>
