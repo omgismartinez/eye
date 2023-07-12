@@ -87,8 +87,7 @@ export function AccountForm() {
                             <FormControl>
                                 <Input
                                     type='email'
-                                    // value={field.value}
-                                    defaultValue={field.value}
+                                    placeholder='Ingresa tu correo electrónico'
                                     {...field}
                                 />
                             </FormControl>
