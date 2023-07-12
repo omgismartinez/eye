@@ -12,7 +12,7 @@ export default function Navbar() {
         '/all': 'Todos los Diagnósticos',
         '/patients': 'Administrar Pacientes',
         '/terms': 'Términos y Condiciones',
-        '/account': 'Cuenta y Perfil',
+        '/settings': 'Configuración',
     }
 
     return (
