@@ -1,4 +1,4 @@
-import { Image } from 'lucide-react'
+import { ImageIcon } from 'lucide-react'
 import Header from '@/components/header'
 
 export default function New() {
@@ -30,7 +30,7 @@ export default function New() {
                                 relative
                             `}
                         >
-                            <Image size={28} />
+                            <ImageIcon size={28} />
                             <div className='flex flex-col items-center gap-3'>
                                 <h1 className='font-bold text-base'>Subir Media</h1>
                                 <p className='text-xs text-_gray-808080'>
