@@ -11,6 +11,7 @@ import Link from 'next/link'
 import clsx from 'clsx'
 import { usePathname } from 'next/navigation'
 import { Separator } from './ui/separator'
+import { Button } from './ui/button'
 
 export default function Sidebar() {
     const pathname = usePathname()
@@ -100,13 +101,9 @@ export default function Sidebar() {
                                 </div>
                             </button>
                         </div>
-                        <div className='w-full'>
-                            <button className='px-6 py-3 rounded-lg bg-_main hover:bg-_main/80 w-full'>
-                                <span className='flex items-center justify-between gap-4 whitespace-nowrap text-xs text-_white font-normal'>
-                                    Desconectar <LogOut size={18} />
-                                </span>
-                            </button>
-                        </div>
+                        <Button className='justify-between font-normal'>
+                            Desconectar <LogOut size={18} />
+                        </Button>
                     </div>
                 </section>
             </div>
