@@ -1,5 +1,6 @@
 import { ImageIcon } from 'lucide-react'
 import Header from '@/components/header'
+import { Button } from '@/components/ui/button'
 
 export default function New() {
     return (
@@ -36,9 +37,9 @@ export default function New() {
                                 <p className='text-xs text-_gray-808080'>
                                     Las imágenes deben tener menos de <strong>2 MB</strong> de tamaño.
                                 </p>
-                                <div className='bg-_main hover:bg-_main/80 rounded-xl px-10 py-3 text-_white text-xs'>
+                                <Button type='button' className='px-10 rounded-xl pointer-events-none'>
                                     Subir
-                                </div>
+                                </Button>
                             </div>
                             <input type='file' id='upload' className='sr-only bottom-20' required />
                         </div>
@@ -83,9 +84,7 @@ export default function New() {
                                 </div>
                             </div>
                         </div>
-                        <button className='w-full bg-_main hover:bg-_main/80 rounded-lg px-10 py-3 text-_white text-xs'>
-                            Predecir
-                        </button>
+                        <Button>Predecir</Button>
                     </div>
                 </div>
             </form>
