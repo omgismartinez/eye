@@ -1,8 +1,14 @@
+import { Metadata } from 'next'
 import Header from '@/components/header'
 import { feikData } from '@/components/tables/data'
 import { DataTable } from '@/components/tables/data-table'
 import { Diagnostic } from '@/types'
 import { columns, columnsVisibility } from './columns'
+
+export const metadata: Metadata = {
+    title: 'Diagnósticos | Todos',
+    description: 'Tabla con todos los diagnósticos realizados.',
+}
 
 async function getData(): Promise<Diagnostic[]> {
     // Fetch data from your API here.
