@@ -1,5 +1,11 @@
+import { Metadata } from 'next'
 import Header from '@/components/header'
 import NewForm from './new-form'
+
+export const metadata: Metadata = {
+    title: 'Nuevo Diagnóstico',
+    description: 'Completa los campos para realizar un nuevo diagnóstico.',
+}
 
 export default function New() {
     return (
