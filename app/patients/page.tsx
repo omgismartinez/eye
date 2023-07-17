@@ -1,8 +1,14 @@
+import { Metadata } from 'next'
 import Header from '@/components/header'
 import { feikData } from '@/components/tables/data'
 import { DataTable } from '@/components/tables/data-table'
 import { Patient } from '@/types'
 import { columns, columnsVisibility } from './columns'
+
+export const metadata: Metadata = {
+    title: 'Pacientes',
+    description: 'La tabla de pacientes permite tener un registro completo y organizado de todos los individuos atendidos.',
+}
 
 async function getData(): Promise<Patient[]> {
     // Fetch data from your API here.
