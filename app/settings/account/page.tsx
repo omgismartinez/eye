@@ -1,5 +1,11 @@
+import { Metadata } from 'next'
 import { Separator } from '@/components/ui/separator'
 import { AccountForm } from './account-form'
+
+export const metadata: Metadata = {
+    title: 'Cuenta',
+    description: 'Actualiza la configuración de tu cuenta.',
+}
 
 export default function Account() {
     return (
