@@ -3,7 +3,7 @@ import Header from '@/components/header'
 import NewForm from './new-form'
 
 export const metadata: Metadata = {
-    title: 'Diagnósticos | Nuevo',
+    title: 'Nuevo Diagnóstico',
     description: 'Completa los campos para realizar un nuevo diagnóstico.',
 }
 
