@@ -6,7 +6,7 @@ import { Diagnostic } from '@/types'
 import { columns, columnsVisibility } from './columns'
 
 export const metadata: Metadata = {
-    title: 'Todos los Diagnósticos',
+    title: 'Diagnósticos Realizados',
     description: 'Tabla con todos los diagnósticos realizados.',
 }
 
