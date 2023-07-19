@@ -1,3 +1,10 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'Términos del Servicio',
+    description: 'Términos y condiciones de uso de la aplicación.',
+}
+
 export default function Terms() {
     return (
         <main>
