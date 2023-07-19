@@ -6,7 +6,7 @@ import { Patient } from '@/types'
 import { columns, columnsVisibility } from './columns'
 
 export const metadata: Metadata = {
-    title: 'Pacientes',
+    title: 'Pacientes Registrados',
     description: 'La tabla de pacientes permite tener un registro completo y organizado de todos los individuos atendidos.',
 }
 
