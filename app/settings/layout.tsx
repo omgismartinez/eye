@@ -4,7 +4,10 @@ import { Separator } from '@/components/ui/separator'
 import { SidebarNav } from './components/sidebar'
 
 export const metadata: Metadata = {
-    title: 'Configuración',
+    title: {
+        template: '%s | Configuración',
+        default: 'Perfil | Configuración',
+    },
     description: 'Administra la configuración de tu cuenta y establezca las preferencias',
 }
 
