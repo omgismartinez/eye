@@ -24,9 +24,11 @@ export default function Navbar() {
                     </div>
                 </div>
                 <div className='flex items-center lg:px-6 py-4 w-full'>
-                    <Link href='/' className='bg-_gray-F7F7F7 hidden lg:block rounded-full p-1'>
-                        <ChevronLeft size={18} />
-                    </Link>
+                    {pathname !== '/' && (
+                        <Link href='/' className='bg-_gray-F7F7F7 hidden lg:block rounded-full p-1'>
+                            <ChevronLeft size={18} />
+                        </Link>
+                    )}
                     <h2 className='text-_main font-bold text-base lg:ml-6 whitespace-nowrap'>
                         {routes[pathname as keyof typeof routes]}
                     </h2>
