@@ -3,6 +3,7 @@
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { MobileSidebar } from './mobile-sidebar'
 
 export default function Navbar() {
     const pathname = usePathname()
@@ -23,6 +24,7 @@ export default function Navbar() {
                         <div className='bg-_main w-10 h-10 rounded-full' />
                     </div>
                 </div>
+                <MobileSidebar /> 
                 <div className='flex items-center lg:px-6 py-4 w-full'>
                     {pathname !== '/' && (
                         <Link href='/' className='bg-_gray-F7F7F7 hidden lg:block rounded-full p-1'>
