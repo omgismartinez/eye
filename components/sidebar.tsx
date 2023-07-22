@@ -18,18 +18,12 @@ export default function Sidebar() {
     return (
         <aside
             className='
-                fixed
-                top-0
-                z-30
-                -translate-x-full 
-                lg:translate-x-0
-                border-r
+                lg:border-r
                 border-_gray-border
                 bg-_white
                 pt-[73px]
                 pb-6
                 min-h-screen
-                w-72
             '
         >
             <h1 className='text-_main font-medium text-xs uppercase px-4 py-6'>Menu</h1>
