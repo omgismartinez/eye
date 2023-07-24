@@ -1,8 +1,23 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, useFormField } from '@/components/ui/form'
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ImageIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -29,8 +44,10 @@ const newDiagnosticsFormSchema = z.object({
             message: 'El nombre del paciente no debe tener más de 30 caracteres.',
         }),
     prediction: z
-        .string(),
+        .string()
+        .optional(),
     age: z
+        .coerce
         .number(),
     extra: z
         .string()
@@ -48,7 +65,7 @@ const defaultValues: Partial<NewDiagnosticsFormValues> = {
     prediction: 'Sin predicción',
     age: 23,
     extra: `El paciente no presenta ninguna enfermedad.`,
-    gender: 'Masculino',
+    gender: 'M',
 }
 
 export default function NewForm() {
@@ -95,7 +112,7 @@ export default function NewForm() {
                                             <div className='flex flex-col items-center gap-3'>
                                                 <h1 className='font-bold text-base'>Subir Media</h1>
                                                 <p className='text-xs text-_gray-808080'>
-                                                    Las imágenes deben tener menos de <strong>${MAX_RECOMMENDED_IMAGE_SIZE} MB</strong> de tamaño.
+                                                    Las imágenes deben tener menos de <strong>{MAX_RECOMMENDED_IMAGE_SIZE} MB</strong> de tamaño.
                                                 </p>
                                                 <Button type='button' className='px-10 rounded-xl pointer-events-none'>
                                                     Subir
@@ -121,7 +138,7 @@ export default function NewForm() {
                                     <FormItem className='col-span-2'>
                                         <FormLabel>Nombre</FormLabel>
                                         <FormControl>
-                                            <Input className='bg-_gray-F9F9F9' placeholder='Paciente' autoComplete='off' {...field} />
+                                            <Input className='bg-_gray-F9F9F9' placeholder='Paciente' autoComplete='off' required {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -134,44 +151,78 @@ export default function NewForm() {
                                     <FormItem className='col-span-1'>
                                         <FormLabel>Predicción</FormLabel>
                                         <FormControl>
-                                            <Input className='bg-_gray-F9F9F9' placeholder='Paciente' autoComplete='off' {...field} />
+                                            <Input disabled className='bg-_main text-_white' placeholder='Paciente' autoComplete='off' {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                            {/* <div className='flex flex-col gap-2 col-span-1'>
-                                <label htmlFor='prediccion' className='text-xs font-medium'>Prediccion</label>
-                                <div className='px-5 py-3 bg-_main text-_white rounded-lg'>
-                                    <input type='text' id='prediccion' disabled className='w-full bg-transparent outline-none text-sm font-semibold' placeholder='Sin predicción' />
-                                </div>
-                            </div> */}
-                            <div className='flex flex-col gap-2 col-span-1'>
-                                <label htmlFor='edad' className='text-xs font-medium'>Edad</label>
-                                <div className='px-5 py-3 bg-_gray-F9F9F9 rounded-lg'>
-                                    <input type='number' id='edad' max={150} min={10} className='w-full bg-transparent outline-none text-sm font-semibold' placeholder='18' />
-                                </div>
-                            </div>
-                            <div className='flex flex-col gap-2 col-span-2 row-span-2'>
-                                <label htmlFor='extra' className='text-xs font-medium'>Datos adicionales</label>
-                                <div className='px-5 py-3 bg-_gray-F9F9F9 rounded-lg h-full'>
-                                    <textarea id='extra' rows={5} className='w-full bg-transparent outline-none text-sm font-semibold' placeholder='Escribe datos adicionales del paciente' />
-                                </div>
-                            </div>
-                            <div className='flex flex-col gap-2 col-span-1'>
-                                <label htmlFor='sexo' className='text-xs font-medium'>Sexo</label>
-                                <div className='px-5 py-3 bg-_gray-F9F9F9 rounded-lg'>
-                                    <select name='sexo' id='sexo' className='w-full bg-transparent outline-none text-sm font-semibold' >
-                                        <option value='masculino'>Masculino</option>
-                                        <option value='femenino'>Femenino</option>
-                                    </select>
-                                </div>
-                            </div>
+                            <FormField
+                                control={form.control}
+                                name='age'
+                                render={({ field }) => (
+                                    <FormItem className='col-span-1'>
+                                        <FormLabel>Edad</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type='number'
+                                                max={150}
+                                                min={10}
+                                                className='bg-_gray-F9F9F9'
+                                                placeholder='18'
+                                                autoComplete='off'
+                                                required
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='extra'
+                                render={({ field }) => (
+                                    <FormItem className='col-span-2 row-span-2'>
+                                        <FormLabel>Datos adicionales</FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                rows={5}
+                                                className='bg-_gray-F9F9F9'
+                                                placeholder='Escribe datos adicionales del paciente'
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='gender'
+                                render={({ field }) => (
+                                    <FormItem className='col-span-1'>
+                                        <FormLabel>Género</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value} required>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder='Selecciona una opción' />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value='M'>Masculino</SelectItem>
+                                                <SelectItem value='F'>Femenino</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
                         <Button>Predecir</Button>
                     </div>
                 </div>
             </form>
-        </Form>
+        </Form >
     )
 }
