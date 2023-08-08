@@ -23,18 +23,20 @@ import { ImageIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-const MAX_RECOMMENDED_IMAGE_SIZE = 2
+const MAX_RECOMMENDED_IMAGE_SIZE = 4
 const MAX_FILE_SIZE = MAX_RECOMMENDED_IMAGE_SIZE * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
-const newDiagnosticsFormSchema = z.object({
+export const newDiagnosticsFormSchema = z.object({
     image: z
-        .any()
-        .refine((file) => file?.size <= MAX_FILE_SIZE, `Maximo tamaño de archivo: ${MAX_RECOMMENDED_IMAGE_SIZE}MB`)
+        .custom<File>()
         .refine(
-            (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-            `Solo se permiten los siguientes tipos de archivo: ${ACCEPTED_IMAGE_TYPES.join(', ')}`
-        ),
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+            `Los formatos soportados son: ${ACCEPTED_IMAGE_TYPES.map((type) => '.' + type.split('/')[1]).join(' | ')}`
+        )
+        .refine((file) => file.size <= MAX_FILE_SIZE, `Maximo tamaño de archivo: ${MAX_RECOMMENDED_IMAGE_SIZE}MB`)
+        .nullable()
+    ,
     name: z
         .string()
         .min(2, {
@@ -78,6 +80,7 @@ export default function NewForm() {
     function onSubmit(data: NewDiagnosticsFormValues) {
         // TODO: Send data to API
     }
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -118,7 +121,19 @@ export default function NewForm() {
                                                     Subir
                                                 </Button>
                                             </div>
-                                            <input type='file' id='upload' className='sr-only bottom-20' required {...field} />
+                                            <input
+                                                type='file'
+                                                id='upload'
+                                                onChange={(e) => {
+                                                    if (e.target.files && e.target.files[0]) {
+                                                        field.onChange(e.target.files && e.target.files[0])
+                                                    }
+                                                }}
+                                                accept={ACCEPTED_IMAGE_TYPES.join(',')}
+                                                className='sr-only bottom-20'
+                                                required
+                                            />
+                                            <FormMessage className='absolute inset-x-0 bottom-12 text-center' />
                                         </div>
                                     </label>
                                     <div className='border border-_gray-border' />
