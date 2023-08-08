@@ -27,7 +27,7 @@ const MAX_RECOMMENDED_IMAGE_SIZE = 4
 const MAX_FILE_SIZE = MAX_RECOMMENDED_IMAGE_SIZE * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
-export const newDiagnosticsFormSchema = z.object({
+export const newDiagnosticFormSchema = z.object({
     image: z
         .custom<File>()
         .refine(
@@ -60,9 +60,9 @@ export const newDiagnosticsFormSchema = z.object({
         .string(),
 })
 
-type NewDiagnosticsFormValues = z.infer<typeof newDiagnosticsFormSchema>
+type NewDiagnosticFormValues = z.infer<typeof newDiagnosticFormSchema>
 
-const defaultValues: Partial<NewDiagnosticsFormValues> = {
+const defaultValues: Partial<NewDiagnosticFormValues> = {
     name: 'Alvaro Martinez Martinez',
     prediction: 'Sin predicción',
     age: 23,
@@ -71,13 +71,13 @@ const defaultValues: Partial<NewDiagnosticsFormValues> = {
 }
 
 export default function NewForm() {
-    const form = useForm<NewDiagnosticsFormValues>({
-        resolver: zodResolver(newDiagnosticsFormSchema),
+    const form = useForm<NewDiagnosticFormValues>({
+        resolver: zodResolver(newDiagnosticFormSchema),
         defaultValues,
         mode: 'onChange',
     })
 
-    function onSubmit(data: NewDiagnosticsFormValues) {
+    function onSubmit(data: NewDiagnosticFormValues) {
         // TODO: Send data to API
     }
 
