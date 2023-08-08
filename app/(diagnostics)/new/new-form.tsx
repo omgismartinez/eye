@@ -27,7 +27,7 @@ const MAX_RECOMMENDED_IMAGE_SIZE = 4
 const MAX_FILE_SIZE = MAX_RECOMMENDED_IMAGE_SIZE * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
-export const newDiagnosticFormSchema = z.object({
+const newDiagnosticFormSchema = z.object({
     image: z
         .custom<File>()
         .refine(
@@ -60,7 +60,7 @@ export const newDiagnosticFormSchema = z.object({
         .string(),
 })
 
-type NewDiagnosticFormValues = z.infer<typeof newDiagnosticFormSchema>
+export type NewDiagnosticFormValues = z.infer<typeof newDiagnosticFormSchema>
 
 const defaultValues: Partial<NewDiagnosticFormValues> = {
     name: 'Alvaro Martinez Martinez',
