@@ -21,7 +21,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ImageIcon } from 'lucide-react'
+import { Dot, ImageIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Image from 'next/image'
@@ -74,6 +74,7 @@ const defaultValues: Partial<NewDiagnosticFormValues> = {
 }
 
 export default function NewForm() {
+    const [loading, setLoading] = useState(false)
     const [image, setImage] = useState<File | null>(null)
     const form = useForm<NewDiagnosticFormValues>({
         resolver: zodResolver(newDiagnosticFormSchema),
@@ -82,6 +83,7 @@ export default function NewForm() {
     })
 
     async function onSubmit(data: NewDiagnosticFormValues) {
+        setLoading(true)
         const formData = new FormData()
         formData.append('image', data.image as File)
         formData.append('name', data.name)
@@ -96,6 +98,7 @@ export default function NewForm() {
 
         const prediction: ImageClassificationOutput = await res.json()
         form.setValue('prediction', prediction[0].label)
+        setLoading(false)
     }
 
     return (
@@ -112,6 +115,7 @@ export default function NewForm() {
                                     <label htmlFor='upload'>
                                         <div
                                             data-active={!!image}
+                                            data-loading={loading}
                                             className={`
                                                 flex
                                                 items-center
@@ -124,6 +128,7 @@ export default function NewForm() {
                                                 border-dashed
                                                 border-_gray-808080
                                                 data-[active="true"]:border-_gray-C2C2C2
+                                                data-[loading="true"]:animate-pulse
                                                 rounded-lg
                                                 overflow-hidden
                                                 p-4
@@ -157,6 +162,7 @@ export default function NewForm() {
                                                 }}
                                                 accept={ACCEPTED_IMAGE_TYPES.join(',')}
                                                 className='sr-only bottom-20'
+                                                disabled={loading}
                                                 required
                                             />
                                             <FormMessage className='absolute inset-x-0 bottom-12 text-center' />
@@ -193,7 +199,7 @@ export default function NewForm() {
                                         <FormLabel>Predicción</FormLabel>
                                         <FormControl>
                                             <Input
-                                                disabled={field.value?.includes('Sin predicción')}
+                                                disabled={field.value?.includes('Sin predicción') || loading}
                                                 className='bg-_main text-_white capitalize'
                                                 placeholder='Paciente'
                                                 autoComplete='off'
@@ -267,7 +273,19 @@ export default function NewForm() {
                                 )}
                             />
                         </div>
-                        <Button>Predecir</Button>
+                        <Button disabled={loading}>
+                            <div className='relative'>
+                                Predecir
+                                <div
+                                    data-loading={loading}
+                                    className='absolute -top-1 -right-10 flex opacity-0 -space-x-4 ease-in-out duration-300 data-[loading="true"]:opacity-100'
+                                >
+                                    <Dot className='text-_white animate-pulse m-0 duration-700 delay-1000' />
+                                    <Dot className='text-_white animate-pulse m-0 duration-700 delay-500' />
+                                    <Dot className='text-_white animate-pulse m-0 duration-700' />
+                                </div>
+                            </div>
+                        </Button>
                     </div>
                 </div>
             </form>
