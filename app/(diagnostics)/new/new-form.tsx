@@ -177,12 +177,12 @@ export default function NewForm() {
                 <div>
                     <h1 className='text-base font-bold text-center my-4'>Datos del paciente</h1>
                     <div className='flex flex-col gap-3'>
-                        <div className='grid grid-cols-3 grid-rows-3 gap-3'>
+                        <div className='grid sm:grid-cols-3 lg:grid-rows-3 gap-4 lg:gap-3'>
                             <FormField
                                 control={form.control}
                                 name='name'
                                 render={({ field }) => (
-                                    <FormItem className='col-span-2'>
+                                    <FormItem className='sm:col-span-2'>
                                         <FormLabel>Nombre</FormLabel>
                                         <FormControl>
                                             <Input className='bg-_gray-F9F9F9' placeholder='Paciente' autoComplete='off' required {...field} />
@@ -195,7 +195,7 @@ export default function NewForm() {
                                 control={form.control}
                                 name='prediction'
                                 render={({ field }) => (
-                                    <FormItem className='col-span-1'>
+                                    <FormItem className='lg:col-span-1'>
                                         <FormLabel>Predicción</FormLabel>
                                         <FormControl>
                                             <Input
@@ -215,7 +215,7 @@ export default function NewForm() {
                                 control={form.control}
                                 name='age'
                                 render={({ field }) => (
-                                    <FormItem className='col-span-1'>
+                                    <FormItem className='lg:col-span-1'>
                                         <FormLabel>Edad</FormLabel>
                                         <FormControl>
                                             <Input
@@ -237,7 +237,7 @@ export default function NewForm() {
                                 control={form.control}
                                 name='extra'
                                 render={({ field }) => (
-                                    <FormItem className='col-span-2 row-span-2'>
+                                    <FormItem className='sm:col-span-2 row-span-2'>
                                         <FormLabel>Datos adicionales</FormLabel>
                                         <FormControl>
                                             <Textarea
@@ -263,7 +263,7 @@ export default function NewForm() {
                                                     <SelectValue placeholder='Selecciona una opción' />
                                                 </SelectTrigger>
                                             </FormControl>
-                                            <SelectContent>
+                                            <SelectContent side='top'>
                                                 <SelectItem value='M'>Masculino</SelectItem>
                                                 <SelectItem value='F'>Femenino</SelectItem>
                                             </SelectContent>
