@@ -141,7 +141,7 @@ export default function NewForm() {
                                                 <div className='flex flex-col items-center gap-3'>
                                                     <h1 className='font-bold text-base'>Subir Media</h1>
                                                     <p data-active={!!image} className='text-xs text-_gray-808080 backdrop-blur-sm text-center data-[active="true"]:text-_main'>
-                                                        Las imágenes deben tener menos de <strong>{MAX_RECOMMENDED_IMAGE_SIZE} MB</strong> de tamaño.
+                                                        La imagen debe tener un tamaño inferior a <strong>{MAX_RECOMMENDED_IMAGE_SIZE} MB</strong>.
                                                     </p>
                                                     <Button type='button' className='px-10 rounded-xl pointer-events-none'>
                                                         Subir
