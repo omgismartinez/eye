@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+import type { ImageClassificationOutput } from '@huggingface/inference'
 import { Button } from '@/components/ui/button'
 import {
     Form,
@@ -22,6 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ImageIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import Image from 'next/image'
 
 const MAX_RECOMMENDED_IMAGE_SIZE = 4
 const MAX_FILE_SIZE = MAX_RECOMMENDED_IMAGE_SIZE * 1024 * 1024
@@ -71,14 +74,28 @@ const defaultValues: Partial<NewDiagnosticFormValues> = {
 }
 
 export default function NewForm() {
+    const [image, setImage] = useState<File | null>(null)
     const form = useForm<NewDiagnosticFormValues>({
         resolver: zodResolver(newDiagnosticFormSchema),
         defaultValues,
         mode: 'onChange',
     })
 
-    function onSubmit(data: NewDiagnosticFormValues) {
-        // TODO: Send data to API
+    async function onSubmit(data: NewDiagnosticFormValues) {
+        const formData = new FormData()
+        formData.append('image', data.image as File)
+        formData.append('name', data.name)
+        formData.append('age', data.age.toString())
+        formData.append('extra', data.extra as string)
+        formData.append('gender', data.gender)
+
+        const res = await fetch('/api/classification', {
+            method: 'POST',
+            body: formData,
+        })
+
+        const prediction: ImageClassificationOutput = await res.json()
+        form.setValue('prediction', prediction[0].label)
     }
 
     return (
@@ -93,12 +110,12 @@ export default function NewForm() {
                                 <div className='flex flex-col gap-10'>
                                     <div className='border border-_gray-border' />
                                     <label htmlFor='upload'>
-                                        <div className={`
+                                        <div
+                                            data-active={!!image}
+                                            className={`
                                                 flex
-                                                flex-col
                                                 items-center
                                                 justify-center
-                                                gap-5
                                                 h-80
                                                 bg-_gray-F9F9F9
                                                 hover:bg-_gray-select
@@ -106,20 +123,25 @@ export default function NewForm() {
                                                 border-2
                                                 border-dashed
                                                 border-_gray-808080
+                                                data-[active="true"]:border-_gray-C2C2C2
                                                 rounded-lg
+                                                overflow-hidden
                                                 p-4
                                                 relative
                                             `}
                                         >
-                                            <ImageIcon size={28} />
-                                            <div className='flex flex-col items-center gap-3'>
-                                                <h1 className='font-bold text-base'>Subir Media</h1>
-                                                <p className='text-xs text-_gray-808080'>
-                                                    Las imágenes deben tener menos de <strong>{MAX_RECOMMENDED_IMAGE_SIZE} MB</strong> de tamaño.
-                                                </p>
-                                                <Button type='button' className='px-10 rounded-xl pointer-events-none'>
-                                                    Subir
-                                                </Button>
+                                            {image && <Image alt='image-preview' src={URL.createObjectURL(image)} className='object-cover opacity-50' fill />}
+                                            <div className='z-10 p-4 rounded-lg flex flex-col justify-center items-center gap-5'>
+                                                <ImageIcon size={28} />
+                                                <div className='flex flex-col items-center gap-3'>
+                                                    <h1 className='font-bold text-base'>Subir Media</h1>
+                                                    <p data-active={!!image} className='text-xs text-_gray-808080 backdrop-blur-sm text-center data-[active="true"]:text-_main'>
+                                                        Las imágenes deben tener menos de <strong>{MAX_RECOMMENDED_IMAGE_SIZE} MB</strong> de tamaño.
+                                                    </p>
+                                                    <Button type='button' className='px-10 rounded-xl pointer-events-none'>
+                                                        Subir
+                                                    </Button>
+                                                </div>
                                             </div>
                                             <input
                                                 type='file'
@@ -127,6 +149,10 @@ export default function NewForm() {
                                                 onChange={(e) => {
                                                     if (e.target.files && e.target.files[0]) {
                                                         field.onChange(e.target.files && e.target.files[0])
+                                                        setImage(e.target.files[0])
+                                                    } else {
+                                                        field.onChange(null)
+                                                        setImage(null)
                                                     }
                                                 }}
                                                 accept={ACCEPTED_IMAGE_TYPES.join(',')}
@@ -166,7 +192,14 @@ export default function NewForm() {
                                     <FormItem className='col-span-1'>
                                         <FormLabel>Predicción</FormLabel>
                                         <FormControl>
-                                            <Input disabled className='bg-_main text-_white' placeholder='Paciente' autoComplete='off' {...field} />
+                                            <Input
+                                                disabled={field.value?.includes('Sin predicción')}
+                                                className='bg-_main text-_white capitalize'
+                                                placeholder='Paciente'
+                                                autoComplete='off'
+                                                readOnly
+                                                {...field}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
