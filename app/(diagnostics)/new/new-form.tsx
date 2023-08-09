@@ -32,14 +32,12 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 const newDiagnosticFormSchema = z.object({
     image: z
-        .custom<File>()
+        .custom<File | null>()
         .refine(
-            (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+            (file) => file && ACCEPTED_IMAGE_TYPES.includes(file.type),
             `Los formatos soportados son: ${ACCEPTED_IMAGE_TYPES.map((type) => '.' + type.split('/')[1]).join(' | ')}`
         )
-        .refine((file) => file.size <= MAX_FILE_SIZE, `Maximo tamaño de archivo: ${MAX_RECOMMENDED_IMAGE_SIZE}MB`)
-        .nullable()
-    ,
+        .refine((file) => file && file.size <= MAX_FILE_SIZE, `Maximo tamaño de archivo: ${MAX_RECOMMENDED_IMAGE_SIZE}MB`),
     name: z
         .string()
         .min(2, {
