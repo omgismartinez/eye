@@ -18,6 +18,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+    HoverCardArrow,
+} from '@/components/ui/hover-card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -25,6 +31,7 @@ import { Dot, ImageIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Image from 'next/image'
+import Marker from '@/components/tables/marker'
 
 const MAX_RECOMMENDED_IMAGE_SIZE = 4
 const MAX_FILE_SIZE = MAX_RECOMMENDED_IMAGE_SIZE * 1024 * 1024
@@ -74,6 +81,7 @@ const defaultValues: Partial<NewDiagnosticFormValues> = {
 export default function NewForm() {
     const [loading, setLoading] = useState(false)
     const [image, setImage] = useState<File | null>(null)
+    const [predictions, setPredictions] = useState<ImageClassificationOutput>([])
     const form = useForm<NewDiagnosticFormValues>({
         resolver: zodResolver(newDiagnosticFormSchema),
         defaultValues,
@@ -96,6 +104,7 @@ export default function NewForm() {
 
         const prediction: ImageClassificationOutput = await res.json()
         form.setValue('prediction', prediction[0].label)
+        setPredictions(prediction)
         setLoading(false)
     }
 
@@ -193,20 +202,61 @@ export default function NewForm() {
                                 control={form.control}
                                 name='prediction'
                                 render={({ field }) => (
-                                    <FormItem className='lg:col-span-1'>
-                                        <FormLabel>Predicción</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                disabled={field.value?.includes('Sin predicción') || loading}
-                                                className='bg-_main text-_white capitalize'
-                                                placeholder='Paciente'
-                                                autoComplete='off'
-                                                readOnly
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
+                                    <HoverCard openDelay={200}>
+                                        <HoverCardTrigger asChild>
+                                            <FormItem className='lg:col-span-1'>
+                                                <FormLabel>Predicción</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        disabled={field.value?.includes('Sin predicción') || loading}
+                                                        className='bg-_main text-_white capitalize'
+                                                        autoComplete='off'
+                                                        readOnly
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        </HoverCardTrigger>
+                                        <HoverCardContent
+                                            className='
+                                                min-w-min
+                                                text-sm
+                                                whitespace-normal
+                                                border-none
+                                                rounded-lg
+                                                bg-white
+                                                p-5
+                                                shadow-[hsl(206_22%_7%_/_35%)_0px_10px_25px_-10px,hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]
+                                            '
+                                            side='top'
+                                            sideOffset={5}
+                                        >
+                                            <div className='flex flex-col gap-3'>
+                                                <h1 className='text-base font-bold text-center pb-4'>Predicciones</h1>
+                                                <div className='grid gap-3'>
+                                                    {predictions.length
+                                                        ? predictions.map((prediction) => {
+                                                            const value = Math.ceil((prediction.score / Math.max(...predictions.map((p) => p.score))) * 80)
+                                                            return (
+                                                                <div key={prediction.label} className='grid text-xs'>
+                                                                    <div className='grid gap-1'>
+                                                                        <Marker label={prediction.label} type={'badge'} value={value} />
+                                                                        <div className='flex justify-between'>
+                                                                            <p className='capitalize text-xs'>{prediction.label}</p>
+                                                                            <p className='text-_gray-808080'>{(prediction.score).toFixed(3)}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>)
+                                                        })
+                                                        : <p className='text-center text-xs text-_gray-808080'>
+                                                            Sube una imagen y completa los campos para predecir.
+                                                        </p>}
+                                                </div>
+                                            </div>
+                                            <HoverCardArrow className='fill-_white' />
+                                        </HoverCardContent>
+                                    </HoverCard>
                                 )}
                             />
                             <FormField
