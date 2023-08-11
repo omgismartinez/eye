@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
     // Initialize a image-classification using the Hugging Face Inference SDK
     const response = await Hf.imageClassification({
-        model: 'researchers/google-vbp2-dr400-modificado-2',
+        model: 'researchers/google-vbp2-dr400-valid',
         data: buffer,
     })
 
