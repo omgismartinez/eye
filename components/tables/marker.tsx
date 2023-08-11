@@ -18,7 +18,7 @@ export default function Marker(props: MarkerProps) {
                 'bg-red-700': props.label === 'proliferativa',
                 'w-2 mr-2': type === 'marker'
             }, props.className)}
-            style={{ width: props.type === 'badge' ? `${props.value * 100}%` : undefined, }}
+            style={{ width: props.type === 'badge' ? `${(props.value)}%` : undefined, }}
         />
     )
 }
