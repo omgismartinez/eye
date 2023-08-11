@@ -93,7 +93,7 @@ export const columns: ColumnDef<Patient>[] = [
             return (
                 <div className='flex items-center'>
                     <Badge variant='outline' className='capitalize'>
-                        <Marker value={prediction.value} />
+                        <Marker label={prediction.value} />
                         {prediction.value}
                     </Badge>
                 </div>
