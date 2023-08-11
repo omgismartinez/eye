@@ -1,9 +1,9 @@
-export type Status = 'no dr' | 'leve' | 'moderado' | 'severo' | 'proliferativo'
+export type Status = 'no dr' | 'leve' | 'moderada' | 'severa' | 'proliferativa'
 
 export type Diagnostic = {
     id: string
     patient: Patient
-    prediction: 'no dr' | 'leve' | 'moderado' | 'severo' | 'proliferativo'
+    prediction: Status
     date: string
 }
 
