@@ -10,16 +10,16 @@ export const predictions: { label: string, value: Status }[] = [
         value: 'leve',
     },
     {
-        label: 'Moderado',
-        value: 'moderado',
+        label: 'Moderada',
+        value: 'moderada',
     },
     {
-        label: 'Severo',
-        value: 'severo',
+        label: 'Severa',
+        value: 'severa',
     },
     {
-        label: 'Proliferativo',
-        value: 'proliferativo',
+        label: 'Proliferativa',
+        value: 'proliferativa',
     },
 ]
 
@@ -65,7 +65,7 @@ export const feikData: Diagnostic[] = [
         patient: {
             id: '3',
             name: 'Miriam Rodriguez Ortiz',
-            prediction: 'moderado',
+            prediction: 'moderada',
             image: 'https://avatars.dicebear.com/api/open-peeps/3.svg',
             birthdate: new Date('12/3/2002'),
             phone: 7284612340,
@@ -75,7 +75,7 @@ export const feikData: Diagnostic[] = [
             address: 'Calle 123',
             occupation: 'Estudiante',
         },
-        prediction: 'moderado',
+        prediction: 'moderada',
         date: '9/6/2023, 9:01:24 a. m.'
     },
     {
@@ -83,7 +83,7 @@ export const feikData: Diagnostic[] = [
         patient: {
             id: '4',
             name: 'Maria Perez Alvarado',
-            prediction: 'severo',
+            prediction: 'severa',
             image: 'https://avatars.dicebear.com/api/open-peeps/12.svg',
             birthdate: new Date('5/6/1975'),
             phone: 1234567890,
@@ -93,7 +93,7 @@ export const feikData: Diagnostic[] = [
             address: 'Calle 123',
             occupation: 'Ama de casa',
         },
-        prediction: 'severo',
+        prediction: 'severa',
         date: '11/6/2023, 7:21:24 a. m.'
     },
     {
@@ -101,7 +101,7 @@ export const feikData: Diagnostic[] = [
         patient: {
             id: '728ed52f',
             name: 'Juan Perez Estrada',
-            prediction: 'proliferativo',
+            prediction: 'proliferativa',
             image: 'https://avatars.dicebear.com/api/open-peeps/10.svg',
             birthdate: new Date('1/1/1956'),
             phone: 1234567890,
@@ -111,7 +111,7 @@ export const feikData: Diagnostic[] = [
             address: 'Calle Circunvalación, #123, Col. Centro, C.P. 94300, Orizaba, Veracruz.',
             occupation: 'Transportista',
         },
-        prediction: 'proliferativo',
+        prediction: 'proliferativa',
         date: '1/6/2023, 5:21:24 p. m.'
     },
 ]
