@@ -1,19 +1,24 @@
 import { cn } from '@/lib/utils'
+import { Status } from '@/types'
 
-interface MarkerProps {
-    value: string
-}
+type MarkerProps = {
+    label: Status | string
+    className?: string
+} & ({ type?: 'marker' } | { type?: 'badge', value: number })
 
-export default function Marker({ value }: MarkerProps) {
+export default function Marker(props: MarkerProps) {
+    const { type = 'marker' } = props
     return (
         <div
-            className={cn('w-2 h-2 rounded-full mr-2', {
-                'bg-green-500': value === 'no dr',
-                'bg-yellow-500': value === 'leve',
-                'bg-yellow-700': value === 'moderado',
-                'bg-red-500': value === 'severo',
-                'bg-red-700': value === 'proliferativo',
-            })}
+            className={cn('h-2 rounded-full', {
+                'bg-green-500': props.label === 'no dr',
+                'bg-yellow-500': props.label === 'leve',
+                'bg-yellow-700': props.label === 'moderada',
+                'bg-red-500': props.label === 'severa',
+                'bg-red-700': props.label === 'proliferativa',
+                'w-2 mr-2': type === 'marker'
+            }, props.className)}
+            style={{ width: props.type === 'badge' ? `${props.value * 100}%` : undefined, }}
         />
     )
 }
