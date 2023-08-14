@@ -23,7 +23,7 @@ export default function RootLayout({
           <div className='hidden h-full lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0 z-80'>
             <Sidebar />
           </div>
-          <div className='lg:ml-72 pt-[73px] w-full overflow-hidden'>
+          <div className='lg:ml-72 w-full overflow-hidden'>
             <div className='px-4 lg:px-6 py-8'>
               {children}
             </div>
