@@ -21,13 +21,17 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
     table,
 }: DataTablePaginationProps<TData>) {
+    const selectedRows = table.getFilteredSelectedRowModel().rows.length
+    const totalRows = table.getFilteredRowModel().rows.length
+    const pageCount = table.getPageCount()
+    const pageIndex = table.getState().pagination.pageIndex + 1
     return (
-        <div className='flex items-center justify-between px-4'>
-            <div className='flex-1 text-sm text-_gray-808080'>
-                {table.getFilteredSelectedRowModel().rows.length} de{' '}
-                {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s)
+        <div className='flex items-center justify-between sm:px-4 whitespace-nowrap'>
+            <div className='hidden sm:block flex-1 text-sm text-_gray-808080'>
+                {selectedRows} de{' '}
+                {totalRows} fila(s) seleccionada(s)
             </div>
-            <div className='flex items-center space-x-6 lg:space-x-8'>
+            <div className='flex items-center justify-between w-full sm:w-min space-x-4 sm:space-x-6 lg:space-x-8'>
                 <div className='flex items-center space-x-2'>
                     <p className='text-sm font-medium'>Filas por página</p>
                     <Select
@@ -48,11 +52,10 @@ export function DataTablePagination<TData>({
                         </SelectContent>
                     </Select>
                 </div>
-                <div className='flex w-[100px] items-center justify-center text-sm font-medium'>
-                    Página {table.getState().pagination.pageIndex + 1} de{' '}
-                    {table.getPageCount()}
-                </div>
                 <div className='flex items-center space-x-2'>
+                    <div className='hidden xs:block whitespace-nowrap text-sm font-medium'>
+                        Página {pageIndex} de {pageCount}
+                    </div>
                     <Button
                         variant='outline'
                         className='hidden h-8 w-8 p-0 lg:flex'
