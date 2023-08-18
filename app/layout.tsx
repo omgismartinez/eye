@@ -2,6 +2,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Sidebar from '@/components/sidebar'
 import Navbar from '@/components/navbar'
+import { ThemeProvider } from '@/components/providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,19 +17,26 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang='es'>
+    <html lang='es' suppressHydrationWarning>
       <body className={`min-h-screen ${inter.className}`}>
-        <Navbar />
-        <main className='flex max-w-screen-2xl mx-auto'>
-          <div className='hidden h-full lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0 z-80'>
-            <Sidebar />
-          </div>
-          <div className='lg:ml-72 w-full overflow-hidden'>
-            <div className='px-4 lg:px-6 py-8'>
-              {children}
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Navbar />
+          <main className='flex max-w-screen-2xl mx-auto'>
+            <div className='hidden h-full lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0 z-80'>
+              <Sidebar />
             </div>
-          </div>
-        </main>
+            <div className='lg:ml-72 w-full overflow-hidden'>
+              <div className='px-4 lg:px-6 py-8'>
+                {children}
+              </div>
+            </div>
+          </main>
+        </ThemeProvider>
       </body>
     </html >
   )
