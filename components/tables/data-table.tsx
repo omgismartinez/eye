@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
     return (
         <div className='flex flex-col gap-4'>
             <DataTableFilter table={table} />
-            <div className='rounded-lg border border-_gray-border overflow-hidden'>
+            <div className='rounded-lg border border-_gray-border dark:border-_dark-gray overflow-hidden'>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
