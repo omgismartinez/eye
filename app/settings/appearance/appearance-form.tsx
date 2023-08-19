@@ -15,6 +15,7 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useTheme } from 'next-themes'
 
 const appearanceFormSchema = z.object({
     theme: z.enum(['light', 'dark'], {
@@ -30,12 +31,15 @@ const defaultValues: Partial<AppearanceFormValues> = {
 }
 
 export function AppearanceForm() {
+    const { setTheme } = useTheme()
+
     const form = useForm<AppearanceFormValues>({
         resolver: zodResolver(appearanceFormSchema),
         defaultValues,
     })
 
     function onSubmit(data: AppearanceFormValues) {
+        setTheme(data.theme)
         // toast({
         //     title: 'You submitted the following values:',
         //     description: (
@@ -60,28 +64,33 @@ export function AppearanceForm() {
                             </FormDescription>
                             <FormMessage />
                             <RadioGroup
-                                onValueChange={() => field.onChange}
+                                onValueChange={field.onChange}
                                 defaultValue={field.value}
                                 className='grid max-w-md grid-cols-2 gap-8 pt-2'
                             >
                                 <FormItem>
-                                    <FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
+                                    <FormLabel className='
+                                            [&:has([data-state=checked])>div]:border-_main
+                                            dark:[&:has([data-state=checked])>div]:border-_white
+                                            dark:[&:has([data-state=unchecked])>div]:border-_dark-gray
+                                        '
+                                    >
                                         <FormControl>
                                             <RadioGroupItem value='light' className='sr-only' />
                                         </FormControl>
-                                        <div className='items-center rounded-md border-2 border-muted p-1 hover:border-accent'>
-                                            <div className='space-y-2 rounded-sm bg-[#ecedef] p-2'>
-                                                <div className='space-y-2 rounded-md bg-white p-2 shadow-sm'>
-                                                    <div className='h-2 w-[80px] rounded-lg bg-[#ecedef]' />
-                                                    <div className='h-2 w-[100px] rounded-lg bg-[#ecedef]' />
+                                        <div className='items-center rounded-md border-2 border-_gray-border p-1 hover:bg-_gray-select/40 dark:hover:bg-white/10 group'>
+                                            <div className='space-y-2 rounded-sm bg-_gray-select p-2'>
+                                                <div className='space-y-2 rounded-md bg-white p-2 shadow-sm group-hover:animate-pulse'>
+                                                    <div className='h-2 w-[80px] rounded-lg bg-_gray-808080/40' />
+                                                    <div className='h-2 w-[100px] rounded-lg bg-_gray-808080/40' />
                                                 </div>
-                                                <div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm'>
-                                                    <div className='h-4 w-4 rounded-full bg-[#ecedef]' />
-                                                    <div className='h-2 w-[100px] rounded-lg bg-[#ecedef]' />
+                                                <div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm group-hover:animate-pulse'>
+                                                    <div className='h-4 w-4 rounded-full bg-_gray-808080/40' />
+                                                    <div className='h-2 w-[100px] rounded-lg bg-_gray-808080/40' />
                                                 </div>
-                                                <div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm'>
-                                                    <div className='h-4 w-4 rounded-full bg-[#ecedef]' />
-                                                    <div className='h-2 w-[100px] rounded-lg bg-[#ecedef]' />
+                                                <div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm group-hover:animate-pulse'>
+                                                    <div className='h-4 w-4 rounded-full bg-_gray-808080/40' />
+                                                    <div className='h-2 w-[100px] rounded-lg bg-_gray-808080/40' />
                                                 </div>
                                             </div>
                                         </div>
@@ -91,23 +100,28 @@ export function AppearanceForm() {
                                     </FormLabel>
                                 </FormItem>
                                 <FormItem>
-                                    <FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
+                                    <FormLabel className='
+                                            [&:has([data-state=checked])>div]:border-_main
+                                            dark:[&:has([data-state=checked])>div]:border-_white
+                                            dark:[&:has([data-state=unchecked])>div]:border-_dark-gray
+                                        '
+                                    >
                                         <FormControl>
                                             <RadioGroupItem value='dark' className='sr-only' />
                                         </FormControl>
-                                        <div className='items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground'>
-                                            <div className='space-y-2 rounded-sm bg-slate-950 p-2'>
-                                                <div className='space-y-2 rounded-md bg-slate-800 p-2 shadow-sm'>
-                                                    <div className='h-2 w-[80px] rounded-lg bg-slate-400' />
-                                                    <div className='h-2 w-[100px] rounded-lg bg-slate-400' />
+                                        <div className='items-center rounded-md border-2 border-_gray-border bg-popover p-1 hover:bg-_gray-select dark:hover:bg-_dark-gray/40 group'>
+                                            <div className='space-y-2 rounded-sm bg-_dark-gray p-2'>
+                                                <div className='space-y-2 rounded-md bg-_main p-2 shadow-sm group-hover:animate-pulse'>
+                                                    <div className='h-2 w-[80px] rounded-lg bg-_gray-808080' />
+                                                    <div className='h-2 w-[100px] rounded-lg bg-_gray-808080' />
                                                 </div>
-                                                <div className='flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm'>
-                                                    <div className='h-4 w-4 rounded-full bg-slate-400' />
-                                                    <div className='h-2 w-[100px] rounded-lg bg-slate-400' />
+                                                <div className='flex items-center space-x-2 rounded-md bg-_main p-2 shadow-sm group-hover:animate-pulse'>
+                                                    <div className='h-4 w-4 rounded-full bg-_gray-808080' />
+                                                    <div className='h-2 w-[100px] rounded-lg bg-_gray-808080' />
                                                 </div>
-                                                <div className='flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm'>
-                                                    <div className='h-4 w-4 rounded-full bg-slate-400' />
-                                                    <div className='h-2 w-[100px] rounded-lg bg-slate-400' />
+                                                <div className='flex items-center space-x-2 rounded-md bg-_main p-2 shadow-sm group-hover:animate-pulse'>
+                                                    <div className='h-4 w-4 rounded-full bg-_gray-808080' />
+                                                    <div className='h-2 w-[100px] rounded-lg bg-_gray-808080' />
                                                 </div>
                                             </div>
                                         </div>

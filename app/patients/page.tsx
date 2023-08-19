@@ -4,6 +4,7 @@ import { feikData } from '@/components/tables/data'
 import { DataTable } from '@/components/tables/data-table'
 import { Patient } from '@/types'
 import { columns, columnsVisibility } from './columns'
+import { Separator } from '@/components/ui/separator'
 
 export const metadata: Metadata = {
     title: 'Pacientes Registrados',
@@ -30,7 +31,7 @@ export default async function Patients() {
                 title='Pacientes registrados'
                 subtitle='La tabla de pacientes permite tener un registro completo y organizado de todos los individuos atendidos.'
             />
-            <div className='border border-_gray-border' />
+            <Separator />
             <DataTable columnsVisibility={columnsVisibility} columns={columns} data={data} />
         </main>
     )

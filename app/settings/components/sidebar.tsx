@@ -28,8 +28,8 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                        `justify-start px-4 py-3 rounded-lg font-semibold text-sm text-_gray-C2C2C2 hover:bg-_gray-select`,
-                        pathname === item.href && 'bg-_gray-select text-_main',
+                        `justify-start px-4 py-3 rounded-lg font-semibold text-sm text-_gray-C2C2C2 hover:bg-_gray-select dark:hover:bg-_dark-gray`,
+                        pathname === item.href && 'bg-_gray-select text-_main dark:bg-_dark-gray dark:text-_white',
                     )}>
                     {item.title}
                 </Link>

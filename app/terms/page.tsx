@@ -9,7 +9,7 @@ export default function Terms() {
     return (
         <main>
             <div className='flex justify-center items-center h-96'>
-                <h1 className='text-5xl font-bold text-center text-_main'>
+                <h1 className='text-5xl font-bold text-center text-foreground'>
                     Términos del Servicio
                 </h1>
             </div>

@@ -32,6 +32,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Image from 'next/image'
 import Marker from '@/components/tables/marker'
+import { Separator } from '@/components/ui/separator'
 
 const MAX_RECOMMENDED_IMAGE_SIZE = 4
 const MAX_FILE_SIZE = MAX_RECOMMENDED_IMAGE_SIZE * 1024 * 1024
@@ -118,7 +119,7 @@ export default function NewForm() {
                         <FormItem>
                             <FormControl>
                                 <div className='flex flex-col gap-10'>
-                                    <div className='border border-_gray-border' />
+                                    <div className='border border-_gray-border dark:border-_dark-gray' />
                                     <label htmlFor='upload'>
                                         <div
                                             data-active={!!image}
@@ -130,11 +131,15 @@ export default function NewForm() {
                                                 h-80
                                                 bg-_gray-F9F9F9
                                                 hover:bg-_gray-select
+                                                dark:bg-_dark-gray/30
+                                                dark:hover:bg-_dark-gray/20
                                                 cursor-pointer
                                                 border-2
                                                 border-dashed
                                                 border-_gray-808080
                                                 data-[active="true"]:border-_gray-C2C2C2
+                                                dark:border-_dark-gray
+                                                dark:data-[active="true"]:border-_dark-gray/50
                                                 data-[loading="true"]:animate-pulse
                                                 rounded-lg
                                                 overflow-hidden
@@ -147,7 +152,7 @@ export default function NewForm() {
                                                 <ImageIcon size={28} />
                                                 <div className='flex flex-col items-center gap-3'>
                                                     <h1 className='font-bold text-base'>Subir Media</h1>
-                                                    <p data-active={!!image} className='text-xs text-_gray-808080 backdrop-blur-sm text-center data-[active="true"]:text-_main'>
+                                                    <p data-active={!!image} className='text-xs text-_gray-808080 backdrop-blur-sm text-center data-[active="true"]:text-_main dark:data-[active="true"]:text-_white'>
                                                         La imagen debe tener un tamaño inferior a <strong>{MAX_RECOMMENDED_IMAGE_SIZE} MB</strong>.
                                                     </p>
                                                     <Button type='button' className='px-10 rounded-xl pointer-events-none'>
@@ -175,7 +180,7 @@ export default function NewForm() {
                                             <FormMessage className='absolute inset-x-0 bottom-12 text-center' />
                                         </div>
                                     </label>
-                                    <div className='border border-_gray-border' />
+                                    <Separator />
                                 </div>
                             </FormControl>
                         </FormItem>
@@ -192,7 +197,7 @@ export default function NewForm() {
                                     <FormItem className='sm:col-span-2'>
                                         <FormLabel>Nombre</FormLabel>
                                         <FormControl>
-                                            <Input className='bg-_gray-F9F9F9' placeholder='Paciente' autoComplete='off' required {...field} />
+                                            <Input placeholder='Paciente' autoComplete='off' required {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -226,6 +231,7 @@ export default function NewForm() {
                                                 border-none
                                                 rounded-lg
                                                 bg-white
+                                                dark:bg-_dark-gray
                                                 p-5
                                                 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_25px_-10px,hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]
                                             '
@@ -254,7 +260,7 @@ export default function NewForm() {
                                                         </p>}
                                                 </div>
                                             </div>
-                                            <HoverCardArrow className='fill-_white' />
+                                            <HoverCardArrow className='fill-_white dark:fill-_dark-gray' />
                                         </HoverCardContent>
                                     </HoverCard>
                                 )}
@@ -270,7 +276,6 @@ export default function NewForm() {
                                                 type='number'
                                                 max={150}
                                                 min={10}
-                                                className='bg-_gray-F9F9F9'
                                                 placeholder='18'
                                                 autoComplete='off'
                                                 required
@@ -290,7 +295,6 @@ export default function NewForm() {
                                         <FormControl>
                                             <Textarea
                                                 rows={5}
-                                                className='bg-_gray-F9F9F9'
                                                 placeholder='Escribe datos adicionales del paciente'
                                                 {...field}
                                             />

@@ -4,6 +4,7 @@ import { feikData } from '@/components/tables/data'
 import { DataTable } from '@/components/tables/data-table'
 import { Diagnostic } from '@/types'
 import { columns, columnsVisibility } from './columns'
+import { Separator } from '@/components/ui/separator'
 
 export const metadata: Metadata = {
     title: 'Diagnósticos Realizados',
@@ -30,7 +31,7 @@ export default async function All() {
                     Lo que permite un <strong>seguimiento preciso</strong> de la evolución de la retinopatía diabética en cada paciente.
                 </>}
             />
-            <div className='border border-_gray-border' />
+            <Separator />
             <DataTable columnsVisibility={columnsVisibility} columns={columns} data={data} />
         </main>
     )
