@@ -20,7 +20,7 @@ const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn('[&_tr]:border-b bg-_gray-select', className)} {...props} />
+  <thead ref={ref} className={cn('[&_tr]:border-b bg-_gray-select dark:bg-_dark-gray', className)} {...props} />
 ))
 TableHeader.displayName = 'TableHeader'
 
@@ -55,7 +55,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      'border-b transition-colors border-_gray-border hover:bg-_gray-select data-[state=selected]:bg-_gray-select',
+      'border-b transition-colors border-_gray-border hover:bg-_gray-select data-[state=selected]:bg-_gray-select dark:data-[state=selected]:bg-_dark-gray dark:data-[state=selected]:border-_main dark:border-_dark-gray dark:hover:bg-_main/30',
       className
     )}
     {...props}
@@ -70,7 +70,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-12 px-4 text-left align-middle font-medium text-_gray-808080 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] whitespace-nowrap',
+      'h-12 px-4 text-left align-middle font-medium text-_gray-808080 dark:text-_white [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] whitespace-nowrap',
       className
     )}
     {...props}
