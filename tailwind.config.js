@@ -24,7 +24,10 @@ module.exports = {
           F9F9F9: '#F9F9F9',
           F7F7F7: '#F7F7F7',
           border: '#F2F2F2',
-          select: '#FCFBFC',
+          select: '#F5F5F5',
+        },
+        _dark: {
+          gray: '#27272A',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
