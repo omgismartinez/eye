@@ -64,7 +64,7 @@ export function AppearanceForm() {
                             </FormDescription>
                             <FormMessage />
                             <RadioGroup
-                                onValueChange={field.onChange}
+                                onValueChange={(value: AppearanceFormValues['theme']) => field.onChange(value)}
                                 defaultValue={field.value}
                                 className='grid max-w-md grid-cols-2 gap-8 pt-2'
                             >
