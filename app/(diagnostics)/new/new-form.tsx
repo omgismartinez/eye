@@ -214,7 +214,7 @@ export default function NewForm() {
                                                 <FormControl>
                                                     <Input
                                                         disabled={field.value?.includes('Sin predicción') || loading}
-                                                        className='bg-_main text-_white capitalize'
+                                                        className='bg-_main text-_white dark:bg-_white dark:text-_main capitalize'
                                                         autoComplete='off'
                                                         readOnly
                                                         {...field}
@@ -332,9 +332,9 @@ export default function NewForm() {
                                     data-loading={loading}
                                     className='absolute -top-1 -right-10 flex opacity-0 -space-x-4 ease-in-out duration-300 data-[loading="true"]:opacity-100'
                                 >
-                                    <Dot className='text-_white animate-pulse m-0 duration-700 delay-1000' />
-                                    <Dot className='text-_white animate-pulse m-0 duration-700 delay-500' />
-                                    <Dot className='text-_white animate-pulse m-0 duration-700' />
+                                    <Dot className='text-_white dark:text-_main animate-pulse m-0 duration-700 delay-1000' />
+                                    <Dot className='text-_white dark:text-_main animate-pulse m-0 duration-700 delay-500' />
+                                    <Dot className='text-_white dark:text-_main animate-pulse m-0 duration-700' />
                                 </div>
                             </div>
                         </Button>
