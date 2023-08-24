@@ -7,74 +7,74 @@ import * as z from 'zod'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
 const profileFormSchema = z.object({
-    name: z
-        .string({
-            required_error: 'Por favor ingresa un nombre de usuario.',
-        })
-        .min(2, {
-            message: 'El nombre de usuario debe tener al menos 2 caracteres.',
-        })
-        .max(30, {
-            message: 'El nombre de usuario no debe tener más de 30 caracteres.',
-        }),
-    bio: z.string().max(160).min(4),
-    urls: z
-        .array(
-            z.object({
-                value: z.string().url({ message: 'Por favor ingresa una URL valida.' }),
-            })
-        )
-        .optional(),
+  name: z
+    .string({
+      required_error: 'Por favor ingresa un nombre de usuario.'
+    })
+    .min(2, {
+      message: 'El nombre de usuario debe tener al menos 2 caracteres.'
+    })
+    .max(30, {
+      message: 'El nombre de usuario no debe tener más de 30 caracteres.'
+    }),
+  bio: z.string().max(160).min(4),
+  urls: z
+    .array(
+      z.object({
+        value: z.string().url({ message: 'Por favor ingresa una URL valida.' })
+      })
+    )
+    .optional()
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 // This can come from your database or API.
 const defaultValues: Partial<ProfileFormValues> = {
-    name: 'Alvaro Martinez Martinez',
-    bio: `I'm a software engineer and I love to build things.`,
-    urls: [
-        { value: 'https://martinez.vercel.app' },
-        { value: 'https://twitter.com/omgismartinez' },
-    ],
+  name: 'Alvaro Martinez Martinez',
+  bio: 'I\'m a software engineer and I love to build things.',
+  urls: [
+    { value: 'https://martinez.vercel.app' },
+    { value: 'https://twitter.com/omgismartinez' }
+  ]
 }
 
-export function ProfileForm() {
-    const form = useForm<ProfileFormValues>({
-        resolver: zodResolver(profileFormSchema),
-        defaultValues,
-        mode: 'onChange',
-    })
+export function ProfileForm () {
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues,
+    mode: 'onChange'
+  })
 
-    const { fields, append } = useFieldArray({
-        name: 'urls',
-        control: form.control,
-    })
+  const { fields, append } = useFieldArray({
+    name: 'urls',
+    control: form.control
+  })
 
-    function onSubmit(data: ProfileFormValues) {
-        // toast({
-        //     title: 'You submitted the following values:',
-        //     description: (
-        //         <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-        //             <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-        //         </pre>
-        //     ),
-        // })
-    }
+  function onSubmit (data: ProfileFormValues) {
+    // toast({
+    //     title: 'You submitted the following values:',
+    //     description: (
+    //         <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+    //             <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
+    //         </pre>
+    //     ),
+    // })
+  }
 
-    return (
+  return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
                 <FormField
@@ -150,5 +150,5 @@ export function ProfileForm() {
                 <Button type='submit'>Actualizar perfil</Button>
             </form>
         </Form>
-    )
+  )
 }

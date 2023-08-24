@@ -1,33 +1,33 @@
-import { Column } from '@tanstack/react-table'
+import { type Column } from '@tanstack/react-table'
 import { ChevronsUpDown, EyeOff, SortAsc, SortDesc } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
 interface DataTableColumnHeaderProps<TData, TValue>
-    extends React.HTMLAttributes<HTMLDivElement> {
-    column: Column<TData, TValue>
-    title: string
+  extends React.HTMLAttributes<HTMLDivElement> {
+  column: Column<TData, TValue>
+  title: string
 }
 
-export function DataTableColumnHeader<TData, TValue>({
-    column,
-    title,
-    className,
+export function DataTableColumnHeader<TData, TValue> ({
+  column,
+  title,
+  className
 }: DataTableColumnHeaderProps<TData, TValue>) {
-    if (!column.getCanSort()) {
-        return <div className={cn(className)}>{title}</div>
-    }
+  if (!column.getCanSort()) {
+    return <div className={cn(className)}>{title}</div>
+  }
 
-    return (
+  return (
         <div className={cn('flex items-center space-x-2', className)}>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -37,13 +37,17 @@ export function DataTableColumnHeader<TData, TValue>({
                         className='-ml-3 h-8 data-[state=open]:bg-accent'
                     >
                         <span>{title}</span>
-                        {column.getIsSorted() === 'desc' ? (
+                        {column.getIsSorted() === 'desc'
+                          ? (
                             <SortDesc className='ml-2 h-4 w-4' />
-                        ) : column.getIsSorted() === 'asc' ? (
+                            )
+                          : column.getIsSorted() === 'asc'
+                            ? (
                             <SortAsc className='ml-2 h-4 w-4' />
-                        ) : (
+                              )
+                            : (
                             <ChevronsUpDown className='ml-2 h-4 w-4' />
-                        )}
+                              )}
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='start'>
@@ -73,5 +77,5 @@ export function DataTableColumnHeader<TData, TValue>({
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
-    )
+  )
 }

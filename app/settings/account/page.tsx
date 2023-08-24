@@ -1,14 +1,14 @@
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
 import { Separator } from '@/components/ui/separator'
 import { AccountForm } from './account-form'
 
 export const metadata: Metadata = {
-    title: 'Cuenta',
-    description: 'Actualiza la configuración de tu cuenta.',
+  title: 'Cuenta',
+  description: 'Actualiza la configuración de tu cuenta.'
 }
 
-export default function Account() {
-    return (
+export default function Account () {
+  return (
         <main>
             <div>
                 <h1 className='text-xl font-bold'>Cuenta</h1>
@@ -21,5 +21,5 @@ export default function Account() {
             <Separator className='my-6' />
             <AccountForm />
         </main>
-    )
+  )
 }

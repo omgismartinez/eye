@@ -4,25 +4,25 @@ import { useState } from 'react'
 import type { ImageClassificationOutput } from '@huggingface/inference'
 import { Button } from '@/components/ui/button'
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
 } from '@/components/ui/form'
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
 } from '@/components/ui/select'
 import {
-    HoverCard,
-    HoverCardContent,
-    HoverCardTrigger,
-    HoverCardArrow,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+  HoverCardArrow
 } from '@/components/ui/hover-card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -39,77 +39,77 @@ const MAX_FILE_SIZE = MAX_RECOMMENDED_IMAGE_SIZE * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 const newDiagnosticFormSchema = z.object({
-    image: z
-        .custom<File | null>()
-        .refine(
-            (file) => file && ACCEPTED_IMAGE_TYPES.includes(file.type),
+  image: z
+    .custom<File | null>()
+    .refine(
+      (file) => file && ACCEPTED_IMAGE_TYPES.includes(file.type),
             `Los formatos soportados son: ${ACCEPTED_IMAGE_TYPES.map((type) => '.' + type.split('/')[1]).join(' | ')}`
-        )
-        .refine((file) => file && file.size <= MAX_FILE_SIZE, `Maximo tamaño de archivo: ${MAX_RECOMMENDED_IMAGE_SIZE}MB`),
-    name: z
-        .string()
-        .min(2, {
-            message: 'El nombre del paciente debe tener al menos 2 caracteres.',
-        })
-        .max(30, {
-            message: 'El nombre del paciente no debe tener más de 30 caracteres.',
-        }),
-    prediction: z
-        .string()
-        .optional(),
-    age: z
-        .coerce
-        .number(),
-    extra: z
-        .string()
-        .max(160)
-        .min(4)
-        .optional(),
-    gender: z
-        .string(),
+    )
+    .refine((file) => file && file.size <= MAX_FILE_SIZE, `Maximo tamaño de archivo: ${MAX_RECOMMENDED_IMAGE_SIZE}MB`),
+  name: z
+    .string()
+    .min(2, {
+      message: 'El nombre del paciente debe tener al menos 2 caracteres.'
+    })
+    .max(30, {
+      message: 'El nombre del paciente no debe tener más de 30 caracteres.'
+    }),
+  prediction: z
+    .string()
+    .optional(),
+  age: z
+    .coerce
+    .number(),
+  extra: z
+    .string()
+    .max(160)
+    .min(4)
+    .optional(),
+  gender: z
+    .string()
 })
 
 export type NewDiagnosticFormValues = z.infer<typeof newDiagnosticFormSchema>
 
 const defaultValues: Partial<NewDiagnosticFormValues> = {
-    name: 'Alvaro Martinez Martinez',
-    prediction: 'Sin predicción',
-    age: 23,
-    extra: `El paciente no presenta ninguna enfermedad.`,
-    gender: 'M',
+  name: 'Alvaro Martinez Martinez',
+  prediction: 'Sin predicción',
+  age: 23,
+  extra: 'El paciente no presenta ninguna enfermedad.',
+  gender: 'M'
 }
 
-export default function NewForm() {
-    const [loading, setLoading] = useState(false)
-    const [image, setImage] = useState<File | null>(null)
-    const [predictions, setPredictions] = useState<ImageClassificationOutput>([])
-    const form = useForm<NewDiagnosticFormValues>({
-        resolver: zodResolver(newDiagnosticFormSchema),
-        defaultValues,
-        mode: 'onChange',
+export default function NewForm () {
+  const [loading, setLoading] = useState(false)
+  const [image, setImage] = useState<File | null>(null)
+  const [predictions, setPredictions] = useState<ImageClassificationOutput>([])
+  const form = useForm<NewDiagnosticFormValues>({
+    resolver: zodResolver(newDiagnosticFormSchema),
+    defaultValues,
+    mode: 'onChange'
+  })
+
+  async function onSubmit (data: NewDiagnosticFormValues) {
+    setLoading(true)
+    const formData = new FormData()
+    formData.append('image', data.image as File)
+    formData.append('name', data.name)
+    formData.append('age', data.age.toString())
+    formData.append('extra', data.extra as string)
+    formData.append('gender', data.gender)
+
+    const res = await fetch('/api/classification', {
+      method: 'POST',
+      body: formData
     })
 
-    async function onSubmit(data: NewDiagnosticFormValues) {
-        setLoading(true)
-        const formData = new FormData()
-        formData.append('image', data.image as File)
-        formData.append('name', data.name)
-        formData.append('age', data.age.toString())
-        formData.append('extra', data.extra as string)
-        formData.append('gender', data.gender)
+    const prediction: ImageClassificationOutput = await res.json()
+    form.setValue('prediction', prediction[0].label)
+    setPredictions(prediction)
+    setLoading(false)
+  }
 
-        const res = await fetch('/api/classification', {
-            method: 'POST',
-            body: formData,
-        })
-
-        const prediction: ImageClassificationOutput = await res.json()
-        form.setValue('prediction', prediction[0].label)
-        setPredictions(prediction)
-        setLoading(false)
-    }
-
-    return (
+  return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
@@ -164,13 +164,13 @@ export default function NewForm() {
                                                 type='file'
                                                 id='upload'
                                                 onChange={(e) => {
-                                                    if (e.target.files && e.target.files[0]) {
-                                                        field.onChange(e.target.files && e.target.files[0])
-                                                        setImage(e.target.files[0])
-                                                    } else {
-                                                        field.onChange(null)
-                                                        setImage(null)
-                                                    }
+                                                  if (e.target.files?.[0]) {
+                                                    field.onChange(e.target.files[0])
+                                                    setImage(e.target.files[0])
+                                                  } else {
+                                                    field.onChange(null)
+                                                    setImage(null)
+                                                  }
                                                 }}
                                                 accept={ACCEPTED_IMAGE_TYPES.join(',')}
                                                 className='sr-only bottom-20'
@@ -213,7 +213,7 @@ export default function NewForm() {
                                                 <FormLabel>Predicción</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        disabled={field.value?.includes('Sin predicción') || loading}
+                                                        disabled={field.value?.includes('Sin predicción') ?? loading}
                                                         className='bg-_main text-_white dark:bg-_white dark:text-_main capitalize'
                                                         autoComplete='off'
                                                         readOnly
@@ -241,10 +241,10 @@ export default function NewForm() {
                                             <div className='flex flex-col gap-3'>
                                                 <h1 className='text-base font-bold text-center pb-4'>Predicciones</h1>
                                                 <div className='grid gap-3'>
-                                                    {predictions.length
-                                                        ? predictions.map((prediction) => {
-                                                            const value = Math.ceil((prediction.score / Math.max(...predictions.map((p) => p.score))) * 80)
-                                                            return (
+                                                    {(predictions.length > 0)
+                                                      ? predictions.map((prediction) => {
+                                                        const value = Math.ceil((prediction.score / Math.max(...predictions.map((p) => p.score))) * 80)
+                                                        return (
                                                                 <div key={prediction.label} className='grid text-xs'>
                                                                     <div className='grid gap-1'>
                                                                         <Marker label={prediction.label} type={'badge'} value={value} />
@@ -254,8 +254,8 @@ export default function NewForm() {
                                                                         </div>
                                                                     </div>
                                                                 </div>)
-                                                        })
-                                                        : <p className='text-center text-xs text-_gray-808080'>
+                                                      })
+                                                      : <p className='text-center text-xs text-_gray-808080'>
                                                             Sube una imagen y completa los campos para predecir.
                                                         </p>}
                                                 </div>
@@ -342,5 +342,5 @@ export default function NewForm() {
                 </div>
             </form>
         </Form >
-    )
+  )
 }

@@ -6,18 +6,18 @@ import { usePathname } from 'next/navigation'
 import { Avatar } from './avatar'
 import { MobileSidebar } from './mobile-sidebar'
 
-export default function Navbar() {
-    const pathname = usePathname()
+export default function Navbar () {
+  const pathname = usePathname()
 
-    const routes = {
-        '/new': 'Nuevo Diagnóstico',
-        '/all': 'Todos los Diagnósticos',
-        '/patients': 'Administrar Pacientes',
-        '/terms': 'Términos y Condiciones',
-        '/settings': 'Configuración',
-    }
+  const routes = {
+    '/new': 'Nuevo Diagnóstico',
+    '/all': 'Todos los Diagnósticos',
+    '/patients': 'Administrar Pacientes',
+    '/terms': 'Términos y Condiciones',
+    '/settings': 'Configuración'
+  }
 
-    return (
+  return (
         <nav className='sticky top-0 z-50 backdrop-blur-sm border-b border-_gray-border dark:border-_dark-gray'>
             <div className='flex items-center max-w-screen-2xl mx-auto overflow-hidden'>
                 <div className='flex flex-1 justify-between w-full'>
@@ -40,5 +40,5 @@ export default function Navbar() {
                 </div>
             </div>
         </nav>
-    )
+  )
 }

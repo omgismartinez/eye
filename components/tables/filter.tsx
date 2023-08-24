@@ -1,21 +1,21 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Search, X } from 'lucide-react'
-import { Table } from '@tanstack/react-table'
+import { type Table } from '@tanstack/react-table'
 import { DataTableFacetedFilter } from '@/components/tables/faceted'
 import { DataTableViewOptions } from './view-options'
 import { predictions } from './data'
 
 interface DataTableFilterProps<TData> {
-    table: Table<TData>
+  table: Table<TData>
 }
 
-export function DataTableFilter<TData>({ table }: DataTableFilterProps<TData>) {
-    const isFiltered =
+export function DataTableFilter<TData> ({ table }: DataTableFilterProps<TData>) {
+  const isFiltered =
         table.getPreFilteredRowModel().rows.length >
         table.getFilteredRowModel().rows.length
 
-    return (
+  return (
         <div className='flex items-center justify-between mt-4'>
             <div className='flex flex-1 flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2'>
                 <Input
@@ -23,7 +23,7 @@ export function DataTableFilter<TData>({ table }: DataTableFilterProps<TData>) {
                     placeholder='Buscar por paciente'
                     value={(table.getColumn('Paciente')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
-                        table.getColumn('Paciente')?.setFilterValue(event.target.value)
+                      table.getColumn('Paciente')?.setFilterValue(event.target.value)
                     }
                     className='h-8 lg:w-[250px]'
                 />
@@ -40,8 +40,8 @@ export function DataTableFilter<TData>({ table }: DataTableFilterProps<TData>) {
                             column={table.getColumn('Género')}
                             title='Género'
                             options={[
-                                { value: 'M', label: 'Masculino' },
-                                { value: 'F', label: 'Femenino' },
+                              { value: 'M', label: 'Masculino' },
+                              { value: 'F', label: 'Femenino' }
                             ]}
                         />
                     )}
@@ -59,5 +59,5 @@ export function DataTableFilter<TData>({ table }: DataTableFilterProps<TData>) {
             </div>
             <DataTableViewOptions table={table} />
         </div>
-    )
+  )
 }

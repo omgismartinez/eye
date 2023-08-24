@@ -1,11 +1,11 @@
 'use client'
 
 import {
-    BadgeCheck,
-    BarChart4,
-    LogOut,
-    Settings,
-    Users
+  BadgeCheck,
+  BarChart4,
+  LogOut,
+  Settings,
+  Users
 } from 'lucide-react'
 import Link from 'next/link'
 import clsx from 'clsx'
@@ -13,9 +13,9 @@ import { usePathname } from 'next/navigation'
 import { Separator } from './ui/separator'
 import { Button } from './ui/button'
 
-export default function Sidebar() {
-    const pathname = usePathname()
-    return (
+export default function Sidebar () {
+  const pathname = usePathname()
+  return (
         <aside
             className='
                 lg:border-r
@@ -34,7 +34,7 @@ export default function Sidebar() {
                     <div className='flex flex-col gap-2 text-_gray-808080 text-sm font-bold'>
                         <div className='flex flex-col gap-4'>
                             <button className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80', {
-                                'text-_main dark:text-_white': pathname === '/new' || pathname === '/all',
+                              'text-_main dark:text-_white': pathname === '/new' || pathname === '/all'
                             })}>
                                 <BarChart4 size={18} /> Administrar Diagnósticos
                             </button>
@@ -45,15 +45,15 @@ export default function Sidebar() {
                                 <div className='flex flex-col gap-1 w-full font-semibold text-_gray-C2C2C2'>
                                     <Link
                                         href='/new'
-                                        className={clsx(`flex items-center gap-4 px-4 py-3 w-full whitespace-nowrap rounded-lg hover:bg-_gray-select dark:hover:bg-_dark-gray`, {
-                                            'bg-_gray-select text-_main dark:bg-_dark-gray dark:text-_white': pathname === '/new'
+                                        className={clsx('flex items-center gap-4 px-4 py-3 w-full whitespace-nowrap rounded-lg hover:bg-_gray-select dark:hover:bg-_dark-gray', {
+                                          'bg-_gray-select text-_main dark:bg-_dark-gray dark:text-_white': pathname === '/new'
                                         })}>
                                         Nuevo Diagnóstico
                                     </Link>
                                     <Link
                                         href='/all'
-                                        className={clsx(`flex items-center gap-4 px-4 py-3 w-full whitespace-nowrap rounded-lg hover:bg-_gray-select dark:hover:bg-_dark-gray`, {
-                                            'bg-_gray-select text-_main dark:bg-_dark-gray dark:text-_white': pathname === '/all'
+                                        className={clsx('flex items-center gap-4 px-4 py-3 w-full whitespace-nowrap rounded-lg hover:bg-_gray-select dark:hover:bg-_dark-gray', {
+                                          'bg-_gray-select text-_main dark:bg-_dark-gray dark:text-_white': pathname === '/all'
                                         })}>
                                         Todos los Diagnósticos
                                     </Link>
@@ -66,14 +66,14 @@ export default function Sidebar() {
                         <Link
                             href='/patients'
                             className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80', {
-                                'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname === '/patients'
+                              'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname === '/patients'
                             })}>
                             <Users size={18} /> Administrar Pacientes
                         </Link>
                         <Link
                             href='/terms'
                             className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80', {
-                                'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname === '/terms'
+                              'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname === '/terms'
                             })}>
                             <BadgeCheck size={18} /> Términos y Condiciones
                         </Link>
@@ -83,7 +83,7 @@ export default function Sidebar() {
                             <Link
                                 href='/settings'
                                 className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80', {
-                                    'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname.startsWith('/settings')
+                                  'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname.startsWith('/settings')
                                 })}>
                                 <Settings size={18} /> Configuración
                             </Link>
@@ -104,5 +104,5 @@ export default function Sidebar() {
                 </section>
             </div>
         </aside>
-    )
+  )
 }

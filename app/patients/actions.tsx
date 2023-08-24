@@ -1,25 +1,25 @@
 'use client'
 
-import { Row } from '@tanstack/react-table'
+import { type Row } from '@tanstack/react-table'
 import { Copy, MoreHorizontal, Pen, Star, Trash } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
 interface DataTableRowActionsProps<TData> {
-    row: Row<TData>
+  row: Row<TData>
 }
 
-export function DataTableRowActions<TData>({
-    row,
+export function DataTableRowActions<TData> ({
+  row
 }: DataTableRowActionsProps<TData>) {
-    return (
+  return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
@@ -50,5 +50,5 @@ export function DataTableRowActions<TData>({
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
+  )
 }

@@ -1,30 +1,31 @@
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
+import { type Patient } from '@/types'
+
 import Header from '@/components/header'
 import { feikData } from '@/components/tables/data'
 import { DataTable } from '@/components/tables/data-table'
-import { Patient } from '@/types'
 import { columns, columnsVisibility } from './columns'
 import { Separator } from '@/components/ui/separator'
 
 export const metadata: Metadata = {
-    title: 'Pacientes Registrados',
-    description: 'La tabla de pacientes permite tener un registro completo y organizado de todos los individuos atendidos.',
+  title: 'Pacientes Registrados',
+  description: 'La tabla de pacientes permite tener un registro completo y organizado de todos los individuos atendidos.'
 }
 
-async function getData(): Promise<Patient[]> {
-    // Fetch data from your API here.
-    const data = feikData.map((item) => {
-        return item['patient']
-    })
+async function getData (): Promise<Patient[]> {
+  // Fetch data from your API here.
+  const data = feikData.map((item) => {
+    return item.patient
+  })
 
-    return [
-        ...data,
-    ]
+  return [
+    ...data
+  ]
 }
 
-export default async function Patients() {
-    const data = await getData()
-    return (
+export default async function Patients () {
+  const data = await getData()
+  return (
         <main className='max-w-4xl mx-auto'>
             <Header
                 className='max-w-xl mx-auto'
@@ -34,5 +35,5 @@ export default async function Patients() {
             <Separator />
             <DataTable columnsVisibility={columnsVisibility} columns={columns} data={data} />
         </main>
-    )
+  )
 }

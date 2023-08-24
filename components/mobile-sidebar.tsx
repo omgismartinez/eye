@@ -7,28 +7,28 @@ import { useEffect, useState } from 'react'
 import { BadgeCheck, BarChart4, LogOut, Menu, Settings, Users } from 'lucide-react'
 
 import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetTrigger
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger
 } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Separator } from './ui/separator'
 import { Avatar } from './avatar'
 
 export const MobileSidebar = () => {
-    const pathname = usePathname()
-    const [isMounted, setIsMounted] = useState(false)
+  const pathname = usePathname()
+  const [isMounted, setIsMounted] = useState(false)
 
-    useEffect(() => {
-        setIsMounted(true)
-    }, [])
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
-    if (!isMounted) {
-        return null
-    }
+  if (!isMounted) {
+    return null
+  }
 
-    return (
+  return (
         <Sheet>
             <SheetTrigger asChild>
                 <Button variant='ghost' size='icon' className='lg:hidden'>
@@ -54,7 +54,7 @@ export const MobileSidebar = () => {
                             <div className='flex flex-col gap-2 text-_gray-808080 text-sm font-bold'>
                                 <div className='flex flex-col gap-4'>
                                     <button className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80', {
-                                        'text-_main dark:text-_white': pathname === '/new' || pathname === '/all',
+                                      'text-_main dark:text-_white': pathname === '/new' || pathname === '/all'
                                     })}>
                                         <BarChart4 size={18} /> Administrar Diagnósticos
                                     </button>
@@ -66,8 +66,8 @@ export const MobileSidebar = () => {
                                             <SheetClose asChild>
                                                 <Link
                                                     href='/new'
-                                                    className={clsx(`flex items-center gap-4 px-4 py-3 w-full whitespace-nowrap rounded-lg hover:bg-_gray-select dark:hover:bg-_dark-gray`, {
-                                                        'bg-_gray-select text-_main dark:bg-_dark-gray dark:text-_white': pathname === '/new'
+                                                    className={clsx('flex items-center gap-4 px-4 py-3 w-full whitespace-nowrap rounded-lg hover:bg-_gray-select dark:hover:bg-_dark-gray', {
+                                                      'bg-_gray-select text-_main dark:bg-_dark-gray dark:text-_white': pathname === '/new'
                                                     })}>
                                                     Nuevo Diagnóstico
                                                 </Link>
@@ -75,8 +75,8 @@ export const MobileSidebar = () => {
                                             <SheetClose asChild>
                                                 <Link
                                                     href='/all'
-                                                    className={clsx(`flex items-center gap-4 px-4 py-3 w-full whitespace-nowrap rounded-lg hover:bg-_gray-select dark:hover:bg-_dark-gray`, {
-                                                        'bg-_gray-select text-_main dark:bg-_dark-gray dark:text-_white': pathname === '/all'
+                                                    className={clsx('flex items-center gap-4 px-4 py-3 w-full whitespace-nowrap rounded-lg hover:bg-_gray-select dark:hover:bg-_dark-gray', {
+                                                      'bg-_gray-select text-_main dark:bg-_dark-gray dark:text-_white': pathname === '/all'
                                                     })}>
                                                     Todos los Diagnósticos
                                                 </Link>
@@ -93,7 +93,7 @@ export const MobileSidebar = () => {
                                     <Link
                                         href='/patients'
                                         className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80', {
-                                            'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname === '/patients'
+                                          'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname === '/patients'
                                         })}>
                                         <Users size={18} /> Administrar Pacientes
                                     </Link>
@@ -102,7 +102,7 @@ export const MobileSidebar = () => {
                                     <Link
                                         href='/terms'
                                         className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80', {
-                                            'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname === '/terms'
+                                          'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname === '/terms'
                                         })}>
                                         <BadgeCheck size={18} /> Términos y Condiciones
                                     </Link>
@@ -114,7 +114,7 @@ export const MobileSidebar = () => {
                                         <Link
                                             href='/settings'
                                             className={clsx('flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80', {
-                                                'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname.startsWith('/settings')
+                                              'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname.startsWith('/settings')
                                             })}>
                                             <Settings size={18} /> Configuración
                                         </Link>
@@ -140,5 +140,5 @@ export const MobileSidebar = () => {
                 </aside>
             </SheetContent>
         </Sheet>
-    )
+  )
 }

@@ -1,6 +1,6 @@
 import Header from '@/components/header'
 
-export default function Home() {
+export default function Home () {
   return (
     <main>
       <section className='max-w-xl mx-auto'>

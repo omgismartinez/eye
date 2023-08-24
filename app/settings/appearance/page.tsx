@@ -1,14 +1,14 @@
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
 import { Separator } from '@/components/ui/separator'
 import { AppearanceForm } from './appearance-form'
 
 export const metadata: Metadata = {
-    title: 'Apariencia',
-    description: 'Personaliza la apariencia de la aplicación.',
+  title: 'Apariencia',
+  description: 'Personaliza la apariencia de la aplicación.'
 }
 
-export default function Appearance() {
-    return (
+export default function Appearance () {
+  return (
         <main>
             <div>
                 <h1 className='text-xl font-bold'>Apariencia</h1>
@@ -19,5 +19,5 @@ export default function Appearance() {
             <Separator className='my-6' />
             <AppearanceForm />
         </main>
-    )
+  )
 }

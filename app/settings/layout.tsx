@@ -1,37 +1,37 @@
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
 
 import { Separator } from '@/components/ui/separator'
 import { SidebarNav } from './components/sidebar'
 
 export const metadata: Metadata = {
-    title: {
-        template: '%s | Configuración',
-        default: 'Perfil | Configuración',
-    },
-    description: 'Administra la configuración de tu cuenta y establezca las preferencias',
+  title: {
+    template: '%s | Configuración',
+    default: 'Perfil | Configuración'
+  },
+  description: 'Administra la configuración de tu cuenta y establezca las preferencias'
 }
 
 const sidebarNavItems = [
-    {
-        title: 'Perfil',
-        href: '/settings',
-    },
-    {
-        title: 'Cuenta',
-        href: '/settings/account',
-    },
-    {
-        title: 'Apariencia',
-        href: '/settings/appearance',
-    },
+  {
+    title: 'Perfil',
+    href: '/settings'
+  },
+  {
+    title: 'Cuenta',
+    href: '/settings/account'
+  },
+  {
+    title: 'Apariencia',
+    href: '/settings/appearance'
+  }
 ]
 
 interface SettingsLayoutProps {
-    children: React.ReactNode
+  children: React.ReactNode
 }
 
-export default function SettingsLayout({ children }: SettingsLayoutProps) {
-    return (
+export default function SettingsLayout ({ children }: SettingsLayoutProps) {
+  return (
         <div className='space-y-6'>
             <div className='space-y-0.5'>
                 <h2 className='text-2xl font-bold tracking-tight'>Configuración</h2>
@@ -47,5 +47,5 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
                 <div className='flex-1 lg:max-w-2xl'>{children}</div>
             </div>
         </div>
-    )
+  )
 }

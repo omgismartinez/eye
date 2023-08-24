@@ -1,12 +1,12 @@
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Términos del Servicio',
-    description: 'Términos y condiciones de uso de la aplicación.',
+  title: 'Términos del Servicio',
+  description: 'Términos y condiciones de uso de la aplicación.'
 }
 
-export default function Terms() {
-    return (
+export default function Terms () {
+  return (
         <main>
             <div className='flex justify-center items-center h-96'>
                 <h1 className='text-5xl font-bold text-center text-foreground'>
@@ -205,5 +205,5 @@ export default function Terms() {
                 </section>
             </div>
         </main>
-    )
+  )
 }

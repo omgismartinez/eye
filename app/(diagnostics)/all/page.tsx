@@ -1,27 +1,27 @@
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
+import { type Diagnostic } from '@/types'
 import Header from '@/components/header'
 import { feikData } from '@/components/tables/data'
 import { DataTable } from '@/components/tables/data-table'
-import { Diagnostic } from '@/types'
 import { columns, columnsVisibility } from './columns'
 import { Separator } from '@/components/ui/separator'
 
 export const metadata: Metadata = {
-    title: 'Diagnósticos Realizados',
-    description: 'Tabla con todos los diagnósticos realizados.',
+  title: 'Diagnósticos Realizados',
+  description: 'Tabla con todos los diagnósticos realizados.'
 }
 
-async function getData(): Promise<Diagnostic[]> {
-    // Fetch data from your API here.
-    return [
-        ...feikData,
-        // ...
-    ]
+async function getData (): Promise<Diagnostic[]> {
+  // Fetch data from your API here.
+  return [
+    ...feikData
+    // ...
+  ]
 }
 
-export default async function All() {
-    const data = await getData()
-    return (
+export default async function All () {
+  const data = await getData()
+  return (
         <main className='max-w-4xl mx-auto'>
             <Header
                 className='max-w-2xl mx-auto'
@@ -34,5 +34,5 @@ export default async function All() {
             <Separator />
             <DataTable columnsVisibility={columnsVisibility} columns={columns} data={data} />
         </main>
-    )
+  )
 }

@@ -6,51 +6,51 @@ import * as z from 'zod'
 
 import { Button } from '@/components/ui/button'
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useTheme } from 'next-themes'
 
 const appearanceFormSchema = z.object({
-    theme: z.enum(['light', 'dark'], {
-        required_error: 'Por favor seleccione un tema.',
-    }),
+  theme: z.enum(['light', 'dark'], {
+    required_error: 'Por favor seleccione un tema.'
+  })
 })
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
 // This can come from your database or API.
 const defaultValues: Partial<AppearanceFormValues> = {
-    theme: 'light',
+  theme: 'light'
 }
 
-export function AppearanceForm() {
-    const { setTheme } = useTheme()
+export function AppearanceForm () {
+  const { setTheme } = useTheme()
 
-    const form = useForm<AppearanceFormValues>({
-        resolver: zodResolver(appearanceFormSchema),
-        defaultValues,
-    })
+  const form = useForm<AppearanceFormValues>({
+    resolver: zodResolver(appearanceFormSchema),
+    defaultValues
+  })
 
-    function onSubmit(data: AppearanceFormValues) {
-        setTheme(data.theme)
-        // toast({
-        //     title: 'You submitted the following values:',
-        //     description: (
-        //         <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-        //             <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-        //         </pre>
-        //     ),
-        // })
-    }
+  function onSubmit (data: AppearanceFormValues) {
+    setTheme(data.theme)
+    // toast({
+    //     title: 'You submitted the following values:',
+    //     description: (
+    //         <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+    //             <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
+    //         </pre>
+    //     ),
+    // })
+  }
 
-    return (
+  return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
                 <FormField
@@ -138,5 +138,5 @@ export function AppearanceForm() {
                 <Button type='submit'>Actualizar apariencia</Button>
             </form>
         </Form>
-    )
+  )
 }

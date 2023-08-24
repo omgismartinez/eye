@@ -1,11 +1,11 @@
 import {
-    Avatar as AvatarUi,
-    AvatarImage,
-    AvatarFallback,
+  Avatar as AvatarUi,
+  AvatarImage,
+  AvatarFallback
 } from './ui/avatar'
 
-export function Avatar() {
-    return (
+export function Avatar () {
+  return (
         <div className='flex items-center gap-3'>
             <AvatarUi>
                 <AvatarImage src={''} />
@@ -14,5 +14,5 @@ export function Avatar() {
             </AvatarUi>
             <h3 className='font-bold'>Eye</h3>
         </div>
-    )
+  )
 }
