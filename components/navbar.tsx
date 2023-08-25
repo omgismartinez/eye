@@ -14,7 +14,9 @@ export default function Navbar () {
     '/all': 'Todos los Diagnósticos',
     '/patients': 'Administrar Pacientes',
     '/terms': 'Términos y Condiciones',
-    '/settings': 'Configuración'
+    '/settings': 'Perfil',
+    '/settings/account': 'Cuenta',
+    '/settings/appearance': 'Apariencia'
   }
 
   return (
