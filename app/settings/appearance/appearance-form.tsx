@@ -26,16 +26,20 @@ const appearanceFormSchema = z.object({
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
 // This can come from your database or API.
-const defaultValues: Partial<AppearanceFormValues> = {
-  theme: 'light'
-}
+// const defaultValues: Partial<AppearanceFormValues> = {
+//   theme: 'light'
+// }
 
 export function AppearanceForm () {
-  const { setTheme } = useTheme()
+  const { setTheme, resolvedTheme } = useTheme()
 
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
-    defaultValues
+    defaultValues: async () => {
+      return {
+        theme: resolvedTheme as AppearanceFormValues['theme']
+      }
+    }
   })
 
   function onSubmit (data: AppearanceFormValues) {
@@ -66,6 +70,7 @@ export function AppearanceForm () {
                             <RadioGroup
                                 onValueChange={(value: AppearanceFormValues['theme']) => field.onChange(value)}
                                 defaultValue={field.value}
+                                value={field.value}
                                 className='grid max-w-md grid-cols-2 gap-8 pt-2'
                             >
                                 <FormItem>
