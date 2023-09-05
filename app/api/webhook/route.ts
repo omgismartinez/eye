@@ -45,10 +45,14 @@ export async function POST (req: Request) {
       },
       create: {
         external_id: id,
-        metadata: JSON.stringify(metadata)
+        metadata: {
+          toJSON: () => metadata
+        }
       },
       update: {
-        metadata: JSON.stringify(metadata)
+        metadata: {
+          toJSON: () => metadata
+        }
       }
     })
   }
