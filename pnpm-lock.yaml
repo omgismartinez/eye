@@ -110,6 +110,9 @@ dependencies:
   react-hook-form:
     specifier: ^7.45.1
     version: 7.45.1(react@18.2.0)
+  sonner:
+    specifier: ^0.7.0
+    version: 0.7.0(react-dom@18.2.0)(react@18.2.0)
   svix:
     specifier: ^1.10.0
     version: 1.10.0
@@ -4532,6 +4535,16 @@ packages:
     dependencies:
       solid-js: 1.7.9
       swr-store: 0.10.6
+    dev: false
+
+  /sonner@0.7.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-vAlXCrE6/183yt64ktIUnPv85RmAPYiicl5z35fDDFhWRIUpg7N62TsiIbHjwGuxbVJu/5hYlh92HHImsS27dA==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /source-map-js@1.0.2:
