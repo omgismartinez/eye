@@ -9,12 +9,19 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Separator } from './ui/separator'
+import { SignOutButton } from '@clerk/nextjs'
+import { useMounted } from '@/hooks/use-mounted'
+import { useTransition } from 'react'
 import { Button } from './ui/button'
+import { Icons } from './icons'
 
 export default function Sidebar () {
   const pathname = usePathname()
+  const router = useRouter()
+  const mounted = useMounted()
+  const [isPending, startTransition] = useTransition()
   return (
         <aside
             className='
@@ -97,9 +104,40 @@ export default function Sidebar () {
                                 </div>
                             </button>
                         </div>
-                        <Button className='justify-between font-normal'>
-                            Desconectar <LogOut size={18} />
-                        </Button>
+                        {mounted
+                          ? (
+                                <SignOutButton
+                                    signOutCallback={() =>
+                                      startTransition(() => {
+                                        router.push(`${window.location.origin}/?redirect=false`)
+                                      })
+                                    }
+                                >
+                                    <Button
+                                    aria-label='sign out'
+                                    className='justify-between font-normal'
+                                    disabled={isPending}
+                                    >
+                                    <div className='flex'>
+                                        {isPending && (
+                                        <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
+                                        )}
+                                        Desconectar
+                                    </div>
+                                    <LogOut size={18} />
+                                    </Button>
+                                </SignOutButton>
+                            )
+                          : (
+                                <Button
+                                    aria-label='sign out loading'
+                                    className='justify-between font-normal'
+                                    disabled={true}
+                                >
+                                    Desconectar
+                                    <LogOut size={18} />
+                                </Button>
+                            )}
                     </div>
                 </section>
             </div>
