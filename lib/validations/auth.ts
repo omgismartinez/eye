@@ -17,3 +17,7 @@ export const authSchema = z.object({
         'La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.'
     })
 })
+
+export const userPrivateMetadataSchema = z.object({
+  role: z.enum(['user', 'admin', 'super_admin'])
+})
