@@ -33,11 +33,11 @@ export default authMiddleware({
       throw new Error('User not found.')
     }
 
-    // If the user doesn't have a role, set it to user
+    // If the user doesn't have a role, set it to patient
     if (!user.privateMetadata.role) {
       await clerkClient.users.updateUserMetadata(auth.userId, {
         privateMetadata: {
-          role: 'user' satisfies UserRole
+          role: 'patient' satisfies UserRole
         }
       })
     }
