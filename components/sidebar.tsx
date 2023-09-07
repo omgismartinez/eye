@@ -1,5 +1,7 @@
 'use client'
 
+import type { User } from '@clerk/nextjs/server'
+import type { UserRole } from '@/types'
 import {
   BadgeCheck,
   BarChart4,
@@ -16,12 +18,34 @@ import { useMounted } from '@/hooks/use-mounted'
 import { useTransition } from 'react'
 import { Button } from './ui/button'
 import { Icons } from './icons'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage
+} from './ui/avatar'
 
-export default function Sidebar () {
+interface SidebarProps {
+  user: User | null
+}
+
+export default function Sidebar ({ user }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const mounted = useMounted()
   const [isPending, startTransition] = useTransition()
+
+  const initials = `${user?.firstName?.charAt(0) ?? ''}${user?.lastName?.charAt(0) ?? ''}`
+
+  const getRole = () => {
+    const role = user?.privateMetadata?.role as UserRole
+    if (role === 'patient') { return 'Paciente' }
+    if (role === 'researcher') { return 'Investigador' }
+    if (role === 'developer') { return 'Desarrollador' }
+    if (role === 'medic') { return 'Médico' }
+    if (role === 'admin') { return 'Administrador' }
+    return 'No definido'
+  }
+
   return (
         <aside
             className='
@@ -96,10 +120,16 @@ export default function Sidebar () {
                             </Link>
                             <button className='flex items-center gap-4 whitespace-nowrap group'>
                                 <div className='flex items-center gap-4 py-3 border-y border-_gray-border dark:border-_dark-gray w-full'>
-                                    <div className='w-8 h-8 rounded-full bg-_main group-hover:bg-_main/80 dark:bg-white dark:group-hover:bg-_white/80' />
+                                    <Avatar className='h-8 w-8'>
+                                        <AvatarImage
+                                            src={user?.imageUrl}
+                                            alt={user?.username ?? ''}
+                                        />
+                                        <AvatarFallback>{initials}</AvatarFallback>
+                                    </Avatar>
                                     <div className='flex flex-col items-start'>
-                                        <span className='text-xs font-bold text-_main dark:text-_white'>Alvaro Martinez</span>
-                                        <span className='text-[10px] font-normal leading-tight'>Administrador</span>
+                                        <span className='text-xs font-bold text-_main dark:text-_white'>{user?.firstName} {user?.lastName}</span>
+                                        <span className='text-[10px] font-normal leading-tight capitalize'>{getRole()}</span>
                                     </div>
                                 </div>
                             </button>
