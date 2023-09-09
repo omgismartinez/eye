@@ -1,4 +1,5 @@
 import { Separator } from '@/components/ui/separator'
+import { currentUser } from '@clerk/nextjs'
 import { type Metadata } from 'next'
 import { ProfileForm } from './profile-form'
 
@@ -6,7 +7,8 @@ export const metadata: Metadata = {
   description: 'Actualiza la configuración de tu perfil.'
 }
 
-export default function Profile () {
+export default async function Profile () {
+  const user = await currentUser()
   return (
         <main>
             <div>
@@ -16,7 +18,7 @@ export default function Profile () {
                 </p>
             </div>
             <Separator className='my-6' />
-            <ProfileForm />
+            <ProfileForm user={user} />
         </main>
   )
 }

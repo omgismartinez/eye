@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { type User } from '@clerk/nextjs/server'
 
 const profileFormSchema = z.object({
   name: z
@@ -41,20 +42,16 @@ const profileFormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
-// This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-  name: 'Alvaro Martinez Martinez',
-  bio: 'I\'m a software engineer and I love to build things.',
-  urls: [
-    { value: 'https://martinez.vercel.app' },
-    { value: 'https://twitter.com/omgismartinez' }
-  ]
+interface ProfileFormProps {
+  user: User | null
 }
 
-export function ProfileForm () {
+export function ProfileForm ({ user }: ProfileFormProps) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues,
+    defaultValues: {
+      name: `${user?.firstName} ${user?.lastName}` ?? ''
+    },
     mode: 'onChange'
   })
 
