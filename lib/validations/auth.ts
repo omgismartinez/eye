@@ -18,6 +18,10 @@ export const authSchema = z.object({
     })
 })
 
+export const userRoleSchema = z.enum(['patient', 'researcher', 'developer', 'medic', 'admin'])
+
 export const userPrivateMetadataSchema = z.object({
-  role: z.enum(['patient', 'researcher', 'developer', 'medic', 'admin'])
+  role: userRoleSchema.optional(),
+  language: z.enum(['es', 'en']).optional(),
+  theme: z.enum(['light', 'dark']).optional()
 })
