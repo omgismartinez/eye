@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useTheme } from 'next-themes'
+import { type User } from '@clerk/types'
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
@@ -25,19 +26,15 @@ const appearanceFormSchema = z.object({
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
-// This can come from your database or API.
-// const defaultValues: Partial<AppearanceFormValues> = {
-//   theme: 'light'
-// }
-
-export function AppearanceForm () {
+export function AppearanceForm ({ user }: { user: User | null }) {
   const { setTheme, resolvedTheme } = useTheme()
+  const userTheme = user?.privateMetadata?.theme
 
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues: async () => {
       return {
-        theme: resolvedTheme as AppearanceFormValues['theme']
+        theme: userTheme ?? resolvedTheme as AppearanceFormValues['theme']
       }
     }
   })

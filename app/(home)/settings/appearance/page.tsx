@@ -1,13 +1,15 @@
 import { type Metadata } from 'next'
 import { Separator } from '@/components/ui/separator'
 import { AppearanceForm } from './appearance-form'
+import { currentUser } from '@clerk/nextjs'
 
 export const metadata: Metadata = {
   title: 'Apariencia',
   description: 'Personaliza la apariencia de la aplicación.'
 }
 
-export default function Appearance () {
+export default async function Appearance () {
+  const user = await currentUser()
   return (
         <main>
             <div>
@@ -17,7 +19,7 @@ export default function Appearance () {
                 </p>
             </div>
             <Separator className='my-6' />
-            <AppearanceForm />
+            <AppearanceForm user={user} />
         </main>
   )
 }
