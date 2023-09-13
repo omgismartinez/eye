@@ -1,4 +1,4 @@
-import { type userPrivateMetadataSchema } from '@/lib/validations/auth'
+import { type userRoleSchema } from '@/lib/validations/auth'
 import { type z } from 'zod'
 
 export type Status = 'no dr' | 'leve' | 'moderada' | 'severa' | 'proliferativa'
@@ -24,4 +24,4 @@ export interface Patient {
   occupation: string
 }
 
-export type UserRole = z.infer<typeof userPrivateMetadataSchema>['role']
+export type UserRole = z.infer<typeof userRoleSchema>
