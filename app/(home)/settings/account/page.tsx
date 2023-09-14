@@ -1,13 +1,15 @@
 import { type Metadata } from 'next'
 import { Separator } from '@/components/ui/separator'
 import { AccountForm } from './account-form'
+import { currentUser } from '@clerk/nextjs'
 
 export const metadata: Metadata = {
   title: 'Cuenta',
   description: 'Actualiza la configuración de tu cuenta.'
 }
 
-export default function Account () {
+export default async function Account () {
+  const user = await currentUser()
   return (
         <main>
             <div>
@@ -19,7 +21,7 @@ export default function Account () {
                 </p>
             </div>
             <Separator className='my-6' />
-            <AccountForm />
+            <AccountForm user={user} />
         </main>
   )
 }

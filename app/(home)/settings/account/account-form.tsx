@@ -21,6 +21,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '
 import { CalendarIcon, ChevronsUpDownIcon, CheckIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { Calendar } from '@/components/ui/calendar'
+import { type User } from '@clerk/nextjs/dist/types/server'
 
 const accountFormSchema = z.object({
   email: z
@@ -50,14 +51,13 @@ const languages = [
 
 type AccountFormValues = z.infer<typeof accountFormSchema>
 
-// This can come from your database or API.
-const defaultValues: Partial<AccountFormValues> = {
-  email: 'martnzomg@gmail.com',
-  dob: new Date('2000-04-16'),
-  language: 'es'
-}
+export function AccountForm ({ user }: { user: User | null }) {
+  const defaultValues: Partial<AccountFormValues> = {
+    email: user?.emailAddresses[0].emailAddress ?? '',
+    dob: user?.birthday !== '' && user?.birthday !== undefined ? new Date(user?.birthday) : new Date(user?.createdAt ?? ''),
+    language: user?.privateMetadata.language as string ?? 'es'
+  }
 
-export function AccountForm () {
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
