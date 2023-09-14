@@ -2,8 +2,8 @@
 
 import clsx from 'clsx'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState, useTransition } from 'react'
 import { BadgeCheck, BarChart4, LogOut, Menu, Settings, Users } from 'lucide-react'
 
 import {
@@ -15,10 +15,15 @@ import {
 import { Button } from '@/components/ui/button'
 import { Separator } from './ui/separator'
 import { Avatar } from './avatar'
+import { SignOutButton } from '@clerk/nextjs'
+import { Icons } from './icons'
 
 export const MobileSidebar = () => {
   const pathname = usePathname()
   const [isMounted, setIsMounted] = useState(false)
+  const [isPending, startTransition] = useTransition()
+
+  const router = useRouter()
 
   useEffect(() => {
     setIsMounted(true)
@@ -129,11 +134,27 @@ export const MobileSidebar = () => {
                                         </div>
                                     </button>
                                 </div>
-                                <SheetClose asChild>
-                                    <Button className='justify-between font-normal'>
-                                        Desconectar <LogOut size={18} />
+                                <SignOutButton
+                                    signOutCallback={() =>
+                                      startTransition(() => {
+                                        router.push(`${window.location.origin}/?redirect=false`)
+                                      })
+                                    }
+                                >
+                                    <Button
+                                        aria-label='sign out'
+                                        className='justify-between font-normal'
+                                        disabled={isPending}
+                                        >
+                                        <div className='flex'>
+                                            {isPending && (
+                                                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
+                                            )}
+                                            Desconectar
+                                        </div>
+                                        <LogOut size={18} />
                                     </Button>
-                                </SheetClose>
+                                </SignOutButton>
                             </div>
                         </section>
                     </div>
