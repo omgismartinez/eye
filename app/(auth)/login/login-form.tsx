@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
 import { authSchema } from '@/lib/validations/auth'
-import { OAuthSignIn } from './oauth-login'
+import { OAuthButtons } from '@/components/auth/oauth-buttons'
 import { PasswordInput } from '@/components/password-input'
 import { Icons } from '@/components/icons'
 import { useRouter } from 'next/navigation'
@@ -123,7 +123,7 @@ export function LoginAuthForm ({ className, ...props }: AuthFormProps) {
           </span>
         </div>
       </div>
-      <OAuthSignIn />
+      <OAuthButtons />
     </div>
   )
 }
