@@ -29,14 +29,12 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
 export function AppearanceForm ({ user }: { user: User | null }) {
   const { setTheme, resolvedTheme } = useTheme()
-  const userTheme = user?.privateMetadata.theme
 
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues: async () => {
-      setTheme(userTheme ?? resolvedTheme as string)
       return {
-        theme: userTheme ?? resolvedTheme as AppearanceFormValues['theme']
+        theme: resolvedTheme as AppearanceFormValues['theme']
       }
     }
   })
