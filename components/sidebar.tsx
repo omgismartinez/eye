@@ -5,24 +5,19 @@ import type { UserRole } from '@/types'
 import {
   BadgeCheck,
   BarChart4,
-  LogOut,
   Settings,
   Users
 } from 'lucide-react'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Separator } from './ui/separator'
-import { SignOutButton } from '@clerk/nextjs'
-import { useMounted } from '@/hooks/use-mounted'
-import { useTransition } from 'react'
-import { Button } from './ui/button'
-import { Icons } from './icons'
 import {
   Avatar,
   AvatarFallback,
   AvatarImage
 } from './ui/avatar'
+import { SignoutButton } from './auth/signout-button'
 
 interface SidebarProps {
   user: User | null
@@ -30,9 +25,6 @@ interface SidebarProps {
 
 export default function Sidebar ({ user }: SidebarProps) {
   const pathname = usePathname()
-  const router = useRouter()
-  const mounted = useMounted()
-  const [isPending, startTransition] = useTransition()
 
   const initials = `${user?.firstName?.charAt(0) ?? ''}${user?.lastName?.charAt(0) ?? ''}`
 
@@ -134,40 +126,7 @@ export default function Sidebar ({ user }: SidebarProps) {
                                 </div>
                             </button>
                         </div>
-                        {mounted
-                          ? (
-                                <SignOutButton
-                                    signOutCallback={() =>
-                                      startTransition(() => {
-                                        router.push(`${window.location.origin}/?redirect=false`)
-                                      })
-                                    }
-                                >
-                                    <Button
-                                    aria-label='sign out'
-                                    className='justify-between font-normal'
-                                    disabled={isPending}
-                                    >
-                                    <div className='flex'>
-                                        {isPending && (
-                                        <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-                                        )}
-                                        Desconectar
-                                    </div>
-                                    <LogOut size={18} />
-                                    </Button>
-                                </SignOutButton>
-                            )
-                          : (
-                                <Button
-                                    aria-label='sign out loading'
-                                    className='justify-between font-normal'
-                                    disabled={true}
-                                >
-                                    Desconectar
-                                    <LogOut size={18} />
-                                </Button>
-                            )}
+                        <SignoutButton />
                     </div>
                 </section>
             </div>

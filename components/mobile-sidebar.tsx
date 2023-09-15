@@ -2,9 +2,9 @@
 
 import clsx from 'clsx'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState, useTransition } from 'react'
-import { BadgeCheck, BarChart4, LogOut, Menu, Settings, Users } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { BadgeCheck, BarChart4, Menu, Settings, Users } from 'lucide-react'
 
 import {
   Sheet,
@@ -15,15 +15,11 @@ import {
 import { Button } from '@/components/ui/button'
 import { Separator } from './ui/separator'
 import { Avatar } from './avatar'
-import { SignOutButton } from '@clerk/nextjs'
-import { Icons } from './icons'
+import { SignoutButton } from './auth/signout-button'
 
 export const MobileSidebar = () => {
   const pathname = usePathname()
   const [isMounted, setIsMounted] = useState(false)
-  const [isPending, startTransition] = useTransition()
-
-  const router = useRouter()
 
   useEffect(() => {
     setIsMounted(true)
@@ -134,27 +130,7 @@ export const MobileSidebar = () => {
                                         </div>
                                     </button>
                                 </div>
-                                <SignOutButton
-                                    signOutCallback={() =>
-                                      startTransition(() => {
-                                        router.push(`${window.location.origin}/?redirect=false`)
-                                      })
-                                    }
-                                >
-                                    <Button
-                                        aria-label='sign out'
-                                        className='justify-between font-normal'
-                                        disabled={isPending}
-                                        >
-                                        <div className='flex'>
-                                            {isPending && (
-                                                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-                                            )}
-                                            Desconectar
-                                        </div>
-                                        <LogOut size={18} />
-                                    </Button>
-                                </SignOutButton>
+                                <SignoutButton />
                             </div>
                         </section>
                     </div>
