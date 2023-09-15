@@ -17,7 +17,7 @@ const oauthProviders = [
   strategy: OAuthStrategy
 }>
 
-export function OAuthSignIn () {
+export function OAuthButtons () {
   const [isLoading, setIsLoading] = React.useState<OAuthStrategy | null>(null)
   const { signIn, isLoaded: signInLoaded } = useSignIn()
 
