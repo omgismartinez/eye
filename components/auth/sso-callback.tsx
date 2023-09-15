@@ -3,7 +3,7 @@
 import { Icons } from '@/components/icons'
 import { useClerk } from '@clerk/nextjs'
 import { useEffect } from 'react'
-import { type SSOCallbackPageProps } from './page'
+import { type SSOCallbackPageProps } from '../../app/(auth)/sso-callback/page'
 
 export default function SSOCallback ({ searchParams }: SSOCallbackPageProps) {
   const { handleRedirectCallback } = useClerk()
