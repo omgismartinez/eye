@@ -16,7 +16,8 @@ import {
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useTheme } from 'next-themes'
-import { type User } from '@clerk/types'
+import { type User } from '@clerk/nextjs/dist/types/server'
+import { toast } from 'sonner'
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
@@ -28,32 +29,41 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
 export function AppearanceForm ({ user }: { user: User | null }) {
   const { setTheme, resolvedTheme } = useTheme()
-  const userTheme = user?.privateMetadata?.theme
+  const userTheme = user?.privateMetadata.theme
 
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues: async () => {
+      setTheme(userTheme ?? resolvedTheme as string)
       return {
         theme: userTheme ?? resolvedTheme as AppearanceFormValues['theme']
       }
     }
   })
 
-  function onSubmit (data: AppearanceFormValues) {
-    setTheme(data.theme)
-    // toast({
-    //     title: 'You submitted the following values:',
-    //     description: (
-    //         <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-    //             <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-    //         </pre>
-    //     ),
-    // })
+  async function onSubmit (data: AppearanceFormValues, user: User | null) {
+    const res = async () => {
+      const res = await fetch('/api/user/theme', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ theme: data.theme, userId: user?.id })
+      })
+
+      if (res.ok) setTheme(data.theme)
+
+      return res
+    }
+
+    toast.promise(res, {
+      loading: 'Guardando...',
+      success: '¡Tema guardado!',
+      error: '¡Algo salió mal!'
+    })
   }
 
   return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+            <form onSubmit={form.handleSubmit(async (data) => await onSubmit(data, user))} className='space-y-8'>
                 <FormField
                     control={form.control}
                     name='theme'
