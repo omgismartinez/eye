@@ -20,7 +20,18 @@ export default function Navbar () {
   }
 
   return (
-        <nav className='sticky top-0 z-50 backdrop-blur-sm border-b border-_gray-border dark:border-_dark-gray'>
+        <nav
+            className='
+                sticky
+                top-0
+                z-50
+                backdrop-blur-sm
+                border-b
+                bg-background/40
+                border-_gray-border
+                dark:border-_dark-gray
+            '
+        >
             <div className='flex items-center max-w-screen-2xl mx-auto overflow-hidden'>
                 <div className='flex flex-1 justify-between w-full'>
                     <div className='lg:w-72 p-4 lg:border-r border-_gray-border dark:border-_dark-gray'>
