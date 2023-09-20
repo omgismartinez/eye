@@ -46,7 +46,18 @@ export const MobileSidebar = () => {
                         overflow-auto
                     '
                 >
-                    <header className='sticky top-0 p-4 backdrop-blur-sm border-b border-_gray-border dark:border-_dark-gray'>
+                    <header
+                        className='
+                            sticky
+                            top-0
+                            p-4
+                            backdrop-blur-sm
+                            border-b
+                            bg-background/40
+                            border-_gray-border
+                            dark:border-_dark-gray
+                        '
+                    >
                         <Avatar />
                     </header>
                     <h1 className='text-_main dark:text-_white font-medium text-xs uppercase px-4 py-6'>Menu</h1>
