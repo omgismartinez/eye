@@ -15,3 +15,44 @@ model User {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 }
+
+enum Status {
+  no_dr
+  leve
+  moderada
+  severa
+  proliferativa
+}
+
+enum Gender {
+  M
+  F
+}
+
+model Patient {
+  id         String      @id @default(cuid())
+  name       String
+  prediction Status
+  image      String
+  birthdate  DateTime
+  phone      String
+  email      String
+  age        String
+  gender     Gender
+  address    String
+  occupation String
+  Diagnosis  Diagnosis[]
+}
+
+model Diagnosis {
+  id         String   @id @default(cuid())
+  patient    Patient  @relation(fields: [patient_id], references: [id])
+  prediction Status
+  extra      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  patient_id String
+
+  @@index([patient_id], name: "patient_id")
+}
