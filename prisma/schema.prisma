@@ -8,51 +8,173 @@ datasource db {
   relationMode = "prisma"
 }
 
+model EmailAddress {
+  id            String  @id
+  object        String
+  email_address String
+  verification  Json?
+  user          User?   @relation(fields: [user_id], references: [id])
+  user_id       String?
+
+  @@index([user_id], name: "user_id")
+}
+
+model PhoneNumber {
+  id                         String               @id
+  object                     String
+  phone_number               String
+  reserved_for_second_factor Boolean
+  default_second_factor      Boolean
+  linked_to                  IdentificationLink[]
+  verification               Json?
+  user                       User?                @relation(fields: [user_id], references: [id])
+  user_id                    String?
+
+  @@index([user_id], name: "user_id")
+}
+
+model IdentificationLink {
+  id              String       @id
+  object          String
+  type            String
+  phone_number    PhoneNumber? @relation(fields: [phone_number_id], references: [id])
+  phone_number_id String?
+
+  @@index([phone_number_id], name: "phone_number_id")
+}
+
+model Web3Wallet {
+  id           String  @id
+  object       String
+  web3_wallet  String
+  verification Json?
+  user         User?   @relation(fields: [user_id], references: [id])
+  user_id      String?
+
+  @@index([user_id], name: "user_id")
+}
+
+model ExternalAccount {
+  id                String  @id
+  object            String
+  provider          String
+  identification_id String
+  provider_user_id  String
+  approved_scopes   String
+  email_address     String
+  first_name        String
+  last_name         String
+  avatar_url        String
+  image_url         String
+  username          String?
+  public_metadata   Json?
+  label             String?
+  verification      Json?
+  user              User?   @relation(fields: [user_id], references: [id])
+  user_id           String?
+
+  @@index([user_id], name: "user_id")
+}
+
 model User {
-  id          String   @id @default(cuid())
-  external_id String   @unique
-  metadata    Json
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id                       String            @id @unique
+  object                   String
+  username                 String?
+  first_name               String
+  last_name                String
+  gender                   String
+  birthday                 String
+  profile_image_url        String
+  image_url                String
+  has_image                Boolean
+  primary_email_address_id String
+  primary_phone_number_id  String?
+  primary_web3_wallet_id   String?
+  password_enabled         Boolean
+  totp_enabled             Boolean
+  backup_code_enabled      Boolean
+  two_factor_enabled       Boolean
+  banned                   Boolean
+  email_addresses          EmailAddress[]
+  phone_numbers            PhoneNumber[]
+  web3_wallets             Web3Wallet[]
+  external_accounts        ExternalAccount[]
+  external_id              String?
+  last_sign_in_at          Int?
+  public_metadata          Json
+  private_metadata         Json
+  unsafe_metadata          Json
+  created_at               DateTime          @default(now())
+  updated_at               DateTime          @updatedAt
+  diagnostics              Diagnostic[]
+}
+
+model Patient {
+  id          String       @id @default(cuid())
+  first_name  String
+  last_name   String
+  prediction  Status
+  birthdate   DateTime
+  phone       String
+  email       String       @unique
+  age         String
+  gender      Gender
+  address     String
+  occupation  String
+  diagnostics Diagnostic[]
+  images      Image[]
+}
+
+model Diagnostic {
+  id            String   @id @default(cuid())
+  prediction    Status
+  extra         String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  patient       Patient  @relation(fields: [patient_email], references: [email])
+  patient_email String
+  medic         User     @relation(fields: [medic_id], references: [id])
+  medic_id      String
+  image         Image    @relation(fields: [image_id], references: [id])
+  image_id      String   @unique
+
+  @@index([patient_email], name: "patient_email")
+  @@index([medic_id], name: "medic_id")
+  @@index([image_id], name: "image_id")
+}
+
+model LinkImage {
+  id       String @id @default(cuid())
+  value    String
+  image    Image  @relation(fields: [image_id], references: [id])
+  image_id String
+
+  @@index([image_id], name: "image_id")
+}
+
+model Image {
+  id          String      @id @default(cuid())
+  label       Status
+  url         LinkImage[]
+  description String
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  patient     Patient     @relation(fields: [patient_id], references: [id])
+  patient_id  String
+  diagnostic  Diagnostic?
+
+  @@index([patient_id], name: "patient_id")
 }
 
 enum Status {
-  no_dr
-  leve
-  moderada
-  severa
-  proliferativa
+  NO_DR
+  MILD
+  MODERATE
+  SEVERE
+  PROLIFERATIVE
 }
 
 enum Gender {
   M
   F
-}
-
-model Patient {
-  id         String      @id @default(cuid())
-  name       String
-  prediction Status
-  image      String
-  birthdate  DateTime
-  phone      String
-  email      String
-  age        String
-  gender     Gender
-  address    String
-  occupation String
-  Diagnosis  Diagnosis[]
-}
-
-model Diagnosis {
-  id         String   @id @default(cuid())
-  patient    Patient  @relation(fields: [patient_id], references: [id])
-  prediction Status
-  extra      String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  patient_id String
-
-  @@index([patient_id], name: "patient_id")
 }
