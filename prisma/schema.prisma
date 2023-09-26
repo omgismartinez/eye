@@ -114,6 +114,7 @@ model Patient {
   first_name  String
   last_name   String
   prediction  Status
+  avatar      String
   birthdate   DateTime
   phone       String
   email       String       @unique
