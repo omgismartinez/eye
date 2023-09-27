@@ -33,6 +33,7 @@ import { z } from 'zod'
 import Image from 'next/image'
 import Marker from '@/components/tables/marker'
 import { Separator } from '@/components/ui/separator'
+import { toast } from 'sonner'
 
 const MAX_RECOMMENDED_IMAGE_SIZE = 4
 const MAX_FILE_SIZE = MAX_RECOMMENDED_IMAGE_SIZE * 1024 * 1024
@@ -91,21 +92,54 @@ export default function NewForm () {
 
   async function onSubmit (data: NewDiagnosticFormValues) {
     setLoading(true)
+
     const formData = new FormData()
     formData.append('image', data.image as File)
-    formData.append('name', data.name)
-    formData.append('age', data.age.toString())
-    formData.append('extra', data.extra as string)
-    formData.append('gender', data.gender)
 
-    const res = await fetch('/api/classification', {
-      method: 'POST',
-      body: formData
+    const classification = async () => {
+      const res = await fetch('/api/classification', {
+        method: 'POST',
+        body: formData
+      })
+
+      const prediction: ImageClassificationOutput = await res.json()
+
+      form.setValue('prediction', prediction[0].label)
+      setPredictions(prediction)
+
+      return prediction
+    }
+
+    const diagnostic = async (top_prediction: string) => {
+      formData.append('name', data.name)
+      formData.append('prediction', top_prediction)
+      formData.append('age', data.age.toString())
+      formData.append('extra', data.extra as string)
+      formData.append('gender', data.gender)
+
+      const res = await fetch('/api/diagnostic', {
+        method: 'POST',
+        body: formData
+      })
+
+      const diagnostic = await res.json()
+
+      return diagnostic
+    }
+
+    toast.promise(classification, {
+      loading: 'Prediciendo imagen...',
+      success: (classification) => {
+        toast.promise(diagnostic(classification[0].label), {
+          loading: 'Guardando diagnóstico...',
+          success: 'Diagnóstico guardado exitosamente.',
+          error: 'Error al guardar diagnóstico.'
+        })
+        return <span>Predicción exitosa: <strong className='capitalize'>{classification[0].label}</strong></span>
+      },
+      error: 'Error al predecir imagen.'
     })
 
-    const prediction: ImageClassificationOutput = await res.json()
-    form.setValue('prediction', prediction[0].label)
-    setPredictions(prediction)
     setLoading(false)
   }
 
