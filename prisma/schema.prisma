@@ -109,23 +109,6 @@ datasource db {
 //   diagnostics              Diagnostic[]
 // }
 
-// model Patient {
-//   id          String       @id @default(cuid())
-//   first_name  String
-//   last_name   String
-//   prediction  Status
-//   avatar      String
-//   birthdate   DateTime
-//   phone       String
-//   email       String       @unique
-//   age         Int
-//   gender      Gender
-//   address     String
-//   occupation  String
-//   diagnostics Diagnostic[]
-//   images      Image[]
-// }
-
 // This model is only for testing purposes
 
 model Image {
@@ -185,8 +168,11 @@ model Doctor {
   lastName    String
   specialty   String
   gender      Gender
+  age         Int
+  birthdate   DateTime
+  address     String?
   email       String
-  phone       String?
+  phone       String
   role        Role         @default(DOCTOR)
   diagnostics Diagnostic[]
   patients    Patient[]
@@ -204,6 +190,7 @@ model Patient {
   gender      Gender
   age         Int
   birthdate   DateTime
+  occupation  String?
   address     String?
   email       String
   phone       String
