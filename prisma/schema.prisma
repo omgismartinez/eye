@@ -193,13 +193,10 @@ model Patient {
   email       String       @unique
   phone       String
   diagnostics Diagnostic[]
+  doctor      Doctor[]
 
-  user     User   @relation(fields: [userId], references: [id])
-  doctor   Doctor @relation(fields: [doctorId], references: [id])
-  userId   String @unique
-  doctorId String
-
-  @@index([doctorId], name: "doctorId")
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 }
 
 model Diagnostic {
