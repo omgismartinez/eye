@@ -173,7 +173,6 @@ model Doctor {
   address     String?
   email       String
   phone       String
-  role        Role         @default(DOCTOR)
   diagnostics Diagnostic[]
   patients    Patient[]
 
