@@ -8,178 +8,252 @@ datasource db {
   relationMode = "prisma"
 }
 
-model EmailAddress {
-  id            String  @id
-  object        String
-  email_address String
-  verification  Json?
-  user          User?   @relation(fields: [user_id], references: [id])
-  user_id       String?
+// model EmailAddress {
+//   id            String  @id
+//   object        String
+//   email_address String
+//   verification  Json?
+//   user          User?   @relation(fields: [user_id], references: [id])
+//   user_id       String?
 
-  @@index([user_id], name: "user_id")
+//   @@index([user_id], name: "user_id")
+// }
+
+// model PhoneNumber {
+//   id                         String               @id
+//   object                     String
+//   phone_number               String
+//   reserved_for_second_factor Boolean
+//   default_second_factor      Boolean
+//   linked_to                  IdentificationLink[]
+//   verification               Json?
+//   user                       User?                @relation(fields: [user_id], references: [id])
+//   user_id                    String?
+
+//   @@index([user_id], name: "user_id")
+// }
+
+// model IdentificationLink {
+//   id              String       @id
+//   object          String
+//   type            String
+//   phone_number    PhoneNumber? @relation(fields: [phone_number_id], references: [id])
+//   phone_number_id String?
+
+//   @@index([phone_number_id], name: "phone_number_id")
+// }
+
+// model Web3Wallet {
+//   id           String  @id
+//   object       String
+//   web3_wallet  String
+//   verification Json?
+//   user         User?   @relation(fields: [user_id], references: [id])
+//   user_id      String?
+
+//   @@index([user_id], name: "user_id")
+// }
+
+// model ExternalAccount {
+//   id                String  @id
+//   object            String
+//   provider          String
+//   identification_id String
+//   provider_user_id  String
+//   approved_scopes   String
+//   email_address     String
+//   first_name        String
+//   last_name         String
+//   avatar_url        String
+//   image_url         String
+//   username          String?
+//   public_metadata   Json?
+//   label             String?
+//   verification      Json?
+//   user              User?   @relation(fields: [user_id], references: [id])
+//   user_id           String?
+
+//   @@index([user_id], name: "user_id")
+// }
+
+// model User {
+//   id                       String            @id @unique
+//   object                   String
+//   username                 String?
+//   first_name               String
+//   last_name                String
+//   gender                   Gender
+//   birthday                 String
+//   profile_image_url        String
+//   image_url                String
+//   has_image                Boolean
+//   primary_email_address_id String
+//   primary_phone_number_id  String?
+//   primary_web3_wallet_id   String?
+//   password_enabled         Boolean
+//   totp_enabled             Boolean
+//   backup_code_enabled      Boolean
+//   two_factor_enabled       Boolean
+//   banned                   Boolean
+//   email_addresses          EmailAddress[]
+//   phone_numbers            PhoneNumber[]
+//   web3_wallets             Web3Wallet[]
+//   external_accounts        ExternalAccount[]
+//   external_id              String?
+//   last_sign_in_at          Int?
+//   public_metadata          Json
+//   private_metadata         Json
+//   unsafe_metadata          Json
+//   created_at               DateTime          @default(now())
+//   updated_at               DateTime          @updatedAt
+//   diagnostics              Diagnostic[]
+// }
+
+// model Patient {
+//   id          String       @id @default(cuid())
+//   first_name  String
+//   last_name   String
+//   prediction  Status
+//   avatar      String
+//   birthdate   DateTime
+//   phone       String
+//   email       String       @unique
+//   age         Int
+//   gender      Gender
+//   address     String
+//   occupation  String
+//   diagnostics Diagnostic[]
+//   images      Image[]
+// }
+
+// This model is only for testing purposes
+
+model Image {
+  id        String   @id @default(cuid())
+  eye       Eye
+  label     String
+  url       String   @db.Text
+  camera    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  scale      Scale       @relation(fields: [label], references: [key])
+  diagnostic Diagnostic?
+  disease    Disease     @relation(fields: [diseaseId], references: [id])
+  diseaseId  String
+
+  @@index([label], name: "label")
+  @@index([diseaseId], name: "diseaseId")
 }
 
-model PhoneNumber {
-  id                         String               @id
-  object                     String
-  phone_number               String
-  reserved_for_second_factor Boolean
-  default_second_factor      Boolean
-  linked_to                  IdentificationLink[]
-  verification               Json?
-  user                       User?                @relation(fields: [user_id], references: [id])
-  user_id                    String?
-
-  @@index([user_id], name: "user_id")
+model Disease {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String?
+  key         String       @unique
+  diagnostics Diagnostic[]
+  images      Image[]
+  scales      Scale[]
 }
 
-model IdentificationLink {
-  id              String       @id
-  object          String
-  type            String
-  phone_number    PhoneNumber? @relation(fields: [phone_number_id], references: [id])
-  phone_number_id String?
+model Scale {
+  id          String       @id @default(cuid())
+  key         String       @unique
+  name        String
+  description String?
+  disease     Disease      @relation(fields: [name], references: [name])
+  Image       Image[]
+  Diagnostic  Diagnostic[]
 
-  @@index([phone_number_id], name: "phone_number_id")
-}
-
-model Web3Wallet {
-  id           String  @id
-  object       String
-  web3_wallet  String
-  verification Json?
-  user         User?   @relation(fields: [user_id], references: [id])
-  user_id      String?
-
-  @@index([user_id], name: "user_id")
-}
-
-model ExternalAccount {
-  id                String  @id
-  object            String
-  provider          String
-  identification_id String
-  provider_user_id  String
-  approved_scopes   String
-  email_address     String
-  first_name        String
-  last_name         String
-  avatar_url        String
-  image_url         String
-  username          String?
-  public_metadata   Json?
-  label             String?
-  verification      Json?
-  user              User?   @relation(fields: [user_id], references: [id])
-  user_id           String?
-
-  @@index([user_id], name: "user_id")
+  @@index([name], name: "name")
 }
 
 model User {
-  id                       String            @id @unique
-  object                   String
-  username                 String?
-  first_name               String
-  last_name                String
-  gender                   String
-  birthday                 String
-  profile_image_url        String
-  image_url                String
-  has_image                Boolean
-  primary_email_address_id String
-  primary_phone_number_id  String?
-  primary_web3_wallet_id   String?
-  password_enabled         Boolean
-  totp_enabled             Boolean
-  backup_code_enabled      Boolean
-  two_factor_enabled       Boolean
-  banned                   Boolean
-  email_addresses          EmailAddress[]
-  phone_numbers            PhoneNumber[]
-  web3_wallets             Web3Wallet[]
-  external_accounts        ExternalAccount[]
-  external_id              String?
-  last_sign_in_at          Int?
-  public_metadata          Json
-  private_metadata         Json
-  unsafe_metadata          Json
-  created_at               DateTime          @default(now())
-  updated_at               DateTime          @updatedAt
-  diagnostics              Diagnostic[]
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  phone     String?
+  role      Role     @default(PATIENT)
+  doctor    Doctor?
+  patient   Patient?
+}
+
+model Doctor {
+  id          String       @id @default(cuid())
+  firstName   String
+  lastName    String
+  specialty   String
+  gender      Gender
+  email       String
+  phone       String?
+  role        Role         @default(DOCTOR)
+  diagnostics Diagnostic[]
+  patients    Patient[]
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  @@unique([email, id])
 }
 
 model Patient {
   id          String       @id @default(cuid())
-  first_name  String
-  last_name   String
-  prediction  Status
-  avatar      String
-  birthdate   DateTime
-  phone       String
-  email       String       @unique
-  age         String
+  firstName   String
+  lastName    String
   gender      Gender
-  address     String
-  occupation  String
+  age         Int
+  birthdate   DateTime
+  address     String?
+  email       String
+  phone       String
   diagnostics Diagnostic[]
-  images      Image[]
+
+  user     User   @relation(fields: [userId], references: [id])
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+  userId   String @unique
+  doctorId String
+
+  @@unique([email, id])
+  @@index([doctorId], name: "doctorId")
 }
 
 model Diagnostic {
-  id            String   @id @default(cuid())
-  eye           Eye
-  prediction    Status
-  extra         String
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-  patient       Patient  @relation(fields: [patient_email], references: [email])
-  patient_email String
-  medic         User     @relation(fields: [medic_id], references: [id])
-  medic_id      String
-  image         Image    @relation(fields: [image_id], references: [id])
-  image_id      String   @unique
+  id         String   @id @default(cuid())
+  eye        Eye
+  prediction String
+  extra      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  @@index([patient_email], name: "patient_email")
-  @@index([medic_id], name: "medic_id")
-  @@index([image_id], name: "image_id")
-}
+  scale        Scale   @relation(fields: [prediction], references: [key])
+  doctor       Doctor  @relation(fields: [doctorId], references: [id])
+  patient      Patient @relation(fields: [patientId, patientEmail], references: [id, email])
+  disease      Disease @relation(fields: [diseaseId], references: [id])
+  image        Image   @relation(fields: [imageId], references: [id])
+  doctorId     String
+  patientId    String
+  patientEmail String
+  diseaseId    String
+  imageId      String  @unique
 
-model LinkImage {
-  id       String @id @default(cuid())
-  value    String
-  image    Image  @relation(fields: [image_id], references: [id])
-  image_id String
-
-  @@index([image_id], name: "image_id")
-}
-
-model Image {
-  id          String      @id @default(cuid())
-  eye         Eye
-  label       Status
-  url         LinkImage[]
-  description String
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @updatedAt
-  patient     Patient     @relation(fields: [patient_id], references: [id])
-  patient_id  String
-  diagnostic  Diagnostic?
-
-  @@index([patient_id], name: "patient_id")
-}
-
-enum Status {
-  NO_DR
-  MILD
-  MODERATE
-  SEVERE
-  PROLIFERATIVE
+  @@index([prediction], name: "prediction")
+  @@index([doctorId], name: "doctorId")
+  @@index([patientId, patientEmail], name: "patientFk")
+  @@index([diseaseId], name: "diseaseId")
 }
 
 enum Gender {
   M
   F
+}
+
+enum Role {
+  ADMIN
+  DOCTOR
+  PATIENT
+  RESEARCHER
+  DEVELOPER
 }
 
 enum Eye {
