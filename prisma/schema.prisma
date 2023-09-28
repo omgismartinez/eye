@@ -112,18 +112,18 @@ datasource db {
 // This model is only for testing purposes
 
 model Image {
-  id        String   @id @default(cuid())
-  eye       Eye
-  label     String
-  url       String   @db.Text
-  camera    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  scale      Scale       @relation(fields: [label], references: [key])
+  id         String      @id @default(cuid())
+  eye        Eye
+  label      String
+  url        String      @db.Text
+  camera     String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
   diagnostic Diagnostic?
-  disease    Disease     @relation(fields: [diseaseId], references: [id])
-  diseaseId  String
+
+  labelKey  Label   @relation(fields: [label], references: [key])
+  disease   Disease @relation(fields: [diseaseId], references: [id])
+  diseaseId String
 
   @@index([label], name: "label")
   @@index([diseaseId], name: "diseaseId")
@@ -136,17 +136,17 @@ model Disease {
   key         String       @unique
   diagnostics Diagnostic[]
   images      Image[]
-  scales      Scale[]
+  labels      Label[]
 }
 
-model Scale {
+model Label {
   id          String       @id @default(cuid())
   key         String       @unique
   name        String
   description String?
   disease     Disease      @relation(fields: [name], references: [name])
-  Image       Image[]
-  Diagnostic  Diagnostic[]
+  images      Image[]
+  diagnostics Diagnostic[]
 
   @@index([name], name: "name")
 }
@@ -210,7 +210,7 @@ model Diagnostic {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  scale        Scale   @relation(fields: [prediction], references: [key])
+  label        Label   @relation(fields: [prediction], references: [key])
   doctor       Doctor  @relation(fields: [doctorId], references: [id])
   patient      Patient @relation(fields: [patientEmail], references: [email])
   disease      Disease @relation(fields: [diseaseId], references: [id])
