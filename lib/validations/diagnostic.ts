@@ -1,3 +1,4 @@
+import { Eye } from '@prisma/client'
 import * as z from 'zod'
 
 export const MAX_RECOMMENDED_IMAGE_SIZE = 4
@@ -13,8 +14,9 @@ export const newDiagnosticFormSchema = z.object({
     )
     .refine((file) => file && file.size <= MAX_FILE_SIZE, `Maximo tamaño de archivo: ${MAX_RECOMMENDED_IMAGE_SIZE}MB`),
   eye: z
-    .string()
-    .refine((eye) => ['left', 'right'].includes(eye), 'El ojo debe ser izquierdo o derecho.'),
+    .nativeEnum(Eye, {
+      required_error: 'Especifique el ojo a diagnosticar.'
+    }),
   extra: z
     .string()
     .max(160)
@@ -24,7 +26,13 @@ export const newDiagnosticFormSchema = z.object({
     .string()
     .optional(),
   disease: z
-    .string(),
+    .string({
+      required_error: 'La enfermedad es requerida.'
+    }),
+  doctor: z
+    .string({
+      required_error: 'El doctor se infiere del usuario actual.'
+    }),
   firstName: z
     .string()
     .min(2, {
@@ -52,9 +60,9 @@ export const newDiagnosticFormSchema = z.object({
     .min(4)
     .optional(),
   phone: z
-    .string()
-    .max(10)
-    .min(10),
+    .string({
+      required_error: 'El teléfono es requerido.'
+    }),
   birthdate: z
     .date()
     .max(new Date(), {
