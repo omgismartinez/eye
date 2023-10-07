@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { ImageClassificationOutput } from '@huggingface/inference'
+import { type ImageClassificationOutput } from '@huggingface/inference'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -18,72 +18,43 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-  HoverCardArrow
-} from '@/components/ui/hover-card'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Dot, ImageIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { type z } from 'zod'
 import Image from 'next/image'
-import Marker from '@/components/tables/marker'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
+import { useAuth } from '@clerk/nextjs'
+import DiagnosticForm from '@/components/forms/diagnostic-form'
+import {
+  ACCEPTED_IMAGE_TYPES,
+  MAX_RECOMMENDED_IMAGE_SIZE,
+  newDiagnosticFormSchema
+} from '@/lib/validations/diagnostic'
 
-const MAX_RECOMMENDED_IMAGE_SIZE = 4
-const MAX_FILE_SIZE = MAX_RECOMMENDED_IMAGE_SIZE * 1024 * 1024
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
-
-const newDiagnosticFormSchema = z.object({
-  image: z
-    .custom<File | null>()
-    .refine(
-      (file) => file && ACCEPTED_IMAGE_TYPES.includes(file.type),
-            `Los formatos soportados son: ${ACCEPTED_IMAGE_TYPES.map((type) => '.' + type.split('/')[1]).join(' | ')}`
-    )
-    .refine((file) => file && file.size <= MAX_FILE_SIZE, `Maximo tamaño de archivo: ${MAX_RECOMMENDED_IMAGE_SIZE}MB`),
-  name: z
-    .string()
-    .min(2, {
-      message: 'El nombre del paciente debe tener al menos 2 caracteres.'
-    })
-    .max(30, {
-      message: 'El nombre del paciente no debe tener más de 30 caracteres.'
-    }),
-  prediction: z
-    .string()
-    .optional(),
-  age: z
-    .coerce
-    .number(),
-  extra: z
-    .string()
-    .max(160)
-    .min(4)
-    .optional(),
-  gender: z
-    .string()
-})
-
-export type NewDiagnosticFormValues = z.infer<typeof newDiagnosticFormSchema>
+type NewDiagnosticFormValues = z.infer<typeof newDiagnosticFormSchema>
 
 const defaultValues: Partial<NewDiagnosticFormValues> = {
-  name: 'Alvaro Martinez Martinez',
+  doctor: 'Alvaro Martinez Martinez',
   prediction: 'Sin predicción',
-  age: 23,
+  eye: 'RIGHT',
   extra: 'El paciente no presenta ninguna enfermedad.',
-  gender: 'M'
+  firstName: 'Alvaro',
+  lastName: 'Martinez Martinez',
+  email: 'martinez@example.com',
+  age: 23,
+  gender: 'M',
+  phone: '1234567890'
 }
 
 export default function NewForm () {
+  const { userId } = useAuth()
   const [loading, setLoading] = useState(false)
   const [image, setImage] = useState<File | null>(null)
   const [predictions, setPredictions] = useState<ImageClassificationOutput>([])
+
   const form = useForm<NewDiagnosticFormValues>({
     resolver: zodResolver(newDiagnosticFormSchema),
     defaultValues,
@@ -110,12 +81,24 @@ export default function NewForm () {
       return prediction
     }
 
-    const diagnostic = async (top_prediction: string) => {
-      formData.append('name', data.name)
-      formData.append('prediction', top_prediction)
-      formData.append('age', data.age.toString())
+    const diagnostic = async (classification: ImageClassificationOutput) => {
+      // Diagnostic
+      formData.append('eye', data.eye)
       formData.append('extra', data.extra as string)
+      formData.append('classification', JSON.stringify(classification))
+      formData.append('prediction', classification[0].label)
+      formData.append('disease', data.disease)
+      formData.append('doctor', userId as string)
+
+      // Patient
+      formData.append('firstName', data.firstName)
+      formData.append('lastName', data.lastName)
+      formData.append('age', data.age.toString())
       formData.append('gender', data.gender)
+      formData.append('address', data.address as string)
+      formData.append('phone', data.phone)
+      formData.append('birthdate', data.birthdate as unknown as string)
+      formData.append('email', data.email)
 
       const res = await fetch('/api/diagnostic', {
         method: 'POST',
@@ -130,7 +113,7 @@ export default function NewForm () {
     toast.promise(classification, {
       loading: 'Prediciendo imagen...',
       success: (classification) => {
-        toast.promise(diagnostic(classification[0].label), {
+        toast.promise(diagnostic(classification), {
           loading: 'Guardando diagnóstico...',
           success: 'Diagnóstico guardado exitosamente.',
           error: 'Error al guardar diagnóstico.'
@@ -146,14 +129,14 @@ export default function NewForm () {
   return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField
-                    control={form.control}
-                    name='image'
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <div className='flex flex-col gap-10'>
-                                    <div className='border border-_gray-border dark:border-_dark-gray' />
+                <div className='flex flex-col gap-8'>
+                    <Separator className='h-[2px]' />
+                    <FormField
+                        control={form.control}
+                        name='image'
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
                                     <label htmlFor='upload'>
                                         <div
                                             data-active={!!image}
@@ -214,165 +197,138 @@ export default function NewForm () {
                                             <FormMessage className='absolute inset-x-0 bottom-12 text-center' />
                                         </div>
                                     </label>
-                                    <Separator />
-                                </div>
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-                <div>
-                    <h1 className='text-base font-bold text-center my-4'>Datos del paciente</h1>
-                    <div className='flex flex-col gap-3'>
-                        <div className='grid sm:grid-cols-3 lg:grid-rows-3 gap-4 lg:gap-3'>
-                            <FormField
-                                control={form.control}
-                                name='name'
-                                render={({ field }) => (
-                                    <FormItem className='sm:col-span-2'>
-                                        <FormLabel>Nombre</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder='Paciente' autoComplete='off' required {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='prediction'
-                                render={({ field }) => (
-                                    <HoverCard openDelay={200}>
-                                        <HoverCardTrigger asChild>
-                                            <FormItem className='lg:col-span-1'>
-                                                <FormLabel>Predicción</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        disabled={field.value?.includes('Sin predicción') ?? loading}
-                                                        className='bg-_main text-_white dark:bg-_white dark:text-_main capitalize'
-                                                        autoComplete='off'
-                                                        readOnly
-                                                        {...field}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        </HoverCardTrigger>
-                                        <HoverCardContent
-                                            className='
-                                                min-w-min
-                                                text-sm
-                                                whitespace-normal
-                                                border-none
-                                                rounded-lg
-                                                bg-white
-                                                dark:bg-_dark-gray
-                                                p-5
-                                                shadow-[hsl(206_22%_7%_/_35%)_0px_10px_25px_-10px,hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]
-                                            '
-                                            side='top'
-                                            sideOffset={5}
-                                        >
-                                            <div className='flex flex-col gap-3'>
-                                                <h1 className='text-base font-bold text-center pb-4'>Predicciones</h1>
-                                                <div className='grid gap-3'>
-                                                    {(predictions.length > 0)
-                                                      ? predictions.map((prediction) => {
-                                                        const value = Math.ceil((prediction.score / Math.max(...predictions.map((p) => p.score))) * 80)
-                                                        return (
-                                                                <div key={prediction.label} className='grid text-xs'>
-                                                                    <div className='grid gap-1'>
-                                                                        <Marker label={prediction.label} type={'badge'} value={value} />
-                                                                        <div className='flex justify-between'>
-                                                                            <p className='capitalize text-xs'>{prediction.label}</p>
-                                                                            <p className='text-_gray-808080'>{(prediction.score).toFixed(3)}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>)
-                                                      })
-                                                      : <p className='text-center text-xs text-_gray-808080'>
-                                                            Sube una imagen y completa los campos para predecir.
-                                                        </p>}
-                                                </div>
-                                            </div>
-                                            <HoverCardArrow className='fill-_white dark:fill-_dark-gray' />
-                                        </HoverCardContent>
-                                    </HoverCard>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='age'
-                                render={({ field }) => (
-                                    <FormItem className='lg:col-span-1'>
-                                        <FormLabel>Edad</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type='number'
-                                                max={150}
-                                                min={10}
-                                                placeholder='18'
-                                                autoComplete='off'
-                                                required
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='extra'
-                                render={({ field }) => (
-                                    <FormItem className='sm:col-span-2 row-span-2'>
-                                        <FormLabel>Datos adicionales</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                rows={5}
-                                                placeholder='Escribe datos adicionales del paciente'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='gender'
-                                render={({ field }) => (
-                                    <FormItem className='col-span-1'>
-                                        <FormLabel>Género</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value} required>
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <Separator className='h-[2px]' />
+                    <DiagnosticForm form={form} predictions={predictions} loading={loading} />
+                    <section>
+                        <h1 className='text-base font-bold text-center mb-4'>Datos del paciente</h1>
+                        <div className='flex flex-col gap-6'>
+                            <div className='grid grid-cols-3 gap-3'>
+                                <FormField
+                                    control={form.control}
+                                    name='firstName'
+                                    render={({ field }) => (
+                                        <FormItem className='col-span-3 sm:col-span-1'>
+                                            <FormLabel>Nombre</FormLabel>
                                             <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder='Selecciona una opción' />
-                                                </SelectTrigger>
+                                                <Input placeholder='Nombre del paciente' autoComplete='off' required {...field} />
                                             </FormControl>
-                                            <SelectContent side='top'>
-                                                <SelectItem value='M'>Masculino</SelectItem>
-                                                <SelectItem value='F'>Femenino</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <Button disabled={loading}>
-                            <div className='relative'>
-                                Predecir
-                                <div
-                                    data-loading={loading}
-                                    className='absolute -top-1 -right-10 flex opacity-0 -space-x-4 ease-in-out duration-300 data-[loading="true"]:opacity-100'
-                                >
-                                    <Dot className='text-_white dark:text-_main animate-pulse m-0 duration-700 delay-1000' />
-                                    <Dot className='text-_white dark:text-_main animate-pulse m-0 duration-700 delay-500' />
-                                    <Dot className='text-_white dark:text-_main animate-pulse m-0 duration-700' />
-                                </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name='lastName'
+                                    render={({ field }) => (
+                                        <FormItem className='col-span-3 sm:col-span-2'>
+                                            <FormLabel>Apellidos</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder='Apellidos del paciente'autoComplete='off' required {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name='email'
+                                    render={({ field }) => (
+                                        <FormItem className='col-span-3'>
+                                            <FormLabel>Correo electrónico</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder='a@example.com' autoComplete='off' required {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name='age'
+                                    render={({ field }) => (
+                                        <FormItem className='col-span-3 sm:col-span-1'>
+                                            <FormLabel>Edad</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type='number'
+                                                    max={150}
+                                                    min={10}
+                                                    placeholder='18'
+                                                    autoComplete='off'
+                                                    required
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name='gender'
+                                    render={({ field }) => (
+                                        <FormItem className='col-span-3 sm:col-span-1'>
+                                            <FormLabel>Género</FormLabel>
+                                            <Select
+                                                onValueChange={(value: NewDiagnosticFormValues['gender']) => field.onChange(value)}
+                                                defaultValue={field.value}
+                                                required
+                                            >
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder='Selecciona una opción' />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent side='top'>
+                                                    <SelectItem value='M'>Masculino</SelectItem>
+                                                    <SelectItem value='F'>Femenino</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name='phone'
+                                    render={({ field }) => (
+                                        <FormItem className='col-span-3 sm:col-span-1'>
+                                            <FormLabel>Teléfono</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type='tel'
+                                                    placeholder='000-000-0000'
+                                                    pattern='[0-9]{10}'
+                                                    autoComplete='off'
+                                                    required
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
-                        </Button>
-                    </div>
+
+                            <Button disabled={loading}>
+                                <div className='relative'>
+                                    Predecir
+                                    <div
+                                        data-loading={loading}
+                                        className='absolute -top-1 -right-10 flex opacity-0 -space-x-4 ease-in-out duration-300 data-[loading="true"]:opacity-100'
+                                    >
+                                        <Dot className='text-_white dark:text-_main animate-pulse m-0 duration-700 delay-1000' />
+                                        <Dot className='text-_white dark:text-_main animate-pulse m-0 duration-700 delay-500' />
+                                        <Dot className='text-_white dark:text-_main animate-pulse m-0 duration-700' />
+                                    </div>
+                                </div>
+                            </Button>
+                        </div>
+                    </section>
                 </div>
             </form>
         </Form >
