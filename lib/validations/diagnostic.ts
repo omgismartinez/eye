@@ -49,32 +49,36 @@ export const newDiagnosticFormSchema = z.object({
     .max(30, {
       message: 'El apellido del paciente no debe tener más de 30 caracteres.'
     }),
+  gender: z
+    .enum(['M', 'F']),
   age: z
     .coerce
     .number(),
-  gender: z
-    .enum(['M', 'F']),
-  address: z
-    .string()
-    .max(160)
-    .min(4)
-    .optional(),
-  phone: z
-    .string({
-      required_error: 'El teléfono es requerido.'
-    }),
-  birthdate: z
+  dob: z
     .date()
     .max(new Date(), {
       message: 'La fecha de nacimiento no puede ser mayor a la fecha actual.'
     } as any)
     .min(new Date(1900, 1, 1), {
       message: 'La fecha de nacimiento no puede ser menor a 1900.'
-    } as any)
+    } as any),
+  occupation: z
+    .string()
+    .max(160)
+    .min(4)
+    .optional(),
+  address: z
+    .string()
+    .max(160)
+    .min(4)
     .optional(),
   email: z
     .string()
     .email({
       message: 'El correo electrónico no es válido.'
+    }),
+  phone: z
+    .string({
+      required_error: 'El teléfono es requerido.'
     })
 })
