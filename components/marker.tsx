@@ -6,7 +6,7 @@ type MarkerProps = {
   className?: string
 } & ({ type?: 'marker' } | { type?: 'badge', value: number })
 
-export default function Marker (props: MarkerProps) {
+export function Marker (props: MarkerProps) {
   const { type = 'marker' } = props
   return (
         <div

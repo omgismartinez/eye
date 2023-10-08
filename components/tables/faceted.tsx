@@ -16,7 +16,7 @@ import {
   CommandList,
   CommandSeparator
 } from '@/components/ui/command'
-import Marker from './marker'
+import { Marker } from '@/components/marker'
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>

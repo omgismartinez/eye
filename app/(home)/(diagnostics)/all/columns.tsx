@@ -6,7 +6,7 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/tables/header'
 import { predictions } from '@/components/tables/data'
 import { type Diagnostic } from '@/types'
-import Marker from '@/components/tables/marker'
+import { Marker } from '@/components/marker'
 
 export const columnsVisibility = {
   Paciente: true,

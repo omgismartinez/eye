@@ -6,7 +6,7 @@ import { type Patient } from '@/types'
 import { DataTableColumnHeader } from '@/components/tables/header'
 import { predictions } from '@/components/tables/data'
 import { DataTableRowActions } from './actions'
-import Marker from '@/components/tables/marker'
+import { Marker } from '@/components/marker'
 
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
