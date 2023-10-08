@@ -1,11 +1,11 @@
 'use client'
 
+import * as z from 'zod'
+import { type User } from '@clerk/nextjs/dist/types/server'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import * as z from 'zod'
 
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -15,13 +15,22 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem
+} from '@/components/ui/command'
+import { ChevronsUpDownIcon, CheckIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command'
-import { CalendarIcon, ChevronsUpDownIcon, CheckIcon } from 'lucide-react'
-import { format } from 'date-fns'
-import { Calendar } from '@/components/ui/calendar'
-import { type User } from '@clerk/nextjs/dist/types/server'
+import { DatePicker } from '@/components/date-picker'
 
 const accountFormSchema = z.object({
   email: z
@@ -103,46 +112,19 @@ export function AccountForm ({ user }: { user: User | null }) {
                     control={form.control}
                     name='dob'
                     render={({ field }) => (
-                        <FormItem className='flex flex-col'>
-                            <FormLabel>Fecha de nacimiento</FormLabel>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <FormControl>
-                                        <Button
-                                            variant={'outline'}
-                                            className={cn(
-                                              'w-[240px] pl-3 text-left font-normal',
-                                              !field.value && 'text-muted-foreground'
-                                            )}
-                                        >
-                                            {field.value
-                                              ? (
-                                                  format(field.value, 'PPP')
-                                                )
-                                              : (
-                                                <span>Elije una fecha</span>
-                                                )}
-                                            <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
-                                        </Button>
-                                    </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent className='w-auto p-0' align='start'>
-                                    <Calendar
-                                        mode='single'
-                                        selected={field.value}
-                                        onSelect={() => field.onChange}
-                                        disabled={(date: Date) =>
-                                          date > new Date() || date < new Date('1900-01-01')
-                                        }
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                            <FormDescription>
-                                Tu fecha de nacimiento se usa para calcular tu edad.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
+                      <FormItem className='flex flex-col'>
+                        <FormLabel>Fecha de nacimiento</FormLabel>
+                        <FormControl>
+                          <DatePicker
+                            currentDate={field.value}
+                            onSelect={(date) => field.onChange(date)}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Tu fecha de nacimiento se usa para calcular tu edad.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
                     )}
                 />
                 <FormField
