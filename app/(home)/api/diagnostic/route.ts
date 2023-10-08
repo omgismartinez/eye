@@ -13,25 +13,26 @@ export async function POST (req: Request) {
   const eye = data.get('eye') as Eye
   const extra = data.get('extra') as string
   const classification = data.get('classification') as object
-  const predictionKey = data.get('prediction') as string
-  const diseaseKey = data.get('disease') as string
-  const doctorId = data.get('doctor') as string
+  const predictionKey = data.get('predictionKey') as string
+  const diseaseKey = data.get('diseaseKey') as string
+  const doctorId = data.get('doctorId') as string
 
   // Patient
   const firstName = data.get('firstName') as string
   const lastName = data.get('lastName') as string
-  const age = data.get('age') as unknown as number
+  const age = Number(data.get('age'))
   const gender = data.get('gender') as Gender
   const address = data.get('address') as string
+  const occupation = data.get('occupation') as string
   const phone = data.get('phone') as string
-  const birthdate = data.get('birthdate') as string
+  const dob = data.get('dob') as string
   const email = data.get('email') as string
 
   const res = await prisma.diagnostic.create({
     data: {
       eye,
       extra,
-      classification,
+      classification: { toJSON: () => classification },
       image: {
         create: {
           eye,
@@ -76,7 +77,8 @@ export async function POST (req: Request) {
             address,
             phone,
             email,
-            birthdate,
+            dob,
+            occupation,
             user: {
               connectOrCreate: {
                 where: {
