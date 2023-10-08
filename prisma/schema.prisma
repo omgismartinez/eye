@@ -187,7 +187,7 @@ model Patient {
   lastName    String
   gender      Gender
   age         Int
-  birthdate   DateTime
+  dob         DateTime
   occupation  String?
   address     String?
   email       String       @unique
