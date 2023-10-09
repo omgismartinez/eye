@@ -38,74 +38,20 @@ export async function POST (req: Request) {
   }
   // Handle the webhook
   if (evt.type === 'user.created' || evt.type === 'user.updated') {
-    const {
-      private_metadata,
-      public_metadata,
-      unsafe_metadata,
-      created_at,
-      updated_at,
-      email_addresses,
-      phone_numbers,
-      web3_wallets,
-      external_accounts,
-      ...metadata
-    } = evt.data
+    const metadata = evt.data
     await prisma.user.upsert({
       where: {
         id: metadata.id
       },
       // TODO: Test in production whit the webhook by clerk
       create: {
-        ...metadata,
-        private_metadata: {
-          toJSON: () => private_metadata
-        },
-        public_metadata: {
-          toJSON: () => public_metadata
-        },
-        unsafe_metadata: {
-          toJSON: () => unsafe_metadata
-        },
-        created_at: new Date(created_at),
-        updated_at: new Date(updated_at),
-        email_addresses: {
-          createMany: {
-            data: email_addresses.map((email: any) => (
-              {
-                id: email.id,
-                email_address: email.email_address,
-                object: email.object,
-                verification: email.verification
-              }
-            ))
-          }
-        },
-        phone_numbers: {
-          createMany: {
-            data: phone_numbers.map((phone: any) => (
-              {
-                ...phone
-              }
-            ))
-          }
-        },
-        web3_wallets: {
-          createMany: {
-            data: web3_wallets.map((wallet: any) => (
-              {
-                ...wallet
-              }
-            ))
-          }
-        },
-        external_accounts: {
-          createMany: {
-            data: external_accounts.map((account: any) => (
-              {
-                ...account
-              }
-            ))
-          }
+        id: metadata.id,
+        firstName: metadata.first_name,
+        lastName: metadata.last_name,
+        email: metadata.email_addresses[0].email_address,
+        phone: metadata.phone_numbers[0].phone_number,
+        metadata: {
+          toJSON: () => metadata
         }
       },
       update: {
