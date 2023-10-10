@@ -2,7 +2,6 @@ import type { WebhookEvent } from '@clerk/nextjs/server'
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { prisma } from '@/lib/prisma'
-import { catchError } from '@/lib/utils'
 
 export async function POST (req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -49,35 +48,31 @@ export async function POST (req: Request) {
   }
 
   if (evt.type === 'user.created' || evt.type === 'user.updated') {
-    try {
-      const metadata = evt.data
-      await prisma.user.upsert({
-        where: {
-          id: metadata.id
-        },
-        create: {
-          id: metadata.id,
-          firstName: metadata.first_name,
-          lastName: metadata.last_name,
-          email: metadata.email_addresses[0].email_address,
-          phone: metadata.phone_numbers[0].phone_number,
-          metadata: {
-            toJSON: () => metadata
-          }
-        },
-        update: {
-          firstName: metadata.first_name,
-          lastName: metadata.last_name,
-          email: metadata.email_addresses[0].email_address,
-          phone: metadata.phone_numbers[0].phone_number,
-          metadata: {
-            toJSON: () => metadata
-          }
+    const metadata = evt.data
+    await prisma.user.upsert({
+      where: {
+        id: metadata.id
+      },
+      create: {
+        id: metadata.id,
+        firstName: metadata.first_name,
+        lastName: metadata.last_name,
+        email: metadata.email_addresses[0].email_address,
+        phone: metadata.phone_numbers[0].phone_number || null,
+        metadata: {
+          toJSON: () => metadata
         }
-      })
-    } catch (err) {
-      catchError(err)
-    }
+      },
+      update: {
+        firstName: metadata.first_name,
+        lastName: metadata.last_name,
+        email: metadata.email_addresses[0].email_address,
+        phone: metadata.phone_numbers[0].phone_number || null,
+        metadata: {
+          toJSON: () => metadata
+        }
+      }
+    })
   }
 
   return new Response('', { status: 201 })
