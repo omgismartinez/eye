@@ -3,47 +3,56 @@ import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 
-const webhookSecret: string = process.env.WEBHOOK_SECRET ?? ''
-
 export async function POST (req: Request) {
-  const payload = await req.json()
-  const payloadString = JSON.stringify(payload)
+  // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
+  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET
+
+  if (!WEBHOOK_SECRET) {
+    throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local')
+  }
+
+  // Get the headers
   const headerPayload = headers()
-  const svixId = headerPayload.get('svix-id')
-  const svixIdTimeStamp = headerPayload.get('svix-timestamp')
-  const svixSignature = headerPayload.get('svix-signature')
-  if (!svixId || !svixIdTimeStamp || !svixSignature) {
-    return new Response('Error occured', {
+  const svix_id = headerPayload.get('svix-id')
+  const svix_timestamp = headerPayload.get('svix-timestamp')
+  const svix_signature = headerPayload.get('svix-signature')
+
+  // If there are no headers, error out
+  if (!svix_id || !svix_timestamp || !svix_signature) {
+    return new Response('Error occured -- no svix headers', {
       status: 400
     })
   }
-  // Create an object of the headers
-  const svixHeaders = {
-    'svix-id': svixId,
-    'svix-timestamp': svixIdTimeStamp,
-    'svix-signature': svixSignature
-  }
-  // Create a new Webhook instance with your webhook secret
-  const wh = new Webhook(webhookSecret)
+
+  // Get the body
+  const payload = await req.json()
+  const body = JSON.stringify(payload)
+
+  // Create a new SVIX instance with your secret.
+  const wh = new Webhook(WEBHOOK_SECRET)
 
   let evt: WebhookEvent
+
+  // Verify the payload with the headers
   try {
-    // Verify the webhook payload and headers
-    evt = wh.verify(payloadString, svixHeaders) as WebhookEvent
-  } catch (_) {
-    console.log('error')
+    evt = wh.verify(body, {
+      'svix-id': svix_id,
+      'svix-timestamp': svix_timestamp,
+      'svix-signature': svix_signature
+    }) as WebhookEvent
+  } catch (err) {
+    console.error('Error verifying webhook:', err)
     return new Response('Error occured', {
       status: 400
     })
   }
-  // Handle the webhook
+
   if (evt.type === 'user.created' || evt.type === 'user.updated') {
     const metadata = evt.data
     await prisma.user.upsert({
       where: {
         id: metadata.id
       },
-      // TODO: Test in production whit the webhook by clerk
       create: {
         id: metadata.id,
         firstName: metadata.first_name,
@@ -65,7 +74,6 @@ export async function POST (req: Request) {
       }
     })
   }
-  return new Response('', {
-    status: 201
-  })
+
+  return new Response('', { status: 201 })
 }
