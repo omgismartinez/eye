@@ -58,7 +58,6 @@ export async function POST (req: Request) {
         firstName: metadata.first_name,
         lastName: metadata.last_name,
         email: metadata.email_addresses[0].email_address,
-        phone: metadata.phone_numbers[0].phone_number ?? null,
         metadata: {
           toJSON: () => metadata
         }
@@ -67,7 +66,6 @@ export async function POST (req: Request) {
         firstName: metadata.first_name,
         lastName: metadata.last_name,
         email: metadata.email_addresses[0].email_address,
-        phone: metadata.phone_numbers[0].phone_number ?? null,
         metadata: {
           toJSON: () => metadata
         }
