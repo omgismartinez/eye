@@ -3,7 +3,7 @@ import { type Metadata } from 'next'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 
-import { LoginAuthForm } from './login-form'
+import { LoginAuthForm } from '@/components/forms/login-form'
 
 export const metadata: Metadata = {
   title: 'Iniciar sesión',

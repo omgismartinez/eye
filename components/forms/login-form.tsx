@@ -99,7 +99,13 @@ export function LoginAuthForm ({ className, ...props }: AuthFormProps) {
                   <FormItem>
                     <FormLabel htmlFor='password'>Contraseña</FormLabel>
                     <FormControl>
-                      <PasswordInput {...field} placeholder='••••••••' />
+                      <PasswordInput
+                        id='password'
+                        placeholder='••••••••'
+                        autoComplete='current-password'
+                        autoCorrect='off'
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
