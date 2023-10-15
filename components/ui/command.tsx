@@ -126,6 +126,19 @@ React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
 
 CommandItem.displayName = CommandPrimitive.Item.displayName
 
+const CommandLoading = React.forwardRef<
+React.ElementRef<typeof CommandPrimitive.Loading>,
+React.ComponentPropsWithoutRef<typeof CommandPrimitive.Loading>
+>(({ progress, ...props }, ref) => (
+  <CommandPrimitive.Loading
+    ref={ref}
+    progress={progress}
+    {...props}
+  />
+))
+
+CommandLoading.displayName = CommandPrimitive.Loading.displayName
+
 const CommandShortcut = ({
   className,
   ...props
@@ -150,6 +163,7 @@ export {
   CommandEmpty,
   CommandGroup,
   CommandItem,
+  CommandLoading,
   CommandShortcut,
   CommandSeparator
 }
