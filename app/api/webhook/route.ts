@@ -73,5 +73,14 @@ export async function POST (req: Request) {
     })
   }
 
+  if (evt.type === 'user.deleted') {
+    const metadata = evt.data
+    await prisma.user.delete({
+      where: {
+        id: metadata.id
+      }
+    })
+  }
+
   return new Response('', { status: 201 })
 }
