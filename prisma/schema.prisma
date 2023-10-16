@@ -8,109 +8,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-// model EmailAddress {
-//   id            String  @id
-//   object        String
-//   email_address String
-//   verification  Json?
-//   user          User?   @relation(fields: [user_id], references: [id])
-//   user_id       String?
-
-//   @@index([user_id], name: "user_id")
-// }
-
-// model PhoneNumber {
-//   id                         String               @id
-//   object                     String
-//   phone_number               String
-//   reserved_for_second_factor Boolean
-//   default_second_factor      Boolean
-//   linked_to                  IdentificationLink[]
-//   verification               Json?
-//   user                       User?                @relation(fields: [user_id], references: [id])
-//   user_id                    String?
-
-//   @@index([user_id], name: "user_id")
-// }
-
-// model IdentificationLink {
-//   id              String       @id
-//   object          String
-//   type            String
-//   phone_number    PhoneNumber? @relation(fields: [phone_number_id], references: [id])
-//   phone_number_id String?
-
-//   @@index([phone_number_id], name: "phone_number_id")
-// }
-
-// model Web3Wallet {
-//   id           String  @id
-//   object       String
-//   web3_wallet  String
-//   verification Json?
-//   user         User?   @relation(fields: [user_id], references: [id])
-//   user_id      String?
-
-//   @@index([user_id], name: "user_id")
-// }
-
-// model ExternalAccount {
-//   id                String  @id
-//   object            String
-//   provider          String
-//   identification_id String
-//   provider_user_id  String
-//   approved_scopes   String
-//   email_address     String
-//   first_name        String
-//   last_name         String
-//   avatar_url        String
-//   image_url         String
-//   username          String?
-//   public_metadata   Json?
-//   label             String?
-//   verification      Json?
-//   user              User?   @relation(fields: [user_id], references: [id])
-//   user_id           String?
-
-//   @@index([user_id], name: "user_id")
-// }
-
-// model User {
-//   id                       String            @id @unique
-//   object                   String
-//   username                 String?
-//   first_name               String
-//   last_name                String
-//   gender                   Gender
-//   birthday                 String
-//   profile_image_url        String
-//   image_url                String
-//   has_image                Boolean
-//   primary_email_address_id String
-//   primary_phone_number_id  String?
-//   primary_web3_wallet_id   String?
-//   password_enabled         Boolean
-//   totp_enabled             Boolean
-//   backup_code_enabled      Boolean
-//   two_factor_enabled       Boolean
-//   banned                   Boolean
-//   email_addresses          EmailAddress[]
-//   phone_numbers            PhoneNumber[]
-//   web3_wallets             Web3Wallet[]
-//   external_accounts        ExternalAccount[]
-//   external_id              String?
-//   last_sign_in_at          Int?
-//   public_metadata          Json
-//   private_metadata         Json
-//   unsafe_metadata          Json
-//   created_at               DateTime          @default(now())
-//   updated_at               DateTime          @updatedAt
-//   diagnostics              Diagnostic[]
-// }
-
-// This model is only for testing purposes
-
 model Image {
   id         String      @id @default(cuid())
   eye        Eye
@@ -121,8 +18,8 @@ model Image {
   updatedAt  DateTime    @updatedAt
   diagnostic Diagnostic?
 
-  labelKey  Label   @relation(fields: [label], references: [key])
-  disease   Disease @relation(fields: [diseaseId], references: [id])
+  labelKey  Label   @relation(fields: [label], references: [key], onUpdate: Cascade)
+  disease   Disease @relation(fields: [diseaseId], references: [id], onUpdate: Cascade)
   diseaseId String
 
   @@index([label], name: "label")
@@ -144,7 +41,7 @@ model Label {
   key         String       @unique
   name        String
   description String?      @db.Text
-  disease     Disease      @relation(fields: [name], references: [name])
+  disease     Disease      @relation(fields: [name], references: [name], onUpdate: Cascade)
   images      Image[]
   diagnostics Diagnostic[]
 
@@ -177,7 +74,7 @@ model Doctor {
   diagnostics Diagnostic[]
   patients    Patient[]
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique
 }
 
@@ -195,7 +92,7 @@ model Patient {
   diagnostics Diagnostic[]
   doctor      Doctor[]
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique
 }
 
@@ -208,11 +105,11 @@ model Diagnostic {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  label        Label   @relation(fields: [prediction], references: [key])
-  doctor       Doctor  @relation(fields: [doctorId], references: [id])
-  patient      Patient @relation(fields: [patientEmail], references: [email])
-  disease      Disease @relation(fields: [diseaseId], references: [id])
-  image        Image   @relation(fields: [imageId], references: [id])
+  label        Label   @relation(fields: [prediction], references: [key], onUpdate: Cascade)
+  doctor       Doctor  @relation(fields: [doctorId], references: [id], onUpdate: Cascade)
+  patient      Patient @relation(fields: [patientEmail], references: [email], onUpdate: Cascade)
+  disease      Disease @relation(fields: [diseaseId], references: [id], onUpdate: Cascade)
+  image        Image   @relation(fields: [imageId], references: [id], onUpdate: Cascade)
   doctorId     String
   patientEmail String
   diseaseId    String
