@@ -1,5 +1,6 @@
-import { isClerkAPIResponseError } from '@clerk/nextjs'
+import { type User } from '@clerk/nextjs/server'
 import { type ClassValue, clsx } from 'clsx'
+import { isClerkAPIResponseError } from '@clerk/nextjs'
 import { toast } from 'sonner'
 import { twMerge } from 'tailwind-merge'
 import { z } from 'zod'
@@ -36,4 +37,12 @@ export function catchClerkError (err: unknown) {
   } else {
     return toast.error(unknownErr)
   }
+}
+
+export function getUserEmail (user: User | null) {
+  const email =
+    user?.emailAddresses?.find((e) => e.id === user.primaryEmailAddressId)
+      ?.emailAddress ?? ''
+
+  return email
 }
