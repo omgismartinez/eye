@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client'
 import * as z from 'zod'
 
 export const authSchema = z.object({
@@ -18,10 +19,17 @@ export const authSchema = z.object({
     })
 })
 
-export const userRoleSchema = z.enum(['patient', 'researcher', 'developer', 'medic', 'admin'])
+export const userRoleSchema = z.nativeEnum(Role)
 
 export const userPrivateMetadataSchema = z.object({
   role: userRoleSchema.optional(),
   language: z.enum(['es', 'en']).optional(),
   theme: z.enum(['light', 'dark']).optional()
+})
+
+export const startedSchema = z.object({
+  role: z
+    .nativeEnum(Role, {
+      required_error: 'Por favor selecciona un rol.'
+    })
 })
