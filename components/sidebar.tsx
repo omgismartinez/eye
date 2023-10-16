@@ -30,11 +30,11 @@ export default function Sidebar ({ user }: SidebarProps) {
 
   const getRole = () => {
     const role = user?.privateMetadata?.role as UserRole
-    if (role === 'patient') { return 'Paciente' }
-    if (role === 'researcher') { return 'Investigador' }
-    if (role === 'developer') { return 'Desarrollador' }
-    if (role === 'medic') { return 'Médico' }
-    if (role === 'admin') { return 'Administrador' }
+    if (role === 'PATIENT') { return 'Paciente' }
+    if (role === 'RESEARCHER') { return 'Investigador' }
+    if (role === 'DEVELOPER') { return 'Desarrollador' }
+    if (role === 'DOCTOR') { return 'Doctor' }
+    if (role === 'ADMIN') { return 'Administrador' }
     return 'No definido'
   }
 
