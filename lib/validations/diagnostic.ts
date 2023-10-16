@@ -5,7 +5,7 @@ export const MAX_RECOMMENDED_IMAGE_SIZE = 4
 export const MAX_FILE_SIZE = MAX_RECOMMENDED_IMAGE_SIZE * 1024 * 1024
 export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
-export const newDiagnosticFormSchema = z.object({
+export const diagnosticSchema = z.object({
   image: z
     .custom<File | null>()
     .refine(
@@ -28,6 +28,10 @@ export const newDiagnosticFormSchema = z.object({
   disease: z
     .string({
       required_error: 'La enfermedad es requerida.'
+    }),
+  model: z
+    .string({
+      required_error: 'El modelo es requerido.'
     }),
   doctor: z
     .string({
@@ -81,4 +85,11 @@ export const newDiagnosticFormSchema = z.object({
     .string({
       required_error: 'El teléfono es requerido.'
     })
+})
+
+export const classificationSchema = z.object({
+  image: z
+    .custom<FormData>(),
+  model: z
+    .string()
 })
