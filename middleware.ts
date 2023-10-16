@@ -1,6 +1,5 @@
 import { authMiddleware, clerkClient } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
-import { type UserRole } from './types'
 
 // This example protects all routes including api/trpc routes
 // Please edit this to allow other routes to be public as needed.
@@ -26,20 +25,17 @@ export default authMiddleware({
       return NextResponse.redirect(url)
     }
 
-    // Set the user's role to user if it doesn't exist
+    // Get the user from Clerk
     const user = await clerkClient.users.getUser(auth.userId)
 
     if (!user) {
       throw new Error('User not found.')
     }
 
-    // If the user doesn't have a role, set it to patient
-    if (!user.privateMetadata.role) {
-      await clerkClient.users.updateUserMetadata(auth.userId, {
-        privateMetadata: {
-          role: 'patient' satisfies UserRole
-        }
-      })
+    // If the user has not completed the started page
+    if (!user.privateMetadata.role && req.nextUrl.pathname !== '/started') {
+      url.pathname = '/started'
+      return NextResponse.redirect(url)
     }
   }
 })
