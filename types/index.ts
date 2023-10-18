@@ -1,7 +1,12 @@
 import { type userRoleSchema } from '@/lib/validations/auth'
 import { type z } from 'zod'
 
-export type Status = 'no dr' | 'leve' | 'moderada' | 'severa' | 'proliferativa'
+export type Status =
+| 'NO_DR'
+| 'MILD'
+| 'MODERATE'
+| 'SEVERE'
+| 'PROLIFERATIVE'
 
 export interface Diagnostic {
   id: string

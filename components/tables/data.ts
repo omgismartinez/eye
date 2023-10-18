@@ -3,23 +3,23 @@ import { type Diagnostic, type Status } from '@/types'
 export const predictions: Array<{ label: string, value: Status }> = [
   {
     label: 'No dr',
-    value: 'no dr'
+    value: 'NO_DR'
   },
   {
     label: 'Leve',
-    value: 'leve'
+    value: 'MILD'
   },
   {
     label: 'Moderada',
-    value: 'moderada'
+    value: 'MODERATE'
   },
   {
     label: 'Severa',
-    value: 'severa'
+    value: 'SEVERE'
   },
   {
     label: 'Proliferativa',
-    value: 'proliferativa'
+    value: 'PROLIFERATIVE'
   }
 ]
 
@@ -29,7 +29,7 @@ export const feikData: Diagnostic[] = [
     patient: {
       id: '1',
       name: 'Alvaro Martinez Martinez',
-      prediction: 'no dr',
+      prediction: 'NO_DR',
       image: 'https://api.dicebear.com/7.x/open-peeps/svg?seed=1&face=smileBig',
       birthdate: new Date('5/6/2000'),
       phone: 2721234567,
@@ -39,7 +39,7 @@ export const feikData: Diagnostic[] = [
       address: 'Calle 123',
       occupation: 'Estudiante'
     },
-    prediction: 'no dr',
+    prediction: 'NO_DR',
     date: '5/6/2023, 2:41:24 p. m.'
   },
   {
@@ -47,7 +47,7 @@ export const feikData: Diagnostic[] = [
     patient: {
       id: '2',
       name: 'Eduardo Perez Gonzalez',
-      prediction: 'leve',
+      prediction: 'MILD',
       image: 'https://api.dicebear.com/7.x/open-peeps/svg?seed=2&face=smileBig',
       birthdate: new Date('12/8/2000'),
       phone: 9876543210,
@@ -57,7 +57,7 @@ export const feikData: Diagnostic[] = [
       address: 'Calle 123',
       occupation: 'Estudiante'
     },
-    prediction: 'leve',
+    prediction: 'MILD',
     date: '15/6/2023, 4:41:24 p. m.'
   },
   {
@@ -65,7 +65,7 @@ export const feikData: Diagnostic[] = [
     patient: {
       id: '3',
       name: 'Miriam Rodriguez Ortiz',
-      prediction: 'moderada',
+      prediction: 'MODERATE',
       image: 'https://api.dicebear.com/7.x/open-peeps/svg?seed=3&face=smileBig',
       birthdate: new Date('12/3/2002'),
       phone: 7284612340,
@@ -75,7 +75,7 @@ export const feikData: Diagnostic[] = [
       address: 'Calle 123',
       occupation: 'Estudiante'
     },
-    prediction: 'moderada',
+    prediction: 'MODERATE',
     date: '9/6/2023, 9:01:24 a. m.'
   },
   {
@@ -83,7 +83,7 @@ export const feikData: Diagnostic[] = [
     patient: {
       id: '4',
       name: 'Maria Perez Alvarado',
-      prediction: 'severa',
+      prediction: 'SEVERE',
       image: 'https://api.dicebear.com/7.x/open-peeps/svg?seed=12&face=smileBig',
       birthdate: new Date('5/6/1975'),
       phone: 1234567890,
@@ -93,7 +93,7 @@ export const feikData: Diagnostic[] = [
       address: 'Calle 123',
       occupation: 'Ama de casa'
     },
-    prediction: 'severa',
+    prediction: 'SEVERE',
     date: '11/6/2023, 7:21:24 a. m.'
   },
   {
@@ -101,7 +101,7 @@ export const feikData: Diagnostic[] = [
     patient: {
       id: '728ed52f',
       name: 'Juan Perez Estrada',
-      prediction: 'proliferativa',
+      prediction: 'PROLIFERATIVE',
       image: 'https://api.dicebear.com/7.x/open-peeps/svg?seed=10&face=smileBig',
       birthdate: new Date('1/1/1956'),
       phone: 1234567890,
@@ -111,7 +111,7 @@ export const feikData: Diagnostic[] = [
       address: 'Calle Circunvalación, #123, Col. Centro, C.P. 94300, Orizaba, Veracruz.',
       occupation: 'Transportista'
     },
-    prediction: 'proliferativa',
+    prediction: 'PROLIFERATIVE',
     date: '1/6/2023, 5:21:24 p. m.'
   }
 ]

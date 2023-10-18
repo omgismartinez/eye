@@ -11,11 +11,11 @@ export function Marker (props: MarkerProps) {
   return (
         <div
             className={cn('h-2 rounded-full', {
-              'bg-green-500': props.label === 'no dr',
-              'bg-yellow-500': props.label === 'leve',
-              'bg-yellow-700': props.label === 'moderada',
-              'bg-red-500': props.label === 'severa',
-              'bg-red-700': props.label === 'proliferativa',
+              'bg-green-500': props.label === 'NO_DR',
+              'bg-yellow-500': props.label === 'MILD',
+              'bg-yellow-700': props.label === 'MODERATE',
+              'bg-red-500': props.label === 'SEVERE',
+              'bg-red-700': props.label === 'PROLIFERATIVE',
               'w-2 mr-2': type === 'marker'
             }, props.className)}
             style={{ width: props.type === 'badge' ? `${(props.value)}%` : undefined }}
