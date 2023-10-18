@@ -56,6 +56,7 @@ model User {
   phone     String?
   role      Role     @default(PATIENT)
   metadata  Json?
+  started   Boolean  @default(false)
   doctor    Doctor?
   patient   Patient?
 }
