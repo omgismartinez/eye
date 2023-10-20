@@ -7,6 +7,8 @@ import { NextResponse } from 'next/server'
 export default authMiddleware({
   publicRoutes: [
     // TODO: Add landing page home route here
+    '/login(.*)',
+    '/signup(.*)',
     '/sso-callback(.*)',
     '/api(.*)'
   ],
@@ -32,8 +34,8 @@ export default authMiddleware({
       throw new Error('User not found.')
     }
 
-    // If the user has not completed the started page
-    if (!user.privateMetadata.role && req.nextUrl.pathname !== '/started') {
+    // If the user has not started the onboarding flow
+    if (!user.privateMetadata.started && req.nextUrl.pathname !== '/started') {
       url.pathname = '/started'
       return NextResponse.redirect(url)
     }
