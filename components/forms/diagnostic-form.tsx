@@ -88,7 +88,6 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
       doctor: `${user?.firstName} ${user?.lastName}`,
       prediction: 'Sin predicción',
       eye: 'RIGHT',
-      disease: 'dr',
       extra: 'El paciente no presenta ninguna enfermedad.',
       firstName: 'Test',
       lastName: 'Test',
@@ -111,7 +110,12 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
         setDiseases(diseases)
 
         // Set default values
-        setSelected({ disease: diseases[0] })
+        setSelected({
+          model: models[0],
+          disease: diseases[0]
+        })
+        form.setValue('model', models[0].name)
+        form.setValue('disease', diseases[0].key)
       } catch (error) {
         catchError(error)
       }
@@ -131,26 +135,37 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
           }), {
             loading: 'Prediciendo imagen...',
             success: (output) => {
+              // Set classification
               setClassification(output)
               form.setValue('prediction', output[0].label)
+
+              // Filter data
+              const {
+                image,
+                doctor,
+                prediction,
+                ...dataFiltered
+              } = data
+
+              // Save diagnostic
+              toast.promise(
+                createDiagnosticAction({
+                  classification: output,
+                  imageFormData: formData,
+                  doctor: user?.id as string,
+                  prediction: output[0].label,
+                  ...dataFiltered
+                }), {
+                  loading: 'Guardando diagnóstico...',
+                  success: 'Diagnóstico guardado exitosamente.',
+                  error: (err) => err
+                }
+              )
+
               return <>Predicción exitosa: <b className='capitalize'>{output[0].label}</b></>
             },
             error: (err) => err
           })
-
-        const { image, doctor, ...dataFiltered } = data
-        toast.promise(
-          createDiagnosticAction({
-            imageFormData: formData,
-            doctor: user?.id as string,
-            classification,
-            ...dataFiltered
-          }), {
-            loading: 'Guardando diagnóstico...',
-            success: 'Diagnóstico guardado exitosamente.',
-            error: (err) => err
-          }
-        )
       } catch (error) {
         catchError(error)
       }
