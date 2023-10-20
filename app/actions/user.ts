@@ -6,7 +6,7 @@ import { currentUser, clerkClient } from '@clerk/nextjs'
 import { type startedSchema } from '@/lib/validations/auth'
 import { getUserEmail } from '@/lib/utils'
 
-export async function getCurrentUserAction () {
+export async function getUserAction () {
   const user = await currentUser()
 
   if (!user) {
@@ -30,13 +30,6 @@ export async function startedAction (
   if (!user) {
     throw new Error('User not found')
   }
-
-  // Update Clerk user metadata
-  await clerkClient.users.updateUserMetadata(user.id, {
-    privateMetadata: {
-      role: input.role
-    }
-  })
 
   const email = getUserEmail(user)
 
@@ -79,14 +72,21 @@ export async function startedAction (
     })
   }
 
-  const userUpdated = await prisma.user.update({
+  // Update Clerk user metadata
+  await clerkClient.users.updateUserMetadata(user.id, {
+    privateMetadata: {
+      role: input.role,
+      started: true
+    }
+  })
+
+  await prisma.user.update({
     where: {
       id: user.id
     },
     data: {
-      role: input.role
+      role: input.role,
+      started: true
     }
   })
-
-  return userUpdated
 }
