@@ -22,6 +22,7 @@ export const authSchema = z.object({
 export const userRoleSchema = z.nativeEnum(Role)
 
 export const userPrivateMetadataSchema = z.object({
+  started: z.boolean().optional(),
   role: userRoleSchema.optional(),
   language: z.enum(['es', 'en']).optional(),
   theme: z.enum(['light', 'dark']).optional()
