@@ -20,10 +20,12 @@ import { LabelInfoForm } from './components/label-info-form'
 import { useTransition } from 'react'
 import { startedAction } from '@/app/actions/user'
 import { Icons } from '../icons'
+import { useRouter } from 'next/navigation'
 
 type StartedFormValues = z.infer<typeof startedSchema>
 
 export function StartedForm () {
+  const { push } = useRouter()
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<StartedFormValues>({
@@ -34,6 +36,7 @@ export function StartedForm () {
     startTransition(async () => {
       try {
         await startedAction(data)
+        push('/')
       } catch (err) {
         console.error(err)
         catchClerkError(err)
