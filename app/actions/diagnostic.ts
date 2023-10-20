@@ -4,7 +4,8 @@ import { type z } from 'zod'
 import { type diagnosticSchema } from '@/lib/validations/diagnostic'
 import { type ImageClassificationOutput } from '@huggingface/inference'
 import { prisma } from '@/lib/prisma'
-import { put } from '@vercel/blob'
+import { put, del } from '@vercel/blob'
+import { type Prisma } from '@prisma/client'
 
 export async function createDiagnosticAction (
   input: Omit<z.infer<typeof diagnosticSchema>, 'image'> & {
@@ -20,16 +21,64 @@ export async function createDiagnosticAction (
   const buffer = Buffer.from(bytes)
 
   // Upload image to Vercel Blob Storage
-  const pathname = `diagnostic/${input.disease}/${input.email}/${input.eye}.${file.type.split('/')[1]}`
+  const pathname = `diagnostic/${input.disease}/${input.prediction}/${input.email}/${input.eye}.${file.type.split('/')[1]}`
   const blob = await put(pathname, buffer, {
     access: 'public'
   })
 
+  /**
+   * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#reading-from-a-json-field
+   */
+  const classification = input.classification as unknown as Prisma.JsonArray
+
   const diagnostic = await prisma.diagnostic.create({
     data: {
       eye: input.eye,
+      classification,
       extra: input.extra,
-      classification: JSON.stringify(input.classification),
+      label: {
+        connect: {
+          key: input.prediction
+        }
+      },
+      doctor: {
+        connect: {
+          userId: input.doctor
+        }
+      },
+      patient: {
+        connectOrCreate: {
+          where: {
+            email: input.email
+          },
+          create: {
+            firstName: input.firstName,
+            lastName: input.lastName,
+            email: input.email,
+            age: input.age,
+            phone: input.phone,
+            dob: input.dob,
+            gender: input.gender,
+            user: {
+              connectOrCreate: {
+                where: {
+                  email: input.email
+                },
+                create: {
+                  firstName: input.firstName,
+                  lastName: input.lastName,
+                  email: input.email
+                }
+              }
+            }
+          }
+        }
+      },
+      disease: {
+        connect: {
+          key: input.disease
+        }
+      },
       image: {
         create: {
           eye: input.eye,
@@ -45,29 +94,16 @@ export async function createDiagnosticAction (
             }
           }
         }
-      },
-      disease: {
-        connect: {
-          key: input.disease
-        }
-      },
-      label: {
-        connect: {
-          key: input.prediction
-        }
-      },
-      doctor: {
-        connect: {
-          id: input.doctor
-        }
-      },
-      patient: {
-        connect: {
-          email: input.email
-        }
       }
     }
   })
+
+  if (!diagnostic) {
+    // Delete image from Vercel Blob Storage
+    await del(blob.url)
+      .then(() => console.log('Image deleted.'))
+      .catch(() => console.log('Image not deleted.'))
+  }
 
   return diagnostic
 }
