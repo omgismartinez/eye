@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 export default async function AuthLayout ({ children }: { children: React.ReactNode }) {
   const user = await currentUser()
-  if (user?.privateMetadata.role) redirect('/')
+  if (user?.privateMetadata.started) redirect('/')
   return (
     <main className='container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 px-4 lg:px-0'>
       <div className='relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex'>
