@@ -6,6 +6,27 @@ import { type ImageClassificationOutput } from '@huggingface/inference'
 import { prisma } from '@/lib/prisma'
 import { put, del } from '@vercel/blob'
 import { type Prisma } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
+
+export async function getDiagnosticsAction (input: {
+  doctor: string
+}) {
+  const diagnostics = await prisma.diagnostic.findMany({
+    where: {
+      doctor: {
+        userId: input.doctor
+      }
+    },
+    include: {
+      image: true,
+      label: true,
+      disease: true,
+      patient: true
+    }
+  })
+
+  return diagnostics
+}
 
 export async function createDiagnosticAction (
   input: Omit<z.infer<typeof diagnosticSchema>, 'image'> & {
@@ -104,6 +125,8 @@ export async function createDiagnosticAction (
       .then(() => console.log('Image deleted.'))
       .catch(() => console.log('Image not deleted.'))
   }
+
+  revalidatePath('/all')
 
   return diagnostic
 }
