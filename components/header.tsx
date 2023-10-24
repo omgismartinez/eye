@@ -6,7 +6,7 @@ interface HeaderProps {
   className?: string
 }
 
-export default function Header ({ title, subtitle, className }: HeaderProps) {
+export function Header ({ title, subtitle, className }: HeaderProps) {
   return (
         <div className={cn('flex flex-col gap-6 mb-6', className)}>
             <h1 className='text-2xl font-bold text-center tracking-tight'>{title}</h1>
