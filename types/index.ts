@@ -1,4 +1,11 @@
 import { type userRoleSchema } from '@/lib/validations/auth'
+import type {
+  Disease,
+  Image,
+  Label,
+  Diagnostic,
+  Patient
+} from '@prisma/client'
 import { type z } from 'zod'
 
 export type Status =
@@ -8,25 +15,25 @@ export type Status =
 | 'SEVERE'
 | 'PROLIFERATIVE'
 
-export interface Diagnostic {
-  id: string
+export interface DiagnosticModel extends Diagnostic {
+  image: Image
+  label: Label
+  disease: Disease
   patient: Patient
-  prediction: Status
-  date: string
 }
 
-export interface Patient {
-  id: string
-  name: string
-  prediction: Status
-  image: string
-  birthdate: Date
-  phone: number
-  email: string
-  age: number
-  gender: 'M' | 'F'
-  address: string
-  occupation: string
-}
+// export interface Patient {
+//   id: string
+//   name: string
+//   prediction: Status
+//   image: string
+//   birthdate: Date
+//   phone: number
+//   email: string
+//   age: number
+//   gender: 'M' | 'F'
+//   address: string
+//   occupation: string
+// }
 
 export type UserRole = z.infer<typeof userRoleSchema>
