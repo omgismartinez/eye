@@ -1,7 +1,8 @@
-import type { WebhookEvent } from '@clerk/nextjs/server'
+import type { User, WebhookEvent } from '@clerk/nextjs/server'
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { prisma } from '@/lib/prisma'
+import { getUserEmail } from '@/lib/utils'
 
 export async function POST (req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -49,15 +50,16 @@ export async function POST (req: Request) {
 
   if (evt.type === 'user.created' || evt.type === 'user.updated') {
     const metadata = evt.data
+    const email = getUserEmail(metadata as unknown as User)
     await prisma.user.upsert({
       where: {
-        id: metadata.id
+        email
       },
       create: {
         id: metadata.id,
         firstName: metadata.first_name,
         lastName: metadata.last_name,
-        email: metadata.email_addresses[0].email_address,
+        email,
         metadata: {
           toJSON: () => metadata
         }
@@ -65,7 +67,7 @@ export async function POST (req: Request) {
       update: {
         firstName: metadata.first_name,
         lastName: metadata.last_name,
-        email: metadata.email_addresses[0].email_address,
+        email,
         metadata: {
           toJSON: () => metadata
         }
