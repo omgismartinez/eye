@@ -1,5 +1,5 @@
 import { type Metadata } from 'next'
-import Header from '@/components/header'
+import { Header } from '@/components/header'
 import { DiagnosticForm } from '@/components/forms/diagnostic-form'
 import { currentUser } from '@clerk/nextjs'
 
