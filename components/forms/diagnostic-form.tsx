@@ -54,17 +54,17 @@ import {
   LayersIcon
 } from 'lucide-react'
 import { LabelInfoForm } from '@/components/forms/components/label-info-form'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { Marker } from '@/components/marker'
-import { Label } from '@/components/ui/label'
 import { Icons } from '@/components/icons'
 import { DatePicker } from '@/components/date-picker'
 import { Badge } from '@/components/ui/badge'
 import { createDiagnosticAction, getDiseasesAction } from '@/app/actions/diagnostic'
 import { getModelsAction, startClassificationAction } from '@/app/actions/huggingface'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 type DiagnosticFormValues = z.infer<typeof diagnosticSchema>
 
@@ -231,8 +231,7 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                             field.onChange(e.target.files[0])
                             setFile(e.target.files[0])
                           } else {
-                            field.onChange(null)
-                            setFile(null)
+                            return false
                           }
                         }}
                         accept={ACCEPTED_IMAGE_TYPES.join(',')}
@@ -273,34 +272,57 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                 name='eye'
                 render={({ field }) => (
                   <FormItem className='col-span-3 sm:col-span-1'>
-                    <FormLabel className='flex items-center gap-2'>
-                      Ojo
+                    <div className='flex items-center gap-2'>
+                      <FormLabel>Ojo</FormLabel>
                       <LabelInfoForm>
                         Se debe seleccionar el ojo que se desea diagnosticar,
                         en caso de que se desee diagnosticar ambos ojos,
                         se debe realizar <strong>un diagnóstico por cada ojo</strong>.
                       </LabelInfoForm>
-                    </FormLabel>
-                    <FormControl>
-                      <div className='grid grid-cols-2 p-1 bg-secondary rounded-md'>
-                        <Button
-                          onClick={() => field.onChange('LEFT')}
-                          variant={field.value === 'LEFT' ? 'default' : 'ghost'}
-                          className='text-sm h-8'
-                          asChild
-                        >
-                          <Label>Izquierdo</Label>
-                        </Button>
-                        <Button
-                          onClick={() => field.onChange('RIGHT')}
-                          variant={field.value === 'RIGHT' ? 'default' : 'ghost'}
-                          className='text-sm h-8'
-                          asChild
-                        >
-                          <Label>Derecho</Label>
-                        </Button>
-                      </div>
-                    </FormControl>
+                    </div>
+                    <RadioGroup
+                      onValueChange={(value: DiagnosticFormValues['eye']) => field.onChange(value)}
+                      defaultValue={field.value}
+                      value={field.value}
+                      className='grid grid-cols-2 p-1 bg-secondary rounded-md'
+                    >
+                      <FormItem>
+                        <FormLabel>
+                          <FormControl>
+                            <RadioGroupItem value='LEFT' className='sr-only' />
+                          </FormControl>
+                          <div
+                            className={cn(
+                              'h-8 w-full',
+                              buttonVariants({
+                                variant: field.value === 'LEFT' ? 'default' : 'ghost',
+                                className: 'h-8'
+                              })
+                            )}
+                          >
+                            <span className='text-sm'>Izquierdo</span>
+                          </div>
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem>
+                        <FormLabel>
+                          <FormControl>
+                            <RadioGroupItem value='RIGHT' className='sr-only' />
+                          </FormControl>
+                          <div
+                            className={cn(
+                              'h-8 w-full',
+                              buttonVariants({
+                                variant: field.value === 'RIGHT' ? 'default' : 'ghost',
+                                className: 'h-8'
+                              })
+                            )}
+                          >
+                            <span className='text-sm'>Derecho</span>
+                          </div>
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -310,13 +332,13 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                 name='disease'
                 render={({ field }) => (
                   <FormItem className='col-span-3 sm:col-span-2'>
-                    <FormLabel className='flex items-center gap-2'>
-                      Enfermedad
+                    <div className='flex items-center gap-2'>
+                      <FormLabel>Enfermedad</FormLabel>
                       <LabelInfoForm>
                         <strong>Las enfermedades estan ligadas a un modelo</strong> de inteligencia artificial
                         que se encarga de realizar el diagnóstico.
                       </LabelInfoForm>
-                    </FormLabel>
+                    </div>
                     <FormControl>
                       <Popover
                         open={open.disease}
