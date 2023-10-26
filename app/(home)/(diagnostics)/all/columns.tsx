@@ -5,8 +5,8 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { type ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/tables/header'
 import { predictions } from '@/components/tables/data'
-import { type Diagnostic } from '@/types'
 import { Marker } from '@/components/marker'
+import { type DiagnosticModel } from '@/types'
 
 export const columnsVisibility = {
   Paciente: true,
@@ -17,35 +17,43 @@ export const columnsVisibility = {
   Género: false
 }
 
-export const columns: Array<ColumnDef<Diagnostic>> = [
+export const columns: Array<ColumnDef<DiagnosticModel>> = [
   {
     id: 'select',
     header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected()}
-                onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label='Select all'
-            />
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label='Select all'
+      />
     ),
     cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value: any) => row.toggleSelected(!!value)}
-                aria-label='Select row'
-            />
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value: any) => row.toggleSelected(!!value)}
+        aria-label='Select row'
+      />
     ),
     enableSorting: false,
     enableHiding: false
   },
   {
     id: 'Paciente',
-    accessorKey: 'patient.name',
+    accessorKey: 'patient',
     header ({ column }) {
       return (
-                <DataTableColumnHeader column={column} title={'Paciente'} />
+        <DataTableColumnHeader column={column} title={'Paciente'} />
       )
     },
-    enableHiding: false
+    cell: ({ row }) => {
+      const { firstName, lastName } = row.original.patient
+      return `${firstName} ${lastName}`
+    },
+    enableHiding: false,
+    filterFn: (row, _, value) => {
+      const { firstName, lastName } = row.original.patient
+      return `${firstName} ${lastName}`.toLowerCase().includes(value.toLowerCase())
+    }
   },
   {
     id: 'Predicción',
@@ -58,12 +66,12 @@ export const columns: Array<ColumnDef<Diagnostic>> = [
         return null
       }
       return (
-                <div className='flex items-center'>
-                    <Badge variant='outline' className='rounded-md capitalize'>
-                        <Marker label={prediction.value} />
-                        {prediction.value}
-                    </Badge>
-                </div>
+        <div className='flex items-center'>
+          <Badge variant='outline' className='rounded-md capitalize'>
+            <Marker label={prediction.value} />
+            {prediction.value}
+          </Badge>
+        </div>
       )
     },
     filterFn: (row, id, value) => {
@@ -72,12 +80,24 @@ export const columns: Array<ColumnDef<Diagnostic>> = [
   },
   {
     id: 'Fecha',
-    accessorKey: 'date',
+    accessorKey: 'updatedAt',
     header ({ column }) {
       return (
-                <DataTableColumnHeader column={column} title={'Fecha'} />
+        <DataTableColumnHeader column={column} title={'Fecha'} />
       )
-    }
+    },
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('Fecha'))
+      return (
+        <span>{date.toLocaleDateString('es', {
+          hour: 'numeric',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        })}</span>
+      )
+    },
+    sortDescFirst: true
   },
   {
     id: 'Teléfono',
@@ -96,9 +116,9 @@ export const columns: Array<ColumnDef<Diagnostic>> = [
     cell: ({ getValue }) => {
       const gender = getValue() === 'M' ? 'Masculino' : 'Femenino'
       return (
-                <Badge variant='outline' className='capitalize rounded-md'>
-                    {gender}
-                </Badge>
+        <Badge variant='outline' className='capitalize rounded-md'>
+          {gender}
+        </Badge>
       )
     },
     filterFn: (row, id, value) => {
