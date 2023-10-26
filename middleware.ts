@@ -12,6 +12,9 @@ export default authMiddleware({
     '/sso-callback(.*)',
     '/api(.*)'
   ],
+  ignoredRoutes: [
+    '/api(.*)'
+  ],
   async afterAuth (auth, req) {
     if (auth.isPublicRoute) {
       //  For public routes, we don't need to do anything
