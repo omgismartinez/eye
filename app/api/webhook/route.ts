@@ -3,6 +3,9 @@ import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 import { getUserEmail } from '@/lib/utils'
+import { NextResponse } from 'next/server'
+
+export const runtime = 'edge'
 
 export async function POST (req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -48,10 +51,11 @@ export async function POST (req: Request) {
     })
   }
 
+  // User is created or updated
   if (evt.type === 'user.created' || evt.type === 'user.updated') {
     const metadata = evt.data
     const email = getUserEmail(metadata as unknown as User)
-    await prisma.user.upsert({
+    const user = await prisma.user.upsert({
       where: {
         email
       },
@@ -73,16 +77,32 @@ export async function POST (req: Request) {
         }
       }
     })
+
+    if (!user) {
+      return NextResponse.json('', { status: 400 })
+    }
+
+    return NextResponse.json(user, { status: 201 })
   }
 
+  // User is deleted
   if (evt.type === 'user.deleted') {
     const metadata = evt.data
-    await prisma.user.delete({
+    const user = await prisma.user.delete({
       where: {
         id: metadata.id
       }
     })
+
+    if (!user) {
+      return NextResponse.json('', { status: 400 })
+    }
+
+    return NextResponse.json(user, { status: 200 })
   }
 
-  return new Response('', { status: 201 })
+  return NextResponse.json(
+    { message: 'Invalid webhook event type.' },
+    { status: 400 }
+  )
 }
