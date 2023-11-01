@@ -4,7 +4,8 @@ import type {
   Image,
   Label,
   Diagnostic,
-  Patient
+  Patient,
+  User
 } from '@prisma/client'
 import { type z } from 'zod'
 
@@ -22,18 +23,9 @@ export interface DiagnosticModel extends Diagnostic {
   patient: Patient
 }
 
-// export interface Patient {
-//   id: string
-//   name: string
-//   prediction: Status
-//   image: string
-//   birthdate: Date
-//   phone: number
-//   email: string
-//   age: number
-//   gender: 'M' | 'F'
-//   address: string
-//   occupation: string
-// }
+export interface PatientModel extends Patient {
+  user: User
+  diagnostics: Diagnostic[]
+}
 
 export type UserRole = z.infer<typeof userRoleSchema>
