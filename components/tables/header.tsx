@@ -27,6 +27,10 @@ export function DataTableColumnHeader<TData, TValue> ({
     return <div className={cn(className)}>{title}</div>
   }
 
+  const isSortedDesc =
+    column.getIsSorted() === 'desc' &&
+    column.getFirstSortDir() === 'desc'
+
   return (
     <div className={cn('flex items-center space-x-2', className)}>
       <DropdownMenu>
@@ -37,17 +41,11 @@ export function DataTableColumnHeader<TData, TValue> ({
             className='-ml-3 h-8 data-[state=open]:bg-accent'
           >
             <span className='text-sm'>{title}</span>
-            {column.getIsSorted() === 'desc'
-              ? (
-                  <SortDesc className='ml-2 h-4 w-4' />
-                )
+            {isSortedDesc
+              ? <SortDesc className='ml-2 h-4 w-4' />
               : column.getIsSorted() === 'asc'
-                ? (
-                    <SortAsc className='ml-2 h-4 w-4' />
-                  )
-                : (
-                    <ChevronsUpDown className='ml-2 h-4 w-4' />
-                  )}
+                ? <SortAsc className='ml-2 h-4 w-4' />
+                : <ChevronsUpDown className='ml-2 h-4 w-4' />}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='start'>
