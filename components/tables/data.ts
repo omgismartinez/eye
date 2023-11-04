@@ -1,4 +1,4 @@
-import { type Diagnostic, type Status } from '@/types'
+import { type Status } from '@/types'
 
 export const predictions: Array<{ label: string, value: Status }> = [
   {
@@ -23,7 +23,21 @@ export const predictions: Array<{ label: string, value: Status }> = [
   }
 ]
 
-export const feikData: Diagnostic[] = [
+export const filters = {
+  prediction: [
+    { value: 'NO_DR', label: 'No dr' },
+    { value: 'MILD', label: 'Leve' },
+    { value: 'MODERATE', label: 'Moderada' },
+    { value: 'SEVERE', label: 'Severa' },
+    { value: 'PROLIFERATIVE', label: 'Proliferativa' }
+  ],
+  gender: [
+    { value: 'M', label: 'Masculino' },
+    { value: 'F', label: 'Femenino' }
+  ]
+}
+
+export const feikData = [
   {
     id: '1',
     patient: {
