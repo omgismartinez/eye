@@ -3,7 +3,10 @@
 import { type z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { currentUser, clerkClient } from '@clerk/nextjs'
-import { type startedSchema } from '@/lib/validations/auth'
+import type {
+  userPrivateMetadataSchema,
+  startedSchema
+} from '@/lib/validations/auth'
 import { getUserEmail } from '@/lib/utils'
 
 export async function getUserAction () {
@@ -99,6 +102,22 @@ export async function startedAction (
     data: {
       role: input.role,
       started: true
+    }
+  })
+}
+
+export async function updateThemeAction (
+  theme: z.infer<typeof userPrivateMetadataSchema>['theme']
+) {
+  const user = await currentUser()
+
+  if (!user) {
+    throw new Error('User not found')
+  }
+
+  await clerkClient.users.updateUserMetadata(user.id, {
+    privateMetadata: {
+      theme
     }
   })
 }

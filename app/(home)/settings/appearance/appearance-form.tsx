@@ -18,6 +18,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useTheme } from 'next-themes'
 import { type User } from '@clerk/nextjs/dist/types/server'
 import { toast } from 'sonner'
+import { updateThemeAction } from '@/app/actions/user'
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
@@ -39,29 +40,21 @@ export function AppearanceForm ({ user }: { user: User | null }) {
     }
   })
 
-  async function onSubmit (data: AppearanceFormValues, user: User | null) {
-    const res = async () => {
-      const res = await fetch('/api/user/theme', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ theme: data.theme, userId: user?.id })
+  async function onSubmit (data: AppearanceFormValues) {
+    toast.promise(
+      updateThemeAction(data.theme), {
+        loading: 'Guardando...',
+        success: () => {
+          setTheme(data.theme)
+          return '¡Tema actualizado!'
+        },
+        error: '¡Algo salió mal!'
       })
-
-      if (res.ok) setTheme(data.theme)
-
-      return res
-    }
-
-    toast.promise(res, {
-      loading: 'Guardando...',
-      success: '¡Tema guardado!',
-      error: '¡Algo salió mal!'
-    })
   }
 
   return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(async (data) => await onSubmit(data, user))} className='space-y-8'>
+            <form onSubmit={form.handleSubmit(async (data) => await onSubmit(data))} className='space-y-8'>
                 <FormField
                     control={form.control}
                     name='theme'
