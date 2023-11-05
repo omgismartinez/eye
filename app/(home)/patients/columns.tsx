@@ -1,47 +1,45 @@
 'use client'
 
 import { type ColumnDef } from '@tanstack/react-table'
-import { type Patient } from '@/types'
 
 import { DataTableColumnHeader } from '@/components/tables/header'
-import { predictions } from '@/components/tables/data'
 import { DataTableRowActions } from './actions'
-import { Marker } from '@/components/marker'
 
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
+import { type PatientModel } from '@/types'
+import { type Prisma } from '@prisma/client'
 
 export const columnsVisibility = {
   Paciente: true,
-  Predicción: true,
   Teléfono: true,
   Edad: true,
   Sexo: true,
   Dirección: false,
   'C. electrónico': false,
-  'F. Nacimiento': false,
+  'F. Nacimiento': true,
   Ocupación: false
 }
 
-export const columns: Array<ColumnDef<Patient>> = [
+export const columns: Array<ColumnDef<PatientModel>> = [
   {
     id: 'select',
     header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected()}
-                onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label='Select all'
-            />
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label='Select all'
+      />
     ),
     cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value: any) => row.toggleSelected(!!value)}
-                aria-label='Select row'
-            />
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value: any) => row.toggleSelected(!!value)}
+        aria-label='Select row'
+      />
     ),
     enableSorting: false,
     enableHiding: false
@@ -51,56 +49,42 @@ export const columns: Array<ColumnDef<Patient>> = [
     accessorKey: 'name',
     header ({ column }) {
       return (
-                <DataTableColumnHeader column={column} title={'Paciente'} />
+        <DataTableColumnHeader column={column} title={'Paciente'} />
       )
     },
     cell ({ row }) {
-      const image = row.original.image
-      const name = row.original.name
-      const email = row.original.email
-      return (
-                <div className='flex items-center space-x-4'>
-                    <Avatar>
-                        <AvatarImage src={image} />
-                        <AvatarFallback>
-                            {name
-                              .split(' ')
-                              .slice(0, 2)
-                              .map((name) => name[0])
-                              .join('')
-                            }
-                        </AvatarFallback>
-                    </Avatar>
-                    <div>
-                        <p className='text-sm font-medium leading-none'>{name}</p>
-                        <p className='text-sm text-muted-foreground'>{email}</p>
-                    </div>
-                </div>
-      )
-    },
-    enableHiding: false
-  },
-  {
-    id: 'Predicción',
-    accessorKey: 'prediction',
-    header: 'Predicción',
-    cell: ({ row }) => {
-      const prediction = predictions.find((prediction) => prediction.value === row.getValue('Predicción'))
+      const {
+        user,
+        firstName,
+        lastName,
+        email
+      } = row.original
 
-      if (!prediction) {
-        return null
-      }
+      const image = user.metadata as Prisma.JsonObject
+
       return (
-                <div className='flex items-center'>
-                    <Badge variant='outline' className='capitalize'>
-                        <Marker label={prediction.value} />
-                        {prediction.value}
-                    </Badge>
-                </div>
+        <div className='flex items-center space-x-4'>
+          <Avatar>
+            <AvatarImage src={image?.image_url as string} />
+            <AvatarFallback>
+              {`${firstName} ${lastName}`
+                .split(' ')
+                .slice(0, 2)
+                .map((name) => name[0])
+                .join('')
+              }
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className='text-sm font-medium leading-none'>{firstName + ' ' + lastName}</p>
+            <p className='text-sm text-muted-foreground'>{email}</p>
+          </div>
+        </div>
       )
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
+    filterFn: (row, _, value) => {
+      const { firstName, lastName } = row.original
+      return `${firstName} ${lastName}`.toLowerCase().includes(value.toLowerCase())
     },
     enableHiding: false
   },
@@ -122,14 +106,15 @@ export const columns: Array<ColumnDef<Patient>> = [
     cell: ({ row }) => {
       const gender = row.original.gender === 'M' ? 'Masculino' : 'Femenino'
       return (
-                <Badge variant='outline' className='capitalize'>
-                    {gender}
-                </Badge>
+        <Badge variant='outline' className='capitalize'>
+          {gender}
+        </Badge>
       )
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
-    }
+    },
+    enableColumnFilter: false
   },
   {
     id: 'Dirección',
@@ -138,20 +123,20 @@ export const columns: Array<ColumnDef<Patient>> = [
     cell: ({ row }) => {
       const address = row.original.address
       return (
-                <div className='grid gap-2'>
-                    <HoverCard openDelay={200}>
-                        <HoverCardTrigger asChild>
-                            <p className='max-w-[190px] truncate'>{address}</p>
-                        </HoverCardTrigger>
-                        <HoverCardContent
-                            align='center'
-                            className='w-72 text-sm whitespace-normal'
-                            side='left'
-                        >
-                            {address}
-                        </HoverCardContent>
-                    </HoverCard>
-                </div>
+        <div className='grid gap-2'>
+          <HoverCard openDelay={200}>
+            <HoverCardTrigger asChild>
+              <p className='max-w-[190px] truncate'>{address}</p>
+            </HoverCardTrigger>
+            <HoverCardContent
+              align='center'
+              className='w-72 text-sm whitespace-normal'
+              side='left'
+            >
+              {address}
+            </HoverCardContent>
+          </HoverCard>
+        </div>
       )
     }
   },
@@ -166,11 +151,11 @@ export const columns: Array<ColumnDef<Patient>> = [
     header: 'F. Nacimiento',
     cell: ({ row }) => {
       const birthdate =
-                row.original.birthdate
-                  ? new Date(row.original.birthdate).toLocaleDateString()
-                  : 'N/A'
+        row.original.dob
+          ? new Date(row.original.dob).toLocaleDateString()
+          : 'N/A'
       return (
-                <>{birthdate}</>
+        <>{birthdate}</>
       )
     }
   },

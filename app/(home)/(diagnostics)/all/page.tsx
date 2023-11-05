@@ -5,6 +5,8 @@ import { columns, columnsVisibility } from './columns'
 import { Separator } from '@/components/ui/separator'
 import { getDiagnosticsAction } from '@/app/actions/diagnostic'
 import { currentUser } from '@clerk/nextjs'
+import { getUserEmail } from '@/lib/utils'
+import { filters } from '@/components/tables/data'
 
 export const metadata: Metadata = {
   title: 'Diagnósticos Realizados',
@@ -13,7 +15,7 @@ export const metadata: Metadata = {
 
 export default async function All () {
   const user = await currentUser()
-  const data = await getDiagnosticsAction({ doctor: user?.id ?? '' })
+  const data = await getDiagnosticsAction({ email: getUserEmail(user) })
   return (
     <main className='max-w-4xl mx-auto'>
       <Header
@@ -27,7 +29,23 @@ export default async function All () {
         }
       />
       <Separator />
-      <DataTable columnsVisibility={columnsVisibility} columns={columns} data={data} />
+      <DataTable
+        filterableColumns={[
+          {
+            id: 'prediction',
+            title: 'Predicción',
+            options: filters.prediction
+          },
+          {
+            id: 'patient',
+            title: 'Género',
+            options: filters.gender
+          }
+        ]}
+        columnsVisibility={columnsVisibility}
+        columns={columns}
+        data={data}
+      />
     </main>
   )
 }
