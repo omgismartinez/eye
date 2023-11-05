@@ -27,15 +27,18 @@ import {
 import { useState } from 'react'
 import { DataTablePagination } from './pagination'
 import { DataTableFilter } from './filter'
+import { type DataTableFilterableColumn } from '@/types'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: TData[]
   columnsVisibility?: VisibilityState
+  filterableColumns?: Array<DataTableFilterableColumn<TData>>
 }
 
 export function DataTable<TData, TValue> ({
   columns,
+  filterableColumns,
   columnsVisibility,
   data
 }: DataTableProps<TData, TValue>) {
@@ -69,7 +72,10 @@ export function DataTable<TData, TValue> ({
 
   return (
     <div className='flex flex-col gap-4'>
-      <DataTableFilter table={table} />
+      <DataTableFilter
+        table={table}
+        filterableColumns={filterableColumns}
+      />
       <div className='rounded-lg border border-_gray-border dark:border-_dark-gray overflow-hidden'>
         <Table>
           <TableHeader>
