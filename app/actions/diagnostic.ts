@@ -7,15 +7,26 @@ import { prisma } from '@/lib/prisma'
 import { put, del } from '@vercel/blob'
 import { type Prisma } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
+import { type User } from '@clerk/nextjs/dist/types/server'
+import { getUserEmail } from '@/lib/utils'
 
 export async function getDiagnosticsAction (input: {
-  doctor: string
+  email: string
 }) {
   const diagnostics = await prisma.diagnostic.findMany({
     where: {
-      doctor: {
-        userId: input.doctor
-      }
+      OR: [
+        {
+          doctor: {
+            email: input.email
+          }
+        },
+        {
+          patient: {
+            email: input.email
+          }
+        }
+      ]
     },
     include: {
       image: true,
@@ -64,7 +75,7 @@ export async function createDiagnosticAction (
       },
       doctor: {
         connect: {
-          userId: input.doctor
+          email: input.doctor
         }
       },
       patient: {
@@ -75,7 +86,6 @@ export async function createDiagnosticAction (
           create: {
             firstName: input.firstName,
             lastName: input.lastName,
-            email: input.email,
             age: input.age,
             phone: input.phone,
             dob: input.dob,
@@ -134,4 +144,26 @@ export async function createDiagnosticAction (
 export async function getDiseasesAction () {
   const diseases = await prisma.disease.findMany()
   return diseases
+}
+
+export async function getPatientsAction (input: {
+  user: User | null
+}) {
+  const email = getUserEmail(input.user)
+
+  const patients = await prisma.patient.findMany({
+    where: {
+      doctor: {
+        every: {
+          email
+        }
+      }
+    },
+    include: {
+      user: true,
+      diagnostics: true
+    }
+  })
+
+  return patients
 }
