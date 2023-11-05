@@ -75,8 +75,7 @@ model Doctor {
   diagnostics Diagnostic[]
   patients    Patient[]
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String @unique
+  user User @relation(fields: [email], references: [email], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Patient {
@@ -93,8 +92,7 @@ model Patient {
   diagnostics Diagnostic[]
   doctor      Doctor[]
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String @unique
+  user User @relation(fields: [email], references: [email], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Diagnostic {
