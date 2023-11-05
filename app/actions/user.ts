@@ -34,8 +34,18 @@ export async function startedAction (
   const email = getUserEmail(user)
 
   if (input.role === 'PATIENT') {
-    await prisma.patient.create({
-      data: {
+    await prisma.patient.upsert({
+      where: {
+        email
+      },
+      update: {
+        user: {
+          connect: {
+            email
+          }
+        }
+      },
+      create: {
         firstName: user.firstName ?? 'John',
         lastName: user.lastName ?? 'Doe',
         email,
@@ -43,18 +53,25 @@ export async function startedAction (
         phone: '',
         dob: new Date('2000-01-01'),
         gender: 'M',
-        user: {
-          connect: {
-            id: user.id
-          }
-        }
+        address: 'La Luna',
+        occupation: 'Astronauta'
       }
     })
   }
 
   if (input.role === 'DOCTOR') {
-    await prisma.doctor.create({
-      data: {
+    await prisma.doctor.upsert({
+      where: {
+        email
+      },
+      update: {
+        user: {
+          connect: {
+            email
+          }
+        }
+      },
+      create: {
         firstName: user.firstName ?? 'John',
         lastName: user.lastName ?? 'Doe',
         email,
@@ -62,12 +79,7 @@ export async function startedAction (
         phone: '',
         birthdate: new Date('2000-01-01'),
         gender: 'M',
-        specialty: 'N/A',
-        user: {
-          connect: {
-            id: user.id
-          }
-        }
+        specialty: 'N/A'
       }
     })
   }
@@ -82,7 +94,7 @@ export async function startedAction (
 
   await prisma.user.update({
     where: {
-      id: user.id
+      email
     },
     data: {
       role: input.role,
