@@ -11,7 +11,7 @@ import { useEffect, useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { catchError, cn } from '@/lib/utils'
+import { catchError, cn, getUserEmail } from '@/lib/utils'
 import {
   ACCEPTED_IMAGE_TYPES,
   MAX_RECOMMENDED_IMAGE_SIZE,
@@ -147,12 +147,14 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                 ...dataFiltered
               } = data
 
+              const doctorEmail = getUserEmail(user)
+
               // Save diagnostic
               toast.promise(
                 createDiagnosticAction({
                   classification: output,
                   imageFormData: formData,
-                  doctor: user?.id as string,
+                  doctor: doctorEmail,
                   prediction: output[0].label,
                   ...dataFiltered
                 }), {
