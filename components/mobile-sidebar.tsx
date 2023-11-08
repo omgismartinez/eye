@@ -3,7 +3,7 @@
 import clsx from 'clsx'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useMounted } from '@/hooks/use-mounted'
 import { BadgeCheck, BarChart4, Menu, Settings, Users } from 'lucide-react'
 import type { User } from '@clerk/nextjs/server'
 
@@ -26,14 +26,11 @@ import {
 
 export const MobileSidebar = ({ user }: { user: User | null }) => {
   const pathname = usePathname()
-  const [isMounted, setIsMounted] = useState(false)
   const initials = `${user?.firstName?.charAt(0) ?? ''}${user?.lastName?.charAt(0) ?? ''}`
 
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
+  const mounted = useMounted()
 
-  if (!isMounted) {
+  if (!mounted) {
     return null
   }
 
