@@ -17,16 +17,17 @@ import { Button } from '@/components/ui/button'
 import { Separator } from './ui/separator'
 import { AvatarApp } from './avatar-app'
 import { SignoutButton } from './auth/signout-button'
-import { getRole } from './sidebar'
 import {
   Avatar,
   AvatarFallback,
   AvatarImage
 } from './ui/avatar'
+import { getRole } from '@/lib/utils'
 
 export const MobileSidebar = ({ user }: { user: User | null }) => {
   const pathname = usePathname()
   const initials = `${user?.firstName?.charAt(0) ?? ''}${user?.lastName?.charAt(0) ?? ''}`
+  const role = getRole(user)
 
   const mounted = useMounted()
 
@@ -151,7 +152,7 @@ export const MobileSidebar = ({ user }: { user: User | null }) => {
                     </Avatar>
                     <div className='flex flex-col items-start'>
                       <span className='text-xs font-bold text-_main dark:text-_white'>{user?.firstName} {user?.lastName}</span>
-                      <span className='text-[10px] font-normal leading-tight capitalize'>{getRole(user)}</span>
+                      <span className='text-[10px] font-normal leading-tight capitalize'>{role}</span>
                     </div>
                   </div>
                 </button>
