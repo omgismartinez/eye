@@ -46,3 +46,23 @@ export function getUserEmail (user: User | null) {
 
   return email
 }
+
+export const getRole = (user: User | null) => {
+  const role = user?.privateMetadata?.role
+  if (role === 'PATIENT') {
+    return 'Paciente'
+  }
+  if (role === 'RESEARCHER') {
+    return 'Investigador'
+  }
+  if (role === 'DEVELOPER') {
+    return 'Desarrollador'
+  }
+  if (role === 'DOCTOR') {
+    return 'Doctor'
+  }
+  if (role === 'ADMIN') {
+    return 'Administrador'
+  }
+  return 'No definido'
+}
