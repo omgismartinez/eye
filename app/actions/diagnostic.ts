@@ -149,13 +149,17 @@ export async function getDiseasesAction () {
 export async function getPatientsAction (input: {
   user: User | null
 }) {
+  if (!input.user) throw new Error('User is required.')
+
   const email = getUserEmail(input.user)
 
   const patients = await prisma.patient.findMany({
     where: {
       doctor: {
         every: {
-          email
+          email: {
+            equals: email
+          }
         }
       }
     },
