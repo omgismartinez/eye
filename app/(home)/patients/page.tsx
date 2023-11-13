@@ -6,6 +6,7 @@ import { columns, columnsVisibility } from './columns'
 import { Separator } from '@/components/ui/separator'
 import { getPatientsAction } from '@/app/actions/diagnostic'
 import { currentUser } from '@clerk/nextjs'
+import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: 'Pacientes Registrados',
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 
 export default async function Patients () {
   const user = await currentUser()
+  if (user?.privateMetadata.role !== 'ADMIN') redirect('/')
   const data = await getPatientsAction({ user })
   return (
     <main className='max-w-4xl mx-auto'>
