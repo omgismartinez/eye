@@ -1,11 +1,11 @@
-import { type UserRole, type NavigationRoute } from '@/types'
+import type { UserRole, NavigationRoute } from '@/types'
 import {
-  BadgeCheck,
-  BarChart4,
-  FilePlus2,
-  Settings,
-  Users,
-  FileStack
+  BadgeCheckIcon,
+  BarChart4Icon,
+  FilePlus2Icon,
+  FileStackIcon,
+  SettingsIcon,
+  UsersIcon
 } from 'lucide-react'
 
 export const PROTECTED_ROUTES = {
@@ -22,39 +22,39 @@ export const Navigation: NavigationRoute = {
     {
       name: 'Administrar Diagnósticos',
       path: '/diagnostics',
-      icon: BarChart4,
+      icon: BarChart4Icon,
       children: [
         {
           name: 'Nuevo Diagnóstico',
           path: '/new',
           permissions: ['ADMIN', 'DOCTOR'],
-          icon: FilePlus2
+          icon: FilePlus2Icon
         },
         {
           name: 'Todos los Diagnósticos',
           path: '/all',
           permissions: ['ADMIN', 'DOCTOR', 'PATIENT'],
-          icon: FileStack
+          icon: FileStackIcon
         }
       ]
     },
     {
       name: 'Administrar Pacientes',
       path: '/patients',
-      icon: Users,
+      icon: UsersIcon,
       permissions: ['ADMIN', 'DOCTOR']
     },
     {
       name: 'Términos y Condiciones',
       path: '/terms',
-      icon: BadgeCheck
+      icon: BadgeCheckIcon
     }
   ],
   bottom: [
     {
       name: 'Configuración',
       path: '/settings',
-      icon: Settings,
+      icon: SettingsIcon,
       permissions: ['ADMIN', 'DOCTOR', 'PATIENT']
     }
   ]
