@@ -130,7 +130,7 @@ export default function Sidebar ({ user }: SidebarProps) {
                       'flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80',
                       {
                         'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white':
-                          pathname === route.path,
+                          pathname.startsWith(route.path),
                         hidden: route.permissions && !route.permissions.includes(role)
                       }
                     )}
