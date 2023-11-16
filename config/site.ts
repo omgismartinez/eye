@@ -1,3 +1,4 @@
+import { type NavigationRoute } from '@/types'
 import {
   BadgeCheck,
   BarChart4,
@@ -7,7 +8,7 @@ import {
   FileStack
 } from 'lucide-react'
 
-export const sidebarNav = {
+export const Navigation: NavigationRoute = {
   top: [
     {
       name: 'Administrar Diagnósticos',
@@ -17,13 +18,13 @@ export const sidebarNav = {
         {
           name: 'Nuevo Diagnóstico',
           path: '/new',
-          permissions: ['Admin', 'Doctor'],
+          permissions: ['ADMIN', 'DOCTOR'],
           icon: FilePlus2
         },
         {
           name: 'Todos los Diagnósticos',
           path: '/all',
-          permissions: ['Admin', 'Doctor', 'Paciente'],
+          permissions: ['ADMIN', 'DOCTOR', 'PATIENT'],
           icon: FileStack
         }
       ]
@@ -32,7 +33,7 @@ export const sidebarNav = {
       name: 'Administrar Pacientes',
       path: '/patients',
       icon: Users,
-      permissions: ['Admin', 'Doctor']
+      permissions: ['ADMIN', 'DOCTOR']
     },
     {
       name: 'Términos y Condiciones',
@@ -45,7 +46,7 @@ export const sidebarNav = {
       name: 'Configuración',
       path: '/settings',
       icon: Settings,
-      permissions: ['Admin', 'Doctor', 'Paciente']
+      permissions: ['ADMIN', 'DOCTOR', 'PATIENT']
     }
   ]
 }
