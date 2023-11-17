@@ -7,6 +7,7 @@ import type {
   Patient,
   User
 } from '@prisma/client'
+import { type LucideIcon } from 'lucide-react'
 import { type z } from 'zod'
 
 export type Status =
@@ -45,3 +46,13 @@ export interface DataTableFilterableColumn<TData>
   extends DataTableSearchableColumn<TData> {
   options: Option[]
 }
+
+export interface NavigationRouteProps {
+  name: string
+  path: string
+  icon: LucideIcon
+  permissions?: UserRole[]
+  children?: NavigationRouteProps[]
+}
+
+export type NavigationRoute = Record<string, NavigationRouteProps[]>
