@@ -1,4 +1,4 @@
-import { type NavigationRoute } from '@/types'
+import { type UserRole, type NavigationRoute } from '@/types'
 import {
   BadgeCheck,
   BarChart4,
@@ -7,6 +7,15 @@ import {
   Users,
   FileStack
 } from 'lucide-react'
+
+export const PROTECTED_ROUTES = {
+  '*': ['ADMIN'],
+  '/new': ['DOCTOR'],
+  '/all': ['DOCTOR', 'PATIENT'],
+  '/patients': ['DOCTOR'],
+  '/settings': ['DOCTOR', 'PATIENT'],
+  '/terms': ['DOCTOR', 'PATIENT']
+} satisfies Record<string, UserRole[]>
 
 export const Navigation: NavigationRoute = {
   top: [
