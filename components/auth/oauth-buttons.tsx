@@ -28,7 +28,7 @@ export function OAuthButtons () {
       await signIn.authenticateWithRedirect({
         strategy: provider,
         redirectUrl: '/sso-callback',
-        redirectUrlComplete: '/started'
+        redirectUrlComplete: '/'
       })
     } catch (error) {
       setIsLoading(null)
