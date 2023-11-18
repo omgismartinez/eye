@@ -155,10 +155,10 @@ export async function getPatientsAction (input: {
 
   const patients = await prisma.patient.findMany({
     where: {
-      doctor: {
-        every: {
-          email: {
-            equals: email
+      diagnostics: {
+        some: {
+          doctor: {
+            email
           }
         }
       }

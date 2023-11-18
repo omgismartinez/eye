@@ -4,6 +4,7 @@ import { isClerkAPIResponseError } from '@clerk/nextjs'
 import { toast } from 'sonner'
 import { twMerge } from 'tailwind-merge'
 import { z } from 'zod'
+import { PROTECTED_ROUTES } from '@/config/site'
 
 export function cn (...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -65,4 +66,10 @@ export const getRole = (user: User | null) => {
     return 'Administrador'
   }
   return 'No definido'
+}
+
+export const canAccess = (path: keyof typeof PROTECTED_ROUTES, user: User | null) => {
+  if (user?.privateMetadata.role === 'ADMIN') return true
+  const permissions = PROTECTED_ROUTES[path]
+  return permissions.includes(user?.privateMetadata.role as never)
 }
