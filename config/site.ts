@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 import { type UserRole, type NavigationRoute } from '@/types'
+=======
+<<<<<<< HEAD
+import { type NavigationRoute } from '@/types'
+=======
+import { type UserRole, type NavigationRoute } from '@/types'
+>>>>>>> 4f9e9bb18e1155d34d7dd282f2f3c2a74c1081a5
+>>>>>>> 3703290f4882389b4180d66fa8e33704ed87c661
 import {
   BadgeCheck,
   BarChart4,
@@ -8,6 +16,11 @@ import {
   FileStack
 } from 'lucide-react'
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 3703290f4882389b4180d66fa8e33704ed87c661
 export const PROTECTED_ROUTES = {
   '*': ['ADMIN'],
   '/new': ['DOCTOR'],
@@ -17,6 +30,10 @@ export const PROTECTED_ROUTES = {
   '/terms': ['DOCTOR', 'PATIENT']
 } satisfies Record<string, UserRole[]>
 
+<<<<<<< HEAD
+=======
+>>>>>>> 4f9e9bb18e1155d34d7dd282f2f3c2a74c1081a5
+>>>>>>> 3703290f4882389b4180d66fa8e33704ed87c661
 export const Navigation: NavigationRoute = {
   top: [
     {
