@@ -3,6 +3,7 @@ import { Header } from '@/components/header'
 import { DiagnosticForm } from '@/components/forms/diagnostic-form'
 import { currentUser } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
+import { canAccess } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'Nuevo Diagnóstico',
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 
 export default async function New () {
   const user = await currentUser()
-  if (user?.privateMetadata.role !== 'ADMIN') redirect('/')
+  if (!canAccess('/new', user)) redirect('/')
   return (
     <main className='max-w-3xl mx-auto'>
       <Header

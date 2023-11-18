@@ -22,13 +22,12 @@ import {
   AvatarFallback,
   AvatarImage
 } from './ui/avatar'
-import { getRole } from '@/lib/utils'
-import { sidebarNav } from '@/config/site'
+import { Navigation } from '@/config/site'
 
 export const MobileSidebar = ({ user }: { user: User | null }) => {
   const pathname = usePathname()
   const initials = `${user?.firstName?.charAt(0) ?? ''}${user?.lastName?.charAt(0) ?? ''}`
-  const role = getRole(user)
+  const role = user?.privateMetadata.role ?? 'PATIENT'
 
   const mounted = useMounted()
 
@@ -69,7 +68,7 @@ export const MobileSidebar = ({ user }: { user: User | null }) => {
           <div className='px-4'>
             <section className='flex flex-col justify-between gap-1 min-h-[650px]'>
               <div className='flex flex-col gap-2 text-_gray-808080 text-sm font-bold'>
-                {sidebarNav.top.map((route, index) => {
+                {Navigation.top.map((route, index) => {
                   const protectedRoute = route.children?.filter(child => child.permissions?.includes(role))
                   const IconChildren = protectedRoute?.[0]?.icon ?? null
                   const IconRoute = route.icon
@@ -121,7 +120,7 @@ export const MobileSidebar = ({ user }: { user: User | null }) => {
                                             {
                                               'bg-_gray-select text-_main dark:bg-_dark-gray dark:text-_white':
                                                 pathname === child.path,
-                                              hidden: !child.permissions.includes(role)
+                                              hidden: !child.permissions?.includes(role)
                                             }
                                           )}
                                         >
@@ -157,7 +156,7 @@ export const MobileSidebar = ({ user }: { user: User | null }) => {
               </div>
             <div className='flex flex-col gap-6 text-_gray-C2C2C2 text-sm font-bold'>
               <div className='flex flex-col gap-2 text-_gray-808080'>
-                {sidebarNav.bottom.map((route, index) => {
+                {Navigation.bottom.map((route, index) => {
                   const IconRoute = route.icon
                   return (
                     <SheetClose key={index} asChild>
