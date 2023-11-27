@@ -1,3 +1,5 @@
+'use client'
+
 import type { UserRole, NavigationRoute } from '@/types'
 import {
   BadgeCheckIcon,
