@@ -37,13 +37,10 @@ export default authMiddleware({
       throw new Error('User not found.')
     }
 
-    //  If the user is not verified, redirect them to the verification page
-    if (user.privateMetadata.started === false) {
+    if (!user.privateMetadata?.started) {
       if (req.nextUrl.pathname !== '/started') {
         url.pathname = '/started'
         return NextResponse.redirect(url)
-      } else {
-        return NextResponse.next()
       }
     }
   }

@@ -36,6 +36,28 @@ export async function startedAction (
 
   const email = getUserEmail(user)
 
+  // Upsert user
+  await prisma.user.upsert({
+    where: {
+      email
+    },
+    create: {
+      id: user.id,
+      firstName: user.firstName ?? `Usuario-${user.externalId}`,
+      lastName: user.lastName ?? '',
+      email,
+      metadata: {
+        toJSON: () => user
+      }
+    },
+    update: {
+      email,
+      metadata: {
+        toJSON: () => user
+      }
+    }
+  })
+
   if (input.role === 'PATIENT') {
     await prisma.patient.upsert({
       where: {
@@ -87,14 +109,6 @@ export async function startedAction (
     })
   }
 
-  // Update Clerk user metadata
-  await clerkClient.users.updateUserMetadata(user.id, {
-    privateMetadata: {
-      role: input.role,
-      started: true
-    }
-  })
-
   await prisma.user.update({
     where: {
       email
@@ -103,6 +117,14 @@ export async function startedAction (
       role: input.role,
       started: true
     }
+  }).then(async () => {
+    // Update Clerk user metadata
+    await clerkClient.users.updateUserMetadata(user.id, {
+      privateMetadata: {
+        role: input.role,
+        started: true
+      }
+    })
   })
 }
 

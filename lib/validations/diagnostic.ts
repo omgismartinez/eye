@@ -69,12 +69,10 @@ export const diagnosticSchema = z.object({
   occupation: z
     .string()
     .max(160)
-    .min(4)
     .optional(),
   address: z
     .string()
     .max(160)
-    .min(4)
     .optional(),
   email: z
     .string()
