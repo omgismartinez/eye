@@ -16,16 +16,35 @@ interface LabelInfoFormProps {
   className?: string
   icon?: LucideIcon | null
   children: React.ReactNode
+  open?: boolean
 }
 
-const LabelInfoForm = ({ className, icon: Icon, children }: LabelInfoFormProps) => {
+const LabelInfoForm = ({
+  className,
+  icon: Icon,
+  children,
+  open
+}: LabelInfoFormProps) => {
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    if (open !== undefined) {
+      setIsOpen(open)
+    }
+  }, [open])
+
   return (
-    <Popover>
+    <Popover
+      open={isOpen}
+      onOpenChange={setIsOpen}
+    >
       <PopoverTrigger>
         <Button
           asChild
           variant={'ghost'}
-          className='w-6 h-6 p-1'
+          className={cn('w-6 h-6 p-1', {
+            'bg-[#0070f3] hover:bg-[#0070f3]/80': isOpen
+          })}
         >
           {Icon ? <Icon /> : <InfoIcon className={cn('w-4 h-4', className)} />}
         </Button>
