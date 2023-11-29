@@ -485,40 +485,43 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                   <FormItem className='col-span-3'>
                     <FormLabel className='flex items-center gap-2'>
                       Predicción
-                      <LabelInfoForm icon={classification.length > 0 ? LayersIcon : null}>
-                          {classification.length > 0
-                            ? (
-                                <div className='flex flex-col gap-2'>
-                                  <h1 className='text-base font-bold text-center'>Predicciones</h1>
-                                  <div className='grid gap-3'>
-                                    {classification.length > 0 &&
-                                      classification.map((prediction) => {
-                                        const value = Math.ceil((prediction.score / Math.max(...classification.map((p) => p.score))) * 80)
-                                        return (
-                                          <div key={prediction.label} className='grid text-xs'>
-                                            <div className='grid gap-1'>
-                                              <Marker label={prediction.label} type={'badge'} value={value} />
-                                              <div className='flex justify-between'>
-                                                <p className='capitalize text-xs'>{prediction.label}</p>
-                                                <p className='text-_gray-808080'>{(prediction.score).toFixed(3)}</p>
-                                              </div>
-                                            </div>
+                      <LabelInfoForm
+                        icon={classification.length > 0 ? LayersIcon : null}
+                        open={classification.length > 0}
+                      >
+                        {classification.length > 0
+                          ? (
+                            <div className='flex flex-col gap-2'>
+                              <h1 className='text-base font-bold text-center'>Predicciones</h1>
+                              <div className='grid gap-3'>
+                                {classification.length > 0 &&
+                                  classification.map((prediction) => {
+                                    const value = Math.ceil((prediction.score / Math.max(...classification.map((p) => p.score))) * 80)
+                                    return (
+                                      <div key={prediction.label} className='grid text-xs'>
+                                        <div className='grid gap-1'>
+                                          <Marker label={prediction.label} type={'badge'} value={value} />
+                                          <div className='flex justify-between'>
+                                            <p className='capitalize text-xs'>{prediction.label}</p>
+                                            <p className='text-_gray-808080'>{(prediction.score).toFixed(3)}</p>
                                           </div>
-                                        )
-                                      })}
-                                  </div>
-                                </div>
-                              )
-                            : (
-                                <p>
-                                  <strong>La predicción se realiza en base a la imagen cargada</strong>,
-                                  por lo que se debe cargar una imagen para poder realizar la predicción.
-                                  <br /><br />
-                                  Después de cargar la imagen y llenar los campos, se debe esperar a que la predicción se realice,
-                                  esto puede tardar unos segundos. Una vez que la predicción se haya realizado,
-                                  se mostrará la predicción en este campo.
-                                </p>
-                              )}
+                                        </div>
+                                      </div>
+                                    )
+                                  })}
+                              </div>
+                            </div>
+                            )
+                          : (
+                            <p>
+                              <strong>La predicción se realiza en base a la imagen cargada</strong>,
+                              por lo que se debe cargar una imagen para poder realizar la predicción.
+                              <br /><br />
+                              Después de cargar la imagen y llenar los campos, se debe esperar a que la predicción se realice,
+                              esto puede tardar unos segundos. Una vez que la predicción se haya realizado,
+                              se mostrará la predicción en este campo.
+                            </p>
+                            )}
                       </LabelInfoForm>
                     </FormLabel>
                     <FormControl>
@@ -578,7 +581,7 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                     <FormItem className='col-span-3 sm:col-span-2'>
                       <FormLabel>Apellidos</FormLabel>
                       <FormControl>
-                        <Input placeholder='Apellidos del paciente'autoComplete='off' required {...field} />
+                        <Input placeholder='Apellidos del paciente' autoComplete='off' required {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
