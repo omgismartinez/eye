@@ -65,6 +65,7 @@ import { Badge } from '@/components/ui/badge'
 import { createDiagnosticAction, getDiseasesAction } from '@/app/actions/diagnostic'
 import { getModelsAction, startClassificationAction } from '@/app/actions/huggingface'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useRouter } from 'next/navigation'
 
 type DiagnosticFormValues = z.infer<typeof diagnosticSchema>
 
@@ -81,6 +82,7 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
   const [diseases, setDiseases] = useState<Disease[]>([])
   const [models, setModels] = useState<ModelEntry[]>([])
   const [selected, setSelected] = useState<{ disease?: Disease, model?: ModelEntry }>()
+  const { push } = useRouter()
 
   const form = useForm<DiagnosticFormValues>({
     resolver: zodResolver(diagnosticSchema),
@@ -135,7 +137,7 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
           }), {
             loading: 'Prediciendo imagen...',
             success: (output) => {
-              // Set classification
+            // Set classification
               setClassification(output)
               form.setValue('prediction', output[0].label)
 
@@ -159,7 +161,20 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                   ...dataFiltered
                 }), {
                   loading: 'Guardando diagnóstico...',
-                  success: 'Diagnóstico guardado exitosamente.',
+                  success: (diagnostic) => {
+                    toast('Ver diagnóstico', {
+                      cancel: {
+                        label: 'Cerrar',
+                        onClick: () => toast.dismiss()
+                      },
+                      action: {
+                        label: 'Ver',
+                        onClick: () => push(`/diagnostic/${diagnostic.id}`)
+                      },
+                      dismissible: true
+                    })
+                    return 'Diagnóstico guardado exitosamente.'
+                  },
                   error: (err) => err
                 }
               )
