@@ -39,6 +39,25 @@ export async function getDiagnosticsAction (input: {
   return diagnostics
 }
 
+export async function getDiagnosticAction (input: {
+  id: string
+}) {
+  const diagnostic = await prisma.diagnostic.findUnique({
+    where: {
+      id: input.id
+    },
+    include: {
+      doctor: true,
+      image: true,
+      label: true,
+      disease: true,
+      patient: true
+    }
+  })
+
+  return diagnostic
+}
+
 export async function createDiagnosticAction (
   input: Omit<z.infer<typeof diagnosticSchema>, 'image'> & {
     imageFormData: FormData
