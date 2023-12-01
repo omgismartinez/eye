@@ -11,13 +11,12 @@ import {
 } from 'lucide-react'
 
 export const PROTECTED_ROUTES = {
-  '*': ['ADMIN'],
-  '/new': ['DOCTOR'],
-  '/all': ['DOCTOR', 'PATIENT'],
-  '/patients': ['DOCTOR'],
-  '/settings': ['DOCTOR', 'PATIENT'],
-  '/terms': ['DOCTOR', 'PATIENT']
-} satisfies Record<string, UserRole[]>
+  ADMIN: ['*'],
+  DOCTOR: ['/diagnostics', '/patients', '/settings', '/terms'],
+  PATIENT: ['/diagnostics', '/settings', '/terms'],
+  DEVELOPER: ['/settings', '/terms'],
+  RESEARCHER: ['/settings', '/terms']
+} satisfies Record<UserRole, string[]>
 
 export const Navigation: NavigationRoute = {
   top: [
@@ -34,7 +33,7 @@ export const Navigation: NavigationRoute = {
         },
         {
           name: 'Todos los Diagnósticos',
-          path: '/all',
+          path: '/diagnostics',
           permissions: ['ADMIN', 'DOCTOR', 'PATIENT'],
           icon: FileStackIcon
         }
