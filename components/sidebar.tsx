@@ -37,6 +37,7 @@ export default function Sidebar ({ user }: SidebarProps) {
         <section className='flex flex-col justify-between gap-1 min-h-[650px]'>
           <div className='flex flex-col gap-2 text-_gray-808080 text-sm font-bold'>
             {Navigation.top.map((route, index) => {
+              if (route.permissions?.includes(role) === false) return null
               const protectedRoute = route.children?.filter(child => child.permissions?.includes(role))
               const IconChildren = protectedRoute?.[0]?.icon ?? null
               const IconRoute = route.icon
@@ -104,8 +105,7 @@ export default function Sidebar ({ user }: SidebarProps) {
                           className={clsx(
                             'flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80',
                             {
-                              'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white':
-                                pathname === route.path,
+                              'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname === route.path,
                               hidden: route.permissions && !route.permissions.includes(role)
                             }
                           )}
@@ -126,11 +126,8 @@ export default function Sidebar ({ user }: SidebarProps) {
                     key={index}
                     href={route.path}
                     className={clsx(
-                      'flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80',
-                      {
-                        'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white':
-                          pathname.startsWith(route.path),
-                        hidden: route.permissions && !route.permissions.includes(role)
+                      'flex items-center gap-4 px-2 py-3 whitespace-nowrap rounded-lg hover:text-_main/80 dark:hover:text-_white/80', {
+                        'text-_main bg-_gray-select dark:bg-_dark-gray dark:text-_white': pathname.startsWith(route.path)
                       }
                     )}
                   >
