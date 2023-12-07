@@ -12,8 +12,8 @@ import {
 
 export const PROTECTED_ROUTES = {
   ADMIN: ['*'],
-  DOCTOR: ['/diagnostics', '/patients', '/settings', '/terms'],
-  PATIENT: ['/diagnostics', '/settings', '/terms'],
+  DOCTOR: ['/new', '/diagnostic', '/diagnostics', '/patients', '/settings', '/terms'],
+  PATIENT: ['/diagnostic', '/diagnostics', '/settings', '/terms'],
   DEVELOPER: ['/settings', '/terms'],
   RESEARCHER: ['/settings', '/terms']
 } satisfies Record<UserRole, string[]>
