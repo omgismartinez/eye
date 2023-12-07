@@ -1,14 +1,14 @@
 'use client'
 
 import { ChevronLeft } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { AvatarApp } from './avatar-app'
 import { MobileSidebar } from './mobile-sidebar'
 import type { User } from '@clerk/nextjs/server'
 
 export default function Navbar ({ user }: { user: User | null }) {
   const pathname = usePathname()
+  const router = useRouter()
 
   const routes = {
     '/new': 'Nuevo Diagnóstico',
@@ -44,9 +44,9 @@ export default function Navbar ({ user }: { user: User | null }) {
         </div>
         <div className='hidden lg:flex items-center lg:px-6 py-4 w-full'>
           {pathname !== '/' && (
-            <Link href='/' className='bg-_gray-F7F7F7 dark:bg-_dark-gray hidden lg:block rounded-full p-1'>
+            <button onClick={() => router.back()} className='bg-_gray-F7F7F7 dark:bg-_dark-gray hidden lg:block rounded-full p-1'>
               <ChevronLeft size={18} />
-            </Link>
+            </button>
           )}
           <h2 className='text-_main dark:text-_white font-bold text-base lg:ml-6 whitespace-nowrap'>
             {routes[pathname as keyof typeof routes]}
