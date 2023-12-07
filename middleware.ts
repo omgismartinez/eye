@@ -1,5 +1,6 @@
 import { authMiddleware, clerkClient } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
+import { canAccess } from './lib/utils'
 
 // This example protects all routes including api/trpc routes
 // Please edit this to allow other routes to be public as needed.
@@ -40,6 +41,18 @@ export default authMiddleware({
     if (!user.privateMetadata?.started) {
       if (req.nextUrl.pathname !== '/started') {
         url.pathname = '/started'
+        return NextResponse.redirect(url)
+      }
+    }
+
+    // Check if the user has access to the route they are trying to access
+    const hasAccess = canAccess(req.nextUrl.pathname, user)
+
+    if (hasAccess) {
+      return NextResponse.next()
+    } else {
+      if (req.nextUrl.pathname !== '/') {
+        url.pathname = '/'
         return NextResponse.redirect(url)
       }
     }

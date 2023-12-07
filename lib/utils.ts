@@ -68,8 +68,9 @@ export const getRole = (user: User | null) => {
   return 'No definido'
 }
 
-export const canAccess = (path: keyof typeof PROTECTED_ROUTES, user: User | null) => {
-  if (user?.privateMetadata.role === 'ADMIN') return true
-  const permissions = PROTECTED_ROUTES[path]
-  return permissions.includes(user?.privateMetadata.role as never)
+export const canAccess = (path: string, user: User | null) => {
+  const role = user?.privateMetadata?.role
+  if (!role) return false
+  if (role === 'ADMIN') return true
+  if (PROTECTED_ROUTES[role].includes(`/${path.split('/')[1]}`)) return true
 }
