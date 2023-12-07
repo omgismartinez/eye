@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: 'Tabla con todos los diagnósticos realizados.'
 }
 
-export default async function All () {
+export default async function Diagnostics () {
   const user = await currentUser()
   const data = await getDiagnosticsAction({ email: getUserEmail(user) })
   return (
