@@ -162,17 +162,7 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                 }), {
                   loading: 'Guardando diagnóstico...',
                   success: (diagnostic) => {
-                    toast('Ver diagnóstico', {
-                      cancel: {
-                        label: 'Cerrar',
-                        onClick: () => toast.dismiss()
-                      },
-                      action: {
-                        label: 'Ver',
-                        onClick: () => push(`/diagnostic/${diagnostic.id}`)
-                      },
-                      dismissible: true
-                    })
+                    push(`/diagnostic/${diagnostic.id}`)
                     return 'Diagnóstico guardado exitosamente.'
                   },
                   error: (err) => err
