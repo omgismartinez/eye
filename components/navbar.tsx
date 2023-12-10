@@ -1,23 +1,27 @@
 'use client'
 
-import { ChevronLeft } from 'lucide-react'
-import { usePathname, useRouter } from 'next/navigation'
+import { Home } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import { AvatarApp } from './avatar-app'
 import { MobileSidebar } from './mobile-sidebar'
 import type { User } from '@clerk/nextjs/server'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 export default function Navbar ({ user }: { user: User | null }) {
   const pathname = usePathname()
-  const router = useRouter()
 
   const routes = {
+    '/': 'Inicio',
     '/new': 'Nuevo Diagnóstico',
-    '/all': 'Todos los Diagnósticos',
+    '/diagnostics': 'Todos los Diagnósticos',
     '/patients': 'Administrar Pacientes',
     '/terms': 'Términos y Condiciones',
-    '/settings': 'Perfil',
-    '/settings/account': 'Cuenta',
-    '/settings/appearance': 'Apariencia'
+    '/settings': 'Configuración',
+    '/profile': 'Perfil',
+    '/account': 'Cuenta',
+    '/appearance': 'Apariencia',
+    '/diagnostic': 'Diagnóstico'
   }
 
   return (
@@ -43,14 +47,38 @@ export default function Navbar ({ user }: { user: User | null }) {
           </div>
         </div>
         <div className='hidden lg:flex items-center lg:px-6 py-4 w-full'>
-          {pathname !== '/' && (
-            <button onClick={() => router.back()} className='bg-_gray-F7F7F7 dark:bg-_dark-gray hidden lg:block rounded-full p-1'>
-              <ChevronLeft size={18} />
-            </button>
-          )}
-          <h2 className='text-_main dark:text-_white font-bold text-base lg:ml-6 whitespace-nowrap'>
-            {routes[pathname as keyof typeof routes]}
-          </h2>
+          <Link
+            href={'/'}
+            className='flex items-center p-1.5 gap-2 hover:bg-_gray-select h-min dark:hover:bg-_dark-gray/40 w-min rounded-full transition overflow-hidden'
+          >
+            <Home size={18} />
+          </Link>
+          {pathname.split('/').map((path, index) => {
+            const route = routes[`/${path}` as keyof typeof routes]
+            if (!route) return null
+            if (path === '' && (index === 0 && path === '')) return null
+            return (
+              <div key={index} className='flex items-center'>
+                {index !== 0 && (
+                  <div className='flex items-center px-2 text-xl text-_gray-border dark:text-_gray-808080'>
+                    /
+                  </div>
+                )}
+                <Link
+                  href={path === '' ? '/' : `${pathname.split(path)[0]}${path}`}
+                  className={cn(
+                    'flex hover:bg-_gray-select h-min dark:hover:bg-_dark-gray/40 w-min rounded-full transition overflow-hidden', {
+                      'bg-_gray-select dark:bg-_dark-gray': pathname === `/${path}` || pathname.endsWith(`/${path}`)
+                    }
+                  )}
+                >
+                  <h2 className='text-_main dark:text-_white font-bold text-base whitespace-nowrap px-2'>
+                    {route}
+                  </h2>
+                </Link>
+              </div>
+            )
+          })}
         </div>
       </div>
     </nav>
