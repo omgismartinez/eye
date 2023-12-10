@@ -7,6 +7,10 @@ import { DataTableColumnHeader } from '@/components/tables/header'
 import { predictions } from '@/components/tables/data'
 import { Marker } from '@/components/marker'
 import { type DiagnosticModel } from '@/types'
+import { Maximize2 } from 'lucide-react'
+import { buttonVariants } from '@/components/ui/button'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 export const columnsVisibility = {
   Paciente: true,
@@ -66,7 +70,16 @@ export const columns: Array<ColumnDef<DiagnosticModel>> = [
         return null
       }
       return (
-        <div className='flex items-center'>
+        <div className='flex items-center gap-2'>
+          <Link
+            href={`/diagnostic/${row.original.id}`}
+            className={cn(buttonVariants({
+              variant: 'ghost',
+              className: 'w-7 h-7 p-0 rounded-full inline-flex overflow-hidden'
+            }))}
+          >
+            <Maximize2 size={14} />
+          </Link>
           <Badge variant='outline' className='rounded-md capitalize'>
             <Marker label={prediction.value} />
             {prediction.value}
