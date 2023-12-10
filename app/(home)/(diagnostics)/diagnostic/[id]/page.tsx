@@ -58,6 +58,7 @@ export default async function Diagnostic ({ params }: { params: { id: string } }
             <div className='pt-2'>
               <Separator />
             </div>
+            <h1 className='font-bold leading-loose text-lg'>Datos del paciente</h1>
             <div className='grid grid-cols-3 text-sm'>
               <h2 className='text-_gray-C2C2C2'>Paciente</h2>
               <p className='col-span-2'>
@@ -124,7 +125,7 @@ export default async function Diagnostic ({ params }: { params: { id: string } }
                 alt={diagnostic?.image.label ?? ''}
                 width={200}
                 height={200}
-                className='rounded-xl w-96 h-full object-cover'
+                className='rounded-xl w-96 h-72 object-contain'
               />
             </div>
           </div>
