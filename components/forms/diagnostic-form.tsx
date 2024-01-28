@@ -1,7 +1,7 @@
 'use client'
 
 import { type z } from 'zod'
-import { type Disease } from '@prisma/client'
+import { type Diagnostic, type Disease } from '@prisma/client'
 import { type ImageClassificationOutput } from '@huggingface/inference'
 import { type ModelEntry } from '@huggingface/hub'
 import { type User } from '@clerk/nextjs/server'
@@ -65,7 +65,7 @@ import { Badge } from '@/components/ui/badge'
 import { createDiagnosticAction, getDiseasesAction } from '@/app/actions/diagnostic'
 import { getModelsAction, startClassificationAction } from '@/app/actions/huggingface'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 type DiagnosticFormValues = z.infer<typeof diagnosticSchema>
 
@@ -82,7 +82,7 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
   const [diseases, setDiseases] = useState<Disease[]>([])
   const [models, setModels] = useState<ModelEntry[]>([])
   const [selected, setSelected] = useState<{ disease?: Disease, model?: ModelEntry }>()
-  const { push } = useRouter()
+  const [diagnostic, setDiagnostic] = useState<Diagnostic>()
 
   const form = useForm<DiagnosticFormValues>({
     resolver: zodResolver(diagnosticSchema),
@@ -162,7 +162,8 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                 }), {
                   loading: 'Guardando diagnóstico...',
                   success: (diagnostic) => {
-                    push(`/diagnostic/${diagnostic.id}`)
+                    setDiagnostic(diagnostic)
+                    // push(`/diagnostic/${diagnostic.id}`)
                     return 'Diagnóstico guardado exitosamente.'
                   },
                   error: (err) => err
@@ -443,13 +444,13 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                             <CommandEmpty>No se encontraron modelos</CommandEmpty>
                             <CommandList>
                               <CommandGroup heading='Modelos'>
-                                {models.length === 0 &&
+                                {models?.length === 0 &&
                                   <CommandLoading>
                                     <CommandItem>
                                       Buscando modelos...
                                     </CommandItem>
                                   </CommandLoading>}
-                                {models.map((model, index) => (
+                                {models?.map((model, index) => (
                                   <CommandItem
                                     key={model.id}
                                     onSelect={() => {
@@ -491,10 +492,10 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                     <FormLabel className='flex items-center gap-2'>
                       Predicción
                       <LabelInfoForm
-                        icon={classification.length > 0 ? LayersIcon : null}
-                        open={classification.length > 0}
+                        icon={classification?.length > 0 ? LayersIcon : null}
+                        open={classification?.length > 0}
                       >
-                        {classification.length > 0
+                        {classification?.length > 0
                           ? (
                             <div className='flex flex-col gap-2'>
                               <h1 className='text-base font-bold text-center'>Predicciones</h1>
@@ -514,6 +515,13 @@ export function DiagnosticForm ({ user }: DiagnosticFormProps) {
                                       </div>
                                     )
                                   })}
+                                {diagnostic?.id && (
+                                  <Link className='underline text-xs text-end mt-4' href={`/diagnostic/${diagnostic?.id}`}>
+                                    <Badge variant={'outline'}>
+                                      Ver mas
+                                    </Badge>
+                                  </Link>
+                                )}
                               </div>
                             </div>
                             )
