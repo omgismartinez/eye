@@ -45,7 +45,7 @@ const LabelInfoForm = ({
           asChild
           variant={'ghost'}
           className={cn('w-6 h-6 p-1', {
-            'bg-[#0070f3] hover:bg-[#0070f3]/80': isOpen
+            'bg-_main hover:bg-main/50 text-white hover:text-white': isOpen
           })}
         >
           {Icon ? <Icon /> : <InfoIcon className={cn('w-4 h-4', className)} />}
